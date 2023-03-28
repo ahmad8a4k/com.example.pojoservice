@@ -1,0 +1,55 @@
+version: '3.5'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=ahmadbbatal3d2d3l5y
+      - MYSQL_DATABASE=pojoservicedb
+      - MYSQL_USER=pojoservicedb
+      - MYSQL_PASSWORD=ahmadbbatal3d2d3l5y
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: mysqladmin ping -h db4free.net -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+      timeout: 30s
+      retries: 5
+
+  backend:
+    build: .
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 64M
+    depends_on:
+      - db
+    environment:
+      - ENVIRONMENT=dev
+    restart: always
+    ports:
+      - "3510:3500"
+
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    ports:
+      - "3570:9090"
+    volumes:
+      - ./monitoring:/etc/prometheus/
+    links:
+      - backend
+
+  grafana:
+    image: grafana/grafana-oss:9.3.6
+    ports:
+      - "3000:3000"
+    user: "472"
+    volumes:
+      - ./monitoring/grafana:/var/lib/grafana
+    links:
+      - backend
+      - prometheus

@@ -10,7 +10,7 @@ import com.example.token.TokenConfig
 import org.koin.ktor.plugin.Koin
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "3.125.183.140") {
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         module()
     }.start(wait = true)
 }

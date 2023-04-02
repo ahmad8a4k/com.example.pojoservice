@@ -4,9 +4,9 @@ import com.example.data.dto.UserDto
 import com.example.data.entities.UserEntity
 
 fun UserEntity.toUserDto() = UserDto(
-    userId = userId,
-    userName = username,
-    userPassword = userPassword,
-    email = email,
-    userSalt = userSalt
+    user_id = userId,
+    user_name = username,
+    user_password = userPassword,
+    user_email = email,
+    user_salt = userSalt
 )

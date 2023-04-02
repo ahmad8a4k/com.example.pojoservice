@@ -6,7 +6,6 @@ import io.ktor.server.application.*
 
 fun Application.userConfigRouting() {
     routing {
-        getSecretInfoRoute()
         signUpRoute()
         signInRoute()
         deleteUserRoute()

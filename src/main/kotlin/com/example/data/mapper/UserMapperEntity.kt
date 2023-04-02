@@ -5,10 +5,10 @@ import com.example.data.entities.UserEntity
 
 fun UserDto.toUserEntity() =
     UserEntity {
-        userId = this@toUserEntity.userId
-        email = this@toUserEntity.email
-        username = this@toUserEntity.userName
-        userPassword = this@toUserEntity.userPassword
-        userSalt = this@toUserEntity.userSalt
+        userId = this@toUserEntity.user_id
+        email = this@toUserEntity.user_email
+        username = this@toUserEntity.user_name
+        userPassword = this@toUserEntity.user_password
+        userSalt = this@toUserEntity.user_salt
 //      userRegister = this@toUserEntity.userRegister.stringToLocalDateTime()
     }

@@ -1,4 +1,4 @@
-package com.example.routes.mapper.signupMapper
+package com.example.routes.mapper.user.signupMapper
 
 import com.example.data.request.UserRegisterRequest
 import io.ktor.server.application.*

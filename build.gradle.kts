@@ -5,7 +5,7 @@ val koin_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.10"
-    id("io.ktor.plugin") version "2.1.2"
+    id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 
     id("com.github.johnrengelman.shadow") version "7.1.1"
@@ -63,11 +63,15 @@ dependencies {
 
 
     // Mysql Connector
-    implementation("mysql:mysql-connector-java:8.0.30")
+    implementation("mysql:mysql-connector-java:8.0.32")
 
     // Ktorm Core   KTORM
-    implementation("org.ktorm:ktorm-core:3.5.0")
-    implementation("org.ktorm:ktorm-support-mysql:3.5.0")
+    implementation("org.ktorm:ktorm-core:3.6.0")
+//    implementation("me.liuwj.ktorm:ktorm-support-mysql:3.1.0")
+//    implementation("me.liuwj.ktorm:ktorm-jackson:3.1.0")
+    implementation("org.ktorm:ktorm-support-mysql:3.6.0")
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 }
 
 ktor {

@@ -8,12 +8,19 @@ object Constants {
 
     const val SALTED_HASH_ALGORITHM = "SHA1PRNG"
 
+    const val DATABASE_URL_ROOT = "jdbc:mysql://localhost:3306/pojo_test"
+    const val DATABASE_USER_ROOT = "root"
+    const val DATABASE_PASSWORD_ROOT = "ghgh"
+
+
     /**
      * Jwt
      */
-    val SECRET = System.getenv("JWT_SECRET") ?: "JWT_SECRET"
+    const val ROOT_ISSUER = "http://127.0.0.1:8080"
+    const val ROOT_AUDIENCE = "user_root"
+
+    val SECRET = System.getenv("JWT_SECRET") ?: "jwt-secret"
     const val ISSUER = "http://db4free.net"
     const val AUDIENCE = "http://db4free.net/pojoservicedb"
-    const val REALM = "Access to notes"
     const val REFRESH_TOKEN_EXPIRE_DATE = (365L * 1000L * 60L * 60L * 24L)
 }

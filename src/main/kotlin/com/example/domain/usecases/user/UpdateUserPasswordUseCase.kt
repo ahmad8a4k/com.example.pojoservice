@@ -1,6 +1,5 @@
-package com.example.domain.usecases
+package com.example.domain.usecases.user
 
-import com.example.data.dto.UserDto
 import com.example.data.repositories.userRepository.UserRepository
 import com.example.data.request.UpdateUserPasswordRequest
 import com.example.domain.SaltedHash
@@ -20,26 +19,26 @@ class UpdateUserPasswordUseCase constructor(
             parameters.password.isEmpty() ||
             parameters.newPassword.isEmpty()
         ) {
-            return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message) as
+            return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message, data = false) as
                     BaseResponse<UpdateUserPasswordUseCase>
         }
 
         if(userDto == null){
-            return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message) as
+            return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message, data = false) as
                     BaseResponse<UpdateUserPasswordUseCase>
         }
 
-        val validationPassword = SaltedHash(hash = userDto.userPassword, salt = userDto.userSalt)
+        val validationPassword = SaltedHash(hash = userDto.user_password, salt = userDto.user_salt)
             .verifyPassword(parameters.password)
 
         if(!validationPassword){
-            return BaseResponse.ErrorResponse(message = ResponseMessages.IncorrectPassword.message) as
+            return BaseResponse.ErrorResponse(message = ResponseMessages.IncorrectPassword.message, data = false) as
                     BaseResponse<UpdateUserPasswordUseCase>
         }
 
         val saltedHash = parameters.newPassword.generateSaltedHash()
-        userRepository.updateUserPassword(user = userDto.copy(userPassword = saltedHash.hash
-            , userSalt = saltedHash.salt))
+        userRepository.updateUserPassword(user = userDto.copy(user_password = saltedHash.hash
+            , user_salt = saltedHash.salt))
 
         return BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessUpdatePassword.message, data = true

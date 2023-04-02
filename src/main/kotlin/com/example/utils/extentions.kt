@@ -2,10 +2,14 @@ package com.example.utils
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.data.tables.*
 import com.example.domain.SaltedHash
+import com.example.domain.mapper.imageFullDetailsToDto
 import com.example.utils.Constants.AUDIENCE
 import com.example.utils.Constants.ISSUER
 import com.example.utils.Constants.REFRESH_TOKEN_EXPIRE_DATE
+import com.example.utils.Constants.ROOT_AUDIENCE
+import com.example.utils.Constants.ROOT_ISSUER
 import com.example.utils.Constants.SALTED_HASH_ALGORITHM
 import com.example.utils.Constants.SECRET
 import org.apache.commons.codec.binary.Hex
@@ -14,6 +18,7 @@ import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.schema.Column
 import java.security.SecureRandom
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -51,4 +56,10 @@ fun String.generateToken(): String =
 
 fun SaltedHash.verifyPassword(password: String): Boolean {
     return DigestUtils.sha256Hex(salt + password) == hash
+}
+
+fun Long.convertLongToDate(): String {
+    val date = Date(this)
+    val format = SimpleDateFormat("yyyy/M/dd")
+    return format.format(date)
 }

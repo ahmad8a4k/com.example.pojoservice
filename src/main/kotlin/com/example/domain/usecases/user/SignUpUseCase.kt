@@ -30,12 +30,12 @@ class SignUpUseCase constructor(
             )
         }
 
-        userRepository.insertUser(user = user)
+        val userInsert = userRepository.insertUser(user = user)
 
         return BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessSignup.message, data = UserResponseWithToken(
-                user = user,
-                token = user.user_name.generateToken()
+                user = userInsert,
+                token = userInsert?.user_name?.generateToken()
             )
         )
     }

@@ -4,7 +4,7 @@ import com.example.data.dto.UserDto
 
 interface UserDao {
 
-    suspend fun insertUser(user: UserDto): Boolean
+    suspend fun insertUser(user: UserDto): UserDto?
 
     suspend fun updateUserPassword(user: UserDto): Boolean
 

@@ -13,12 +13,11 @@ import com.example.utils.Constants.ISSUER
 import org.koin.ktor.plugin.Koin
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         module()
     }.start(wait = true)
 }
 
-@Suppress("unused")
 fun Application.module() {
 
     install(Koin) {
@@ -33,9 +32,10 @@ fun Application.module() {
     )
 
     configureSecurity(tokenConfig)
+    userConfigRouting()
+    imageConfigRouting()
     configureSerialization()
     configureMonitoring()
     configureRouting()
-    userConfigRouting()
-    imageConfigRouting()
+
 }

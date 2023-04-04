@@ -3,6 +3,9 @@ package com.example.data.source.dao
 import com.example.data.dto.ImageDetailsDto
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
+import com.example.data.dto.imageDetails.NaturalCategoriesDto
+import com.example.data.dto.imageDetails.NaturalDetailsDto
+import com.example.data.tables.NaturalCategoryTable
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
 

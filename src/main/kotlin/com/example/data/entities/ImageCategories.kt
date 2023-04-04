@@ -8,6 +8,7 @@ interface ImageCategories : Entity<ImageCategories> {
 
     var id: Int
     var categoryName: String
+    var categoryUrl: String
     var adminAdded: Admins
     var categoryDate: LocalDate
 }

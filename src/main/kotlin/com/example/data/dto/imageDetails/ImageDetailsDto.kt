@@ -23,6 +23,7 @@ data class ImageDetailsColorDto(
 data class ImageDetailsCategoryDto(
     @SerialName("category_id") val category_id: Int,
     @SerialName("category_name") val category_name: String,
+    @SerialName("category_url") val category_url: String,
 )
 
 data class ImageDetailsCategoryDetailsDto(

@@ -9,11 +9,12 @@ import org.ktorm.dsl.QueryRowSet
 import java.sql.Date
 
 fun QueryRowSet.imageCategoryMapper() = ImageCategoryDto(
-    category_id = this[ImageCategoriesTable.id]?: 0,
+    category_id = this[ImageCategoriesTable.id] ?: 0,
     category_name = this[ImageCategoriesTable.categoryName] ?: "",
+    category_url = this[ImageCategoriesTable.category_url] ?: "",
     admin = ImageCategoryAdminDto(
-        admin_id = this[AdminsTable.id]?: 0,
-        admin_name = this[AdminsTable.adminName]?: "",
+        admin_id = this[AdminsTable.id] ?: 0,
+        admin_name = this[AdminsTable.adminName] ?: "",
     ),
     category_date = Date.valueOf(this[ImageCategoriesTable.categoryDate]).time.convertLongToDate(),
 )

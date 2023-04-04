@@ -12,7 +12,8 @@ fun QueryRowSet.imageFullDetailsToDto() = ImageDetailsFullDto(
     image_url = this[ImageDetailsTable.url] ?: "Empty",
     category = ImageDetailsCategoryDto(
         category_id = this[ImageCategoriesTable.id] ?: 0,
-        category_name = this[ImageCategoriesTable.categoryName] ?: "Empty"
+        category_name = this[ImageCategoriesTable.categoryName] ?: "Empty",
+        category_url = this[ImageCategoriesTable.category_url] ?: "Empty",
     ),
     color = ImageDetailsColorDto(
         color_id = this[ColorsTable.id] ?: 0,
@@ -22,7 +23,7 @@ fun QueryRowSet.imageFullDetailsToDto() = ImageDetailsFullDto(
         category_details_id = this[CategoryDetailsTable.id] ?: 0,
         category_details_name = this[CategoryDetailsTable.details] ?: "Empty"
     ),
-    image_description = this[ImageDetailsTable.imgDescription] ?: "Empty",
+    image_description = this[ImageDetailsTable.imgDescription]?: "Empty",
     admin = ImageDetailsAdminDto(
         admin_id = this[AdminsTable.id] ?: 0,
         admin_name = this[AdminsTable.adminName] ?: "Empty"

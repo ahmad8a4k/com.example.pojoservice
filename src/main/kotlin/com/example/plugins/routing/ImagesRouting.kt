@@ -1,9 +1,6 @@
 package com.example.plugins.routing
 
-import com.example.routes.imageRoute.fifteenImagesRoute
-import com.example.routes.imageRoute.getAllImagesCategories
-import com.example.routes.imageRoute.getSevenImageCategoriesRoute
-import com.example.routes.imageRoute.imagesPagingRoute
+import com.example.routes.imageRoute.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
@@ -22,5 +19,10 @@ fun Application.imageConfigRouting() {
         getSevenImageCategoriesRoute()
         getAllImagesCategories()
 
+        /**
+         * Naturals
+         */
+        naturalsImagesRoute()
+        naturalCategoriesRoute()
     }
 }

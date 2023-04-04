@@ -10,6 +10,7 @@ import org.ktorm.schema.varchar
 object ImageCategoriesTable : Table<ImageCategories>("img_categories") {
     val id = int("id").bindTo { it.id }.primaryKey()
     val categoryName = varchar("category_name").bindTo { it.categoryName }
+    val category_url = varchar("category_url").bindTo { it.categoryUrl }
     val adminAdded = int("admin_added").references(AdminsTable) { it.adminAdded }
     val categoryDate = date("category_date").bindTo { it.categoryDate }
 }

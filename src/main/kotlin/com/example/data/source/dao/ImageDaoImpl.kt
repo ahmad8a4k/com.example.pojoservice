@@ -3,13 +3,14 @@ package com.example.data.source.dao
 import com.example.data.dto.ImageDetailsDto
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
+import com.example.data.dto.imageDetails.NaturalCategoriesDto
+import com.example.data.dto.imageDetails.NaturalDetailsDto
 import com.example.data.tables.*
-import com.example.domain.mapper.imageCategoryMapper
-import com.example.domain.mapper.imageFullDetailsToDto
-import com.example.domain.mapper.toImageDetailsDto
+import com.example.domain.mapper.*
 import com.example.utils.getCountOfTableItemsQuery
 import com.example.utils.getTotalPagesTableQuery
 import com.example.utils.imageFullDetailsQuery
+import com.example.utils.naturalDetailsQuery
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
@@ -42,7 +43,7 @@ class ImageDaoImpl(
 
     override suspend fun getSevenImageCategory(): List<ImageCategoryDto> {
         return dataBase.from(ImageCategoriesTable)
-            .innerJoin(
+            .leftJoin(
                 AdminsTable,
                 AdminsTable.id eq ImageCategoriesTable.adminAdded
             ).select()
@@ -51,7 +52,7 @@ class ImageDaoImpl(
 
     override suspend fun getAllCategoryImage(): List<ImageCategoryDto> {
         return dataBase.from(ImageCategoriesTable)
-            .innerJoin(
+            .leftJoin(
                 AdminsTable,
                 AdminsTable.id eq ImageCategoriesTable.adminAdded
             ).select().map { it.imageCategoryMapper() }

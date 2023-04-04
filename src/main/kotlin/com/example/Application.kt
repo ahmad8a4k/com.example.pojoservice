@@ -13,7 +13,7 @@ import com.example.utils.Constants.ISSUER
 import org.koin.ktor.plugin.Koin
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         module()
     }.start(wait = true)
 }

@@ -10,6 +10,7 @@ object UserTable : Table<UserEntity>("user") {
     val userId = int("id").bindTo { it.userId }.primaryKey()
     val email = varchar("email").bindTo { it.email }
     val userName = varchar("username").bindTo { it.username }
+    val fullName = varchar("full_name").bindTo { it.fullName }
     val userPassword = varchar("userpassword").bindTo { it.userPassword }
     val userSalt = varchar("salt").bindTo { it.userSalt }
     val userRegister = datetime("register").bindTo { it.userRegister }

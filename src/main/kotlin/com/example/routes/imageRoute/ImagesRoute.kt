@@ -1,5 +1,6 @@
 package com.example.routes.imageRoute
 
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.domain.endpoints.ImageEndPoint
 import com.example.domain.usecases.image.*
 import com.example.routes.mapper.image.imagesPagingParameter
@@ -14,6 +15,15 @@ fun Route.imagesPagingRoute() {
     put(ImageEndPoint.Images.path) {
         val imagePageParameters = imagesPagingParameter()
         val images = imagesUseCase(imagePageParameters.pageSize.toInt(), imagePageParameters.pageNum.toInt())
+        call.respond(message = images, status = images.statuesCode)
+    }
+}
+
+fun Route.liteImagesPagingRoute() {
+    val liteImagesUseCase by inject<GetLiteImageDetailsUseCase>()
+    put(ImageEndPoint.LiteImages.path) {
+        val imagePageParameters = imagesPagingParameter()
+        val images = liteImagesUseCase(imagePageParameters.pageSize.toInt(), imagePageParameters.pageNum.toInt())
         call.respond(message = images, status = images.statuesCode)
     }
 }

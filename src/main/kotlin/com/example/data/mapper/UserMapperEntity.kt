@@ -8,6 +8,7 @@ fun UserDto.toUserEntity() =
         userId = this@toUserEntity.user_id
         email = this@toUserEntity.user_email
         username = this@toUserEntity.user_name
+        fullName = this@toUserEntity.full_name
         userPassword = this@toUserEntity.user_password
         userSalt = this@toUserEntity.user_salt
 //      userRegister = this@toUserEntity.userRegister.stringToLocalDateTime()

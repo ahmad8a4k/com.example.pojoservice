@@ -1,9 +1,11 @@
 package com.example.utils
 
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.dto.imageDetails.NaturalDetailsDto
 import com.example.data.tables.*
 import com.example.domain.mapper.imageFullDetailsToDto
+import com.example.domain.mapper.liteImageDetails
 import com.example.domain.mapper.naturalFullDetailsToDto
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
@@ -102,4 +104,19 @@ fun Database.naturalDetailsQuery(pageSize: Int, page: Int): List<NaturalDetailsD
         .offset((page - 1) * pageSize)
         .orderBy()
         .map { it.naturalFullDetailsToDto() }
+}
+
+fun Database.liteImageFullDetailsQuery(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
+    return this.from(ImageDetailsTable)
+        .select(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            ImageDetailsTable.register,
+            ImageDetailsTable.imgDescription,
+        )
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+        .orderBy()
+        .map { it.liteImageDetails() }
 }

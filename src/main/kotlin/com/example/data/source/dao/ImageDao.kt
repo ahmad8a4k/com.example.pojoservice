@@ -1,6 +1,7 @@
 package com.example.data.source.dao
 
 import com.example.data.dto.ImageDetailsDto
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.dto.imageDetails.NaturalCategoriesDto
@@ -24,4 +25,6 @@ interface ImageDao {
     suspend fun getAllCategoryImage(): List<ImageCategoryDto>
 
     suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto>
+
+    suspend fun getLiteImageDetailsByPaging(pageSize: Int, page: Int): List<LiteImageDetailsDto>
 }

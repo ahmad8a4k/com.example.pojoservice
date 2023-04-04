@@ -5,6 +5,7 @@ sealed class ImageEndPoint(val path: String) {
      * Images
      */
     object Images : ImageEndPoint(path = "image/images")
+    object LiteImages : ImageEndPoint(path = "image/lite_images")
     object FifteenImages : ImageEndPoint(path = "image/fifteen_top_images")
     object Details : ImageEndPoint(path = "image/image_details")
     object LastUpload : ImageEndPoint(path = "image/image_last_upload")

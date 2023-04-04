@@ -1,16 +1,14 @@
 package com.example.data.source.dao
 
 import com.example.data.dto.ImageDetailsDto
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.dto.imageDetails.NaturalCategoriesDto
 import com.example.data.dto.imageDetails.NaturalDetailsDto
 import com.example.data.tables.*
 import com.example.domain.mapper.*
-import com.example.utils.getCountOfTableItemsQuery
-import com.example.utils.getTotalPagesTableQuery
-import com.example.utils.imageFullDetailsQuery
-import com.example.utils.naturalDetailsQuery
+import com.example.utils.*
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
@@ -60,6 +58,10 @@ class ImageDaoImpl(
 
     override suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto> {
         return dataBase.from(ImageDetailsTable).select().limit(15).map { it.imageFullDetailsToDto() }
+    }
+
+    override suspend fun getLiteImageDetailsByPaging(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
+        return dataBase.liteImageFullDetailsQuery(pageSize = pageSize, page = page)
     }
 
 }

@@ -34,8 +34,9 @@ class SignUpUseCase constructor(
 
         return BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessSignup.message, data = UserResponseWithToken(
-                user = userInsert,
-                token = userInsert?.user_name?.generateToken()
+                userID = userInsert.user_id,
+                userName = userInsert.user_name,
+                token = userInsert.user_name.generateToken()
             )
         )
     }

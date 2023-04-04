@@ -84,6 +84,10 @@ val mainModule = module {
     }
 
     single {
+        GetLiteImageDetailsUseCase(get())
+    }
+
+    single {
         GetFifteenImagesDetailsUseCase(get())
     }
 

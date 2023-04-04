@@ -1,8 +1,7 @@
 package com.example.data.response
 
-import com.example.data.dto.UserDto
-
 data class UserResponseWithToken(
-    val user: UserDto?= UserDto(),
+    val userID: Int? = 0,
+    val userName: String = "",
     val token: String? = "",
 )

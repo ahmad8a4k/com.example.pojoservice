@@ -14,7 +14,7 @@ interface UserRepository {
 
     suspend fun checkIfUserExistByName(username: String): Boolean
 
-    suspend fun insertUser(user: UserDto): UserDto?
+    suspend fun insertUser(user: UserDto): UserDto
 
 //    suspend fun updateUserPassword(user: UserDto): Boolean
 

@@ -13,6 +13,7 @@ fun Application.imageConfigRouting() {
         imagesPagingRoute()
         fifteenImagesRoute()
 
+        liteImagesPagingRoute()
         /**
          * Categories
          */

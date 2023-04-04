@@ -8,6 +8,7 @@ interface UserEntity : Entity<UserEntity> {
     var userId: Int
     var email : String
     var username: String
+    var fullName:String
     var userPassword: String
     var userSalt: String
     var userRegister: LocalDateTime?

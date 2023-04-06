@@ -15,7 +15,8 @@ class SignUpUseCase constructor(
             user.user_email.isEmpty() ||
             user.user_name.isEmpty() ||
             user.user_password.isEmpty() ||
-            user.user_salt.isEmpty()
+            user.user_salt.isEmpty() ||
+            user.full_name.isEmpty()
         ) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.EmptyField.message,

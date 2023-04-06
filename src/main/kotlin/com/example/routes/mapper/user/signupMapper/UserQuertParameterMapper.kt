@@ -10,6 +10,7 @@ fun PipelineContext<*, ApplicationCall>.userParameters(): UserRegisterRequest {
     return UserRegisterRequest(
         userEmail = userParameters.getOrFail("email"),
         username = userParameters.getOrFail("name"),
+        fullName = userParameters.getOrFail("full_name"),
         password = userParameters.getOrFail("password")
     )
 }

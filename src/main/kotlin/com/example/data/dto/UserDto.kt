@@ -12,8 +12,3 @@ data class UserDto(
     @SerialName("user_password") val user_password: String = "Empty",
     @SerialName("user_salt") val user_salt: String = "Empty",
 )
-
-@Serializable
-data class UserLiteDto(
-    @SerialName("user_id") val user_id: Int = 0,
-)

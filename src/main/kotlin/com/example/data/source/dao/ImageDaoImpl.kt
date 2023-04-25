@@ -2,13 +2,14 @@ package com.example.data.source.dao
 
 import com.example.data.dto.ImageDetailsDto
 import com.example.data.dto.LiteImageDetailsDto
+import com.example.data.dto.LiteImageDetailsWithLikesCountDto
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
-import com.example.data.dto.imageDetails.NaturalCategoriesDto
-import com.example.data.dto.imageDetails.NaturalDetailsDto
+import com.example.data.source.queries.*
 import com.example.data.tables.*
-import com.example.domain.mapper.*
-import com.example.utils.*
+import com.example.domain.queryMapper.images.imageCategoryMapper
+import com.example.domain.queryMapper.images.imageFullDetailsToDto
+import com.example.domain.queryMapper.images.toImageDetailsDto
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
@@ -27,7 +28,7 @@ class ImageDaoImpl(
             .map { it.toImageDetailsDto() }
     }
 
-    override suspend fun imagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto> {
+    override suspend fun getImagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto> {
         return dataBase.imageFullDetailsQuery(pageSize = pageSize, page = page)
     }
 
@@ -60,8 +61,22 @@ class ImageDaoImpl(
         return dataBase.from(ImageDetailsTable).select().limit(15).map { it.imageFullDetailsToDto() }
     }
 
-    override suspend fun getLiteImageDetailsByPaging(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
-        return dataBase.liteImageFullDetailsQuery(pageSize = pageSize, page = page)
+    override suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
+        return dataBase.liteListImageDetailsQuery(pageSize = pageSize, page = page)
     }
 
+    override suspend fun getPagingLiteImageByDate(news: Boolean): List<LiteImageDetailsDto> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek(): List<LiteImageDetailsWithLikesCountDto> {
+        return dataBase.getTopRatedLiteImagesThisWeekOrLastWeeks()
+    }
+
+    override suspend fun getTopRatedLiteImages(
+        pageSize: Int,
+        pageNumber: Int,
+    ): List<LiteImageDetailsWithLikesCountDto> {
+        return dataBase.listOfTopRatedLiteImages(pageSize = pageSize, pageNumber = pageNumber)
+    }
 }

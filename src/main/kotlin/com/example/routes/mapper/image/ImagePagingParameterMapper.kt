@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.util.*
 import io.ktor.util.pipeline.*
 
-fun PipelineContext<*, ApplicationCall>.imagesPagingParameter(): ImagePaging {
+fun PipelineContext<*, ApplicationCall>.pagingParameter(): ImagePaging {
     val userParameters = call.request.queryParameters
     return ImagePaging(
         pageSize = userParameters.getOrFail("page_size"),

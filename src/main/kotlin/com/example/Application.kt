@@ -1,6 +1,6 @@
 package com.example
 
-import com.example.db.modules.mainModule
+import com.example.db.mainModule
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -10,6 +10,7 @@ import com.example.plugins.routing.userConfigRouting
 import com.example.token.TokenConfig
 import com.example.utils.Constants.AUDIENCE
 import com.example.utils.Constants.ISSUER
+import io.ktor.http.*
 import org.koin.ktor.plugin.Koin
 
 fun main() {
@@ -36,6 +37,4 @@ fun Application.module() {
     imageConfigRouting()
     configureSerialization()
     configureMonitoring()
-    configureRouting()
-
 }

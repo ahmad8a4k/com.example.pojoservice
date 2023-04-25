@@ -2,11 +2,8 @@ package com.example.data.source.dao
 
 import com.example.data.dto.ImageDetailsDto
 import com.example.data.dto.LiteImageDetailsDto
-import com.example.data.dto.imageDetails.ImageCategoryDto
-import com.example.data.dto.imageDetails.ImageDetailsFullDto
-import com.example.data.dto.imageDetails.NaturalCategoriesDto
-import com.example.data.dto.imageDetails.NaturalDetailsDto
-import com.example.data.tables.NaturalCategoryTable
+import com.example.data.dto.LiteImageDetailsWithLikesCountDto
+import com.example.data.dto.imageDetails.*
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
 
@@ -14,7 +11,7 @@ interface ImageDao {
 
     suspend fun listOfImages(pageSize: Int, page: Int): List<ImageDetailsDto>
 
-    suspend fun imagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto>
+    suspend fun getImagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto>
 
     suspend fun <T : Entity<T>> getCountOfTableItems(table: Table<T>): Int
 
@@ -26,5 +23,11 @@ interface ImageDao {
 
     suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto>
 
-    suspend fun getLiteImageDetailsByPaging(pageSize: Int, page: Int): List<LiteImageDetailsDto>
+    suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDto>
+
+    suspend fun getPagingLiteImageByDate(news:Boolean):List<LiteImageDetailsDto>
+
+    suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek():List<LiteImageDetailsWithLikesCountDto>
+    suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int):List<LiteImageDetailsWithLikesCountDto>
+
 }

@@ -9,8 +9,9 @@ fun UserRegisterRequest.userRequestToDto(): UserDto {
     return UserDto(
         user_id = 0,
         user_name = username,
+        full_name = fullName,
         user_password = saltedHash.hash,
-        user_email = userEmail ,
+        user_email = userEmail,
         user_salt = saltedHash.salt
     )
 }

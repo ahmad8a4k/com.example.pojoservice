@@ -14,7 +14,7 @@ class GetSevenCategoriesUseCases(
 
         return if (categories.isNotEmpty()) BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessFetchImageDetails.message,
-            data = imageDao.getSevenImageCategory()
+            data = categories
         )
 
         else BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchCategoryImages.message)

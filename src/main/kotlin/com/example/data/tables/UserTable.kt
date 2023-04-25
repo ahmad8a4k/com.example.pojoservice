@@ -13,5 +13,6 @@ object UserTable : Table<UserEntity>("user") {
     val fullName = varchar("full_name").bindTo { it.fullName }
     val userPassword = varchar("userpassword").bindTo { it.userPassword }
     val userSalt = varchar("salt").bindTo { it.userSalt }
+    val userSubscribe = int("subscribe_id").references(SubscribeTypesTable) { it.userSubscribe }
     val userRegister = datetime("register").bindTo { it.userRegister }
 }

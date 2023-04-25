@@ -1,24 +1,24 @@
 package com.example.domain.usecases.user
 
 import com.example.data.dto.UserDto
-import com.example.data.repositories.userRepository.UserRepository
+import com.example.data.source.dao.UserDao
 import com.example.domain.SaltedHash
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
 import com.example.utils.verifyPassword
 
-class DeleteUserUseCase constructor(
-    private val userRepository: UserRepository,
+class DeleteUserUseCase (
+    private val userDao: UserDao
 ) {
 
     suspend operator fun invoke(userName: String, userPassword: String): BaseResponse<UserDto> {
-        val userDto = userRepository.getUserByUserName(username = userName)
+        val userDto = userDao.getUserByUserName(userName = userName)
 
         if (userName.isEmpty()) {
             return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message, data = UserDto())
         }
 
-        if (userDto == null) {
+        if (userDto.user_name != userName) {
             return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message, data = UserDto())
         }
 
@@ -29,7 +29,7 @@ class DeleteUserUseCase constructor(
             return BaseResponse.ErrorResponse(message = ResponseMessages.IncorrectPassword.message, data = UserDto())
         }
 
-        userRepository.deleteUser(userName)
+        userDao.deleteUser(userName)
 
         return BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessDeleteUser.message,

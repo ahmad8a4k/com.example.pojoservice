@@ -2,30 +2,20 @@ package com.example.utils
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.example.data.tables.*
 import com.example.domain.SaltedHash
-import com.example.domain.mapper.imageFullDetailsToDto
 import com.example.utils.Constants.AUDIENCE
 import com.example.utils.Constants.ISSUER
 import com.example.utils.Constants.REFRESH_TOKEN_EXPIRE_DATE
-import com.example.utils.Constants.ROOT_AUDIENCE
-import com.example.utils.Constants.ROOT_ISSUER
 import com.example.utils.Constants.SALTED_HASH_ALGORITHM
 import com.example.utils.Constants.SECRET
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
-import org.ktorm.database.Database
-import org.ktorm.dsl.*
-import org.ktorm.schema.Column
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun Database.checkIfExistByName(columnName: Column<String>, name: String): Boolean {
-    return this.from(columnName.table).select().where { columnName eq name }.map {}.isNotEmpty()
-}
 
 fun String.stringToLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));

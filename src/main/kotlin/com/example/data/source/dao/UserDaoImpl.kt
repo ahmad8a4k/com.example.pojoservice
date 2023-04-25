@@ -1,18 +1,17 @@
 package com.example.data.source.dao
 
 import com.example.data.dto.UserDto
-import com.example.data.mapper.toUserEntity
+import com.example.data.setMapper.toUserEntityByBuilder
+import com.example.data.setMapper.toUserEntityUpdatePasswordByBuilder
+import com.example.data.source.queries.checkIfExistByName
+import com.example.data.source.queries.checkIfUserExistByUsingUserId
+import com.example.data.source.queries.getUserDetailsByUserId
 import com.example.data.tables.UserTable
-import com.example.db.user
-import com.example.domain.mapper.toUserDto
-import com.example.utils.checkIfExistByName
+import com.example.domain.queryMapper.user.toUserDetailsDto
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
-import org.ktorm.entity.add
-import org.ktorm.entity.find
-import org.ktorm.entity.update
 
-class UserDaoImpl constructor(
+class UserDaoImpl(
     private var dataBase: Database,
 ) : UserDao {
 
@@ -20,23 +19,42 @@ class UserDaoImpl constructor(
         return dataBase.checkIfExistByName(UserTable.userName, username)
     }
 
-    override suspend fun getUserByUserName(userName: String): UserDto? {
-        return dataBase.user.find { UserTable.userName eq userName }?.toUserDto()
+    override suspend fun getUserByUserName(userName: String): UserDto {
+        return dataBase.from(UserTable).select()
+            .where { UserTable.userName eq userName }.map {
+                it.toUserDetailsDto()
+            }.first()
     }
 
-    // ? this not here
-    override suspend fun insertUser(user: UserDto): UserDto? {
-        dataBase.user.add(user.toUserEntity())
-        return dataBase.user.find { UserTable.userName eq user.user_name }?.toUserDto()
+    override suspend fun insertUser(user: UserDto): UserDto {
+        dataBase.insert(UserTable) { _ ->
+            this.toUserEntityByBuilder(user)
+        }
+        return dataBase.from(UserTable).select()
+            .where { UserTable.userName eq user.user_name }.map {
+                it.toUserDetailsDto()
+            }.first()
     }
 
     override suspend fun updateUserPassword(user: UserDto): Boolean {
-        return dataBase.user.update(user.toUserEntity()) == 1
+        return dataBase.update(UserTable) {
+            this.toUserEntityUpdatePasswordByBuilder(user)
+            where { UserTable.userId eq user.user_id }
+        } == 1
     }
 
     // DELETE FROM `pharmacy_manage`.`user` WHERE (`id` = '00');
     override suspend fun deleteUser(username: String): Boolean {
-        return dataBase.user.find { userTable -> userTable.userName eq username }?.delete() == 1
+        return dataBase.delete(UserTable) {
+            it.userName eq username
+        } == 1
     }
 
+    override suspend fun getUserInformationByUserId(userId: Int): UserDto {
+        return dataBase.getUserDetailsByUserId(userId = userId)
+    }
+
+    override suspend fun checkIfUserExistOrNotByUserId(userId: Int): Boolean {
+        return dataBase.checkIfUserExistByUsingUserId(userId)
+    }
 }

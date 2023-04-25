@@ -10,5 +10,6 @@ data class UserDto(
     @SerialName("full_name") val full_name: String = "Empty",
     @SerialName("user_email") val user_email: String = "Empty",
     @SerialName("user_password") val user_password: String = "Empty",
+    @SerialName("subscribe_details") val subscribe_details: SubscribeTypeDto = SubscribeTypeDto(),
     @SerialName("user_salt") val user_salt: String = "Empty",
 )

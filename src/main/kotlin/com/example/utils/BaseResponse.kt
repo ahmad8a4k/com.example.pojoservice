@@ -16,6 +16,14 @@ sealed class BaseResponse<T>(@JsonIgnore open val statuesCode: HttpStatusCode) {
     ) : BaseResponse<T>(statusCode)
 
     @JsonSerialize
+    data class SuccessBooleanResponse<T>(
+        val status: Boolean = true,
+        val data: Boolean = true,
+        val message: String = "",
+        val statusCode: HttpStatusCode = HttpStatusCode.OK,
+    ) : BaseResponse<Boolean>(statusCode)
+
+    @JsonSerialize
     data class ErrorLiseResponse<T>(
         val status: Boolean = false,
         val data: List<T> = emptyList(),

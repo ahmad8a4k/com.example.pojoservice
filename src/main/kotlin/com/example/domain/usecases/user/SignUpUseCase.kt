@@ -1,14 +1,14 @@
 package com.example.domain.usecases.user
 
 import com.example.data.dto.UserDto
-import com.example.data.repositories.userRepository.UserRepository
 import com.example.data.response.UserResponseWithToken
+import com.example.data.source.dao.UserDao
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
 import com.example.utils.generateToken
 
-class SignUpUseCase constructor(
-    private val userRepository: UserRepository,
+class SignUpUseCase (
+    private val userDao: UserDao,
 ) {
     suspend operator fun invoke(user: UserDto): BaseResponse<UserResponseWithToken> {
         if (
@@ -24,14 +24,14 @@ class SignUpUseCase constructor(
             )
         }
 
-        if (userRepository.checkIfUserExistByName(username = user.user_name)) {
+        if (userDao.checkIfUserExistByName(username = user.user_name)) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.UserAlreadyExist.message,
                 data = UserResponseWithToken()
             )
         }
 
-        val userInsert = userRepository.insertUser(user = user)
+        val userInsert = userDao.insertUser(user = user)
 
         return BaseResponse.SuccessResponse(
             message = ResponseMessages.SuccessSignup.message, data = UserResponseWithToken(

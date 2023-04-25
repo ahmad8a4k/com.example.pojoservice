@@ -1,4 +1,4 @@
-package com.example.routes.mapper.updatePasswordMapper
+package com.example.routes.mapper.user.updatePasswordMapper
 
 import com.example.data.request.UpdateUserPasswordRequest
 import io.ktor.server.application.*
@@ -12,4 +12,9 @@ fun PipelineContext<*, ApplicationCall>.userUpdatePasswordParameters(): UpdateUs
         password = userParameters.getOrFail("password"),
         newPassword = userParameters.getOrFail("newPassword")
     )
+}
+
+fun PipelineContext<*, ApplicationCall>.userIdParameters(): Int {
+    val userParameters = call.request.queryParameters
+    return userParameters.getOrFail("user_id").toInt()
 }

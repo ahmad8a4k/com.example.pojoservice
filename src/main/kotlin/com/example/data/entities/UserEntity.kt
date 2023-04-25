@@ -11,5 +11,6 @@ interface UserEntity : Entity<UserEntity> {
     var fullName:String
     var userPassword: String
     var userSalt: String
+    var userSubscribe : SubscribeTypesEntity
     var userRegister: LocalDateTime?
 }

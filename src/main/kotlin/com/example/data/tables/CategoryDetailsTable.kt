@@ -6,7 +6,7 @@ import org.ktorm.schema.date
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
-object CategoryDetailsTable : Table<CategoryDetails>("category_details") {
+object  CategoryDetailsTable : Table<CategoryDetails>("category_details") {
     val id = int("id").bindTo { it.id }.primaryKey()
     val categoryId = int("category_id").references(ImageCategoriesTable) { it.categoryId }
     val details = varchar("details").bindTo { it.details }

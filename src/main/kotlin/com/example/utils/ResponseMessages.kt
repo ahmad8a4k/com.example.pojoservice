@@ -16,6 +16,10 @@ sealed class ResponseMessages(val message: String) {
     object SuccessDeleteUser : ResponseMessages("SUCCESS DELETE USER")
     object SuccessUpdatePassword : ResponseMessages("SUCCESS UPDATE USER")
     object NotFoundUser : ResponseMessages("Not Found User With This UserName")
+    object NotFoundUserID : ResponseMessages("Not Found User With This UserID")
+
+    object SuccessFetchUserByID : ResponseMessages("SUCCESS FITCH USER")
+
 
     /**
      * Image Response Messages
@@ -28,5 +32,11 @@ sealed class ResponseMessages(val message: String) {
      * Category Response Messages
      */
     object EmptyFetchCategoryImages : ResponseMessages("Empty_Fetch_Category_Image")
+
+
+    /**
+     *  Natural Response Messages
+     */
+    object FailFetchNaturalLites : ResponseMessages("Fail_Fetch_natural_lites")
 
 }

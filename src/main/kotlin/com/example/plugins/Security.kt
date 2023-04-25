@@ -22,7 +22,7 @@ fun Application.configureSecurity(config: TokenConfig) {
                     .withIssuer(config.issuer)
                     .build()
             )
-            challenge { defaultScheme, realm ->
+            challenge { _, _ ->
                 val tokenErrorResponse = BaseResponse.ErrorResponse(
                     message = ResponseMessages.FailAuthentication.message,
                     data = "Fails Token"

@@ -9,7 +9,7 @@ fun PipelineContext<*, ApplicationCall>.userParameters(): UserRegisterRequest {
     val userParameters = call.request.queryParameters
     return UserRegisterRequest(
         userEmail = userParameters.getOrFail("email"),
-        username = userParameters.getOrFail("name"),
+        username = userParameters.getOrFail("user_name"),
         fullName = userParameters.getOrFail("full_name"),
         password = userParameters.getOrFail("password")
     )

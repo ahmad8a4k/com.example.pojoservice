@@ -11,3 +11,8 @@ data class NaturalDetailsDto(
     @SerialName("admin") val admin: ImageDetailsAdminDto,
     @SerialName("register") val register: String,
 )
+
+data class LiteNaturalDetailsDto(
+    @SerialName("natural_id") val natural_id: Int,
+    @SerialName("natural_url") val natural_url: String
+)

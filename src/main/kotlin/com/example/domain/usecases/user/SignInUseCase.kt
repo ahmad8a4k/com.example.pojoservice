@@ -1,24 +1,24 @@
 package com.example.domain.usecases.user
 
-import com.example.data.repositories.userRepository.UserRepository
 import com.example.data.response.UserTokenResponse
+import com.example.data.source.dao.UserDao
 import com.example.domain.SaltedHash
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
 import com.example.utils.generateToken
 import com.example.utils.verifyPassword
 
-class SignInUseCase constructor(
-    private val userRepository: UserRepository,
+class SignInUseCase (
+    private val userDao: UserDao
 ) {
     suspend operator fun invoke(userName: String, userPassword: String): BaseResponse<UserTokenResponse> {
-        val userDto = userRepository.getUserByUserName(username = userName)
+        val userDto = userDao.getUserByUserName(userName = userName)
 
         if (userName.isEmpty()) {
             return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message, data = UserTokenResponse())
         }
 
-        if (userDto == null) {
+        if (userDto.user_name != userName) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.NotFoundUser.message,
                 data = UserTokenResponse()

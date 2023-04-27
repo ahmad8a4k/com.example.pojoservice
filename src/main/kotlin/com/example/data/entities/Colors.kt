@@ -9,4 +9,5 @@ interface Colors: Entity<Colors> {
     var colorName:String
     var adminAdded:Admins
     var colorDate: LocalDate
+    var colorHex:String
 }

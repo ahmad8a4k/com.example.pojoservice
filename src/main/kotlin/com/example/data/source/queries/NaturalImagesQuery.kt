@@ -80,7 +80,7 @@ fun Database.getListOfLiteNaturalDetailsByCategoryQuery(
         )
         .where {
             (NaturalCategoryTable.id eq categoryId) or
-                    (NaturalTagTable.tag_name.like("%$categoryName%"))
+                    (NaturalTagTable.tag_name.like("%$categoryId%"))
         }
         .limit(pageSize)
         .offset((page - 1) * pageSize)
@@ -121,32 +121,5 @@ fun Database.getListOfLiteNaturalsByColorQuery(
 }
 
 
-//fun Database.getListOfLiteNaturalsByColorQuery2(
-//    pageSize: Int,
-//    page: Int,
-//    colorName: String,
-//    colorId: Int,
-//): List<LiteNaturalDetailsDto> {
-//
-//    val naturalsWithColor = this
-//        .from(NaturalTable)
-//        .select(NaturalTable.id)
-//        .where { NaturalTable.color_id eq colorId }
-//        .unionAll(
-//            this
-//                .from(NaturalTable)
-//                .innerJoin(NaturalImagesTagsTable, on = NaturalTable.id eq NaturalImagesTagsTable.natural_id)
-//                .innerJoin(NaturalTagTable, on = NaturalImagesTagsTable.natural_tag_id eq NaturalTagTable.id)
-//                .select(NaturalTable.id)
-//                .where { NaturalTagTable.tag_name.like("%$colorName%") }
-//        )
-//
-//    // Main query that gets the distinct list of LiteNaturalDetailsDto
-//    return this.from(NaturalTable)
-//        .selectDistinct(NaturalTable.id, NaturalTable.url)
-//        .where { NaturalTable.id inList naturalsWithColor }
-//        .limit(pageSize)
-//        .offset((page - 1) * pageSize)
-//        .orderBy(NaturalTable.id.asc())
-//        .map { it.liteNaturalDetails() }
-//}
+
+

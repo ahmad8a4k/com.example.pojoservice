@@ -13,23 +13,23 @@ import java.time.LocalDate
 
 fun Database.imageFullDetailsQuery(pageSize: Int, page: Int): List<ImageDetailsFullDto> {
     return this.from(ImageDetailsTable)
-        .leftJoin(
+        .innerJoin(
             ColorsTable,
             on = ImageDetailsTable.colorId eq ColorsTable.id
         )
-        .leftJoin(
+        .innerJoin(
             ImageCategoriesTable,
             on = ImageDetailsTable.categoryId eq ImageCategoriesTable.id
         )
-        .leftJoin(
+        .innerJoin(
             CategoryDetailsTable,
             CategoryDetailsTable.id eq ImageDetailsTable.categoryDetailsId
         )
-        .leftJoin(
+        .innerJoin(
             ImageStaImageStatsDetails,
             on = ImageDetailsTable.id eq ImageStaImageStatsDetails.imageId
         )
-        .leftJoin(
+        .innerJoin(
             AdminsTable,
             on = AdminsTable.id eq ImageDetailsTable.adminId
         )
@@ -73,13 +73,14 @@ fun Database.liteListImageDetailsQuery(pageSize: Int, page: Int): List<LiteImage
         .orderBy()
         .map { it.liteImageDetailsRow() }
 }
+
 fun Database.getTopRatedLiteImagesThisWeekOrLastWeeks():
         List<LiteImageDetailsWithLikesCountDto> {
     val currentDate = LocalDate.now()
     val oneWeekAgo = currentDate.minusWeeks(1)
     val twoWeeksAgo = currentDate.minusWeeks(2)
     return this.from(ImageDetailsTable)
-        .leftJoin(
+        .innerJoin(
             right = UserSocialTable,
             on = UserSocialTable.image_details_id eq ImageDetailsTable.id
         )
@@ -104,7 +105,7 @@ fun Database.getTopRatedLiteImagesThisWeekOrLastWeeks():
 fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
         List<LiteImageDetailsWithLikesCountDto> {
     return this.from(ImageDetailsTable)
-        .leftJoin(
+        .innerJoin(
             right = UserSocialTable,
             on = UserSocialTable.image_details_id eq ImageDetailsTable.id
         )
@@ -121,4 +122,12 @@ fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
         .limit(pageSize)
         .offset((pageNumber - 1) * pageSize)
         .map { it.liteImageDetailsWithLikesCountRow() }
+}
+
+fun Database.getAllColorsQuery(): Query {
+    return this.from(ColorsTable).select(
+        ColorsTable.id,
+        ColorsTable.colorName,
+        ColorsTable.colorHex
+    )
 }

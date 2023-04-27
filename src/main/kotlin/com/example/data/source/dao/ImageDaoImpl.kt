@@ -1,5 +1,6 @@
 package com.example.data.source.dao
 
+import com.example.data.dto.ColorDetailsDto
 import com.example.data.dto.ImageDetailsDto
 import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.LiteImageDetailsWithLikesCountDto
@@ -7,9 +8,12 @@ import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.source.queries.*
 import com.example.data.tables.*
+import com.example.domain.queryMapper.images.toColorDetailsMapper
 import com.example.domain.queryMapper.images.imageCategoryMapper
 import com.example.domain.queryMapper.images.imageFullDetailsToDto
 import com.example.domain.queryMapper.images.toImageDetailsDto
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
@@ -79,4 +83,11 @@ class ImageDaoImpl(
     ): List<LiteImageDetailsWithLikesCountDto> {
         return dataBase.listOfTopRatedLiteImages(pageSize = pageSize, pageNumber = pageNumber)
     }
+
+    override suspend fun getAllColors(): List<ColorDetailsDto> =
+        coroutineScope {
+            val query = async { dataBase.getAllColorsQuery() }
+
+            query.await().map { it.toColorDetailsMapper() }
+        }
 }

@@ -32,6 +32,7 @@ sealed class ResponseMessages(val message: String) {
      * Category Response Messages
      */
     object EmptyFetchCategoryImages : ResponseMessages("Empty_Fetch_Category_Image")
+    object EmptyFetchColorsImages : ResponseMessages("Empty_Fetch_Colors_Image")
 
 
     /**

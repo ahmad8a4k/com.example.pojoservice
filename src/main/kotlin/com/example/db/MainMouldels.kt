@@ -8,10 +8,6 @@ import com.example.domain.usecases.natural.GetNaturalLiteImagesByCategoryUseCase
 import com.example.domain.usecases.natural.GetNaturalLiteImagesByColorUseCase
 import com.example.domain.usecases.user.*
 import com.example.utils.Constants
-import com.example.utils.Constants.DATABASE_DRIVER
-import com.example.utils.Constants.DATABASE_PASSWORD_ROOT
-import com.example.utils.Constants.DATABASE_URL_ROOT
-import com.example.utils.Constants.DATABASE_USER_ROOT
 import org.koin.dsl.module
 import org.ktorm.database.Database
 import org.ktorm.support.mysql.MySqlDialect

@@ -78,6 +78,9 @@ val mainModule = module {
         GetUserDetailsByIDUserCase(get())
     }
 
+    single {
+        GetAllColorsUseCase(get())
+    }
 
     /* Categories */
     single {

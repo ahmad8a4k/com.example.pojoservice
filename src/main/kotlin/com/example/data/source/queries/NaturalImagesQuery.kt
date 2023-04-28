@@ -79,8 +79,8 @@ fun Database.getListOfLiteNaturalDetailsByCategoryQuery(
             NaturalTable.url
         )
         .where {
-            (NaturalCategoryTable.id eq categoryId) or
-                    (NaturalTagTable.tag_name.like("%$categoryId%"))
+            (NaturalCategoryTable.id eq categoryId) and
+                    (NaturalTagTable.tag_name.like("%$categoryName%"))
         }
         .limit(pageSize)
         .offset((page - 1) * pageSize)

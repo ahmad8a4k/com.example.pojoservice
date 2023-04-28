@@ -19,8 +19,8 @@ fun PipelineContext<*, ApplicationCall>.naturalByCategoriesAndPaging(): NaturalB
 fun PipelineContext<*, ApplicationCall>.naturalByColorsAndPaging(): NaturalByColorAndPagingRequest {
     val queryParameter = call.request.queryParameters
     return NaturalByColorAndPagingRequest(
-        pageSize = queryParameter.getOrFail("page_size"),
-        pageNum = queryParameter.getOrFail("page_number"),
+        pageSize = queryParameter.getOrFail("page_size").toInt(),
+        pageNum = queryParameter.getOrFail("page_number").toInt(),
         color_id = queryParameter.getOrFail("color_id").toInt(),
         color_name = queryParameter.getOrFail("color_name")
     )

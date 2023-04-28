@@ -1,18 +1,30 @@
 package com.example.utils
 
 object Constants {
-    const val DATABASE_URL = "jdbc:mysql://db4free.net:3306/pojoservicedb"
-    const val DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver"
-    const val DATABASE_USER = "pojoservicedb"
-    const val DATABASE_PASSWORD = "ahmadbbatal3d2d3l5y"
+    /**
+     * Mysql
+     */
+//    const val DATABASE_URL = "jdbc:mysql://db4free.net:3306/pojoservicedb"
+//    const val DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver"
+//    const val DATABASE_USER = "pojoservicedb"
+//    const val DATABASE_PASSWORD = "ahmadbbatal3d2d3l5y"
 
-    const val SALTED_HASH_ALGORITHM = "SHA1PRNG"
+    /**
+     * PostGer
+     */
+    const val DATABASE_URL = "jdbc:postgresql://dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com:5432/pojo_database"
+    const val DATABASE_DRIVER = "org.postgresql.Driver"
+    const val DATABASE_USER = "pojo_user_database"
+    const val DATABASE_PASSWORD = "kguITyf41pkYBKeKo7ZIRfdTV2vOKKka"
 
+    /**
+     * Root
+     */
     const val DATABASE_URL_ROOT = "jdbc:mysql://localhost:3306/pojo_test"
     const val DATABASE_USER_ROOT = "root"
     const val DATABASE_PASSWORD_ROOT = "ghgh"
 
-
+    const val SALTED_HASH_ALGORITHM = "SHA1PRNG"
     /**
      * Jwt
      */

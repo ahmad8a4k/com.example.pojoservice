@@ -45,7 +45,7 @@ class GetNaturalLiteImagesByColorUseCase(
 
             val naturalImages = naturalImagesAsync.await()
 
-            if (naturalImages[0].natural_id == 0) {
+            if (naturalImages.isEmpty()) {
                 return@coroutineScope BaseResponse.ErrorLiseResponse(message = ResponseMessages.FailFetchNaturalLites.message)
             }
 

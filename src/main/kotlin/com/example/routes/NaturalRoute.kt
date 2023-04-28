@@ -37,8 +37,8 @@ fun Route.naturalsImagesRoute() {
         put(ImageEndPoint.NaturalColors.path) {
             val naturalByCategoriesAndPagingParameters = naturalByColorsAndPaging()
             val naturalImages = naturalsByColorUseCase(
-                pageSize = naturalByCategoriesAndPagingParameters.pageSize.toInt(),
-                pageNumber = naturalByCategoriesAndPagingParameters.pageNum.toInt(),
+                pageSize = naturalByCategoriesAndPagingParameters.pageSize,
+                pageNumber = naturalByCategoriesAndPagingParameters.pageNum,
                 colorId = naturalByCategoriesAndPagingParameters.color_id,
                 colorName = naturalByCategoriesAndPagingParameters.color_name
             )

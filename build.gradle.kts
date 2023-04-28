@@ -63,13 +63,18 @@ dependencies {
 
 
     // Mysql Connector
-    implementation("mysql:mysql-connector-java:8.0.32")
+//    implementation("mysql:mysql-connector-java:8.0.32")
+//    implementation("org.ktorm:ktorm-support-mysql:3.6.0")
 
     // Ktorm Core   KTORM
     implementation("org.ktorm:ktorm-core:3.6.0")
 //    implementation("me.liuwj.ktorm:ktorm-support-mysql:3.1.0")
 //    implementation("me.liuwj.ktorm:ktorm-jackson:3.1.0")
-    implementation("org.ktorm:ktorm-support-mysql:3.6.0")
+
+
+    // PostGer
+    implementation("org.ktorm:ktorm-support-postgresql:3.6.0")
+    implementation("org.postgresql:postgresql:42.5.4")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 }

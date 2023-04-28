@@ -27,7 +27,7 @@ fun Database.imageFullDetailsQuery(pageSize: Int, page: Int): List<ImageDetailsF
         )
         .innerJoin(
             ImageStaImageStatsDetails,
-            on = ImageDetailsTable.id eq ImageStaImageStatsDetails.imageId
+            on = ImageStaImageStatsDetails.imageId eq ImageDetailsTable.id
         )
         .innerJoin(
             AdminsTable,

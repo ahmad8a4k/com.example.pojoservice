@@ -37,7 +37,7 @@ class GetNaturalLiteImagesByCategoryUseCase(
             categoryId = categoryId
         )
 
-        if(naturalImages[0].natural_id == 0){
+        if(naturalImages.isEmpty()){
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.FailFetchNaturalLites.message)
         }
 

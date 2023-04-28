@@ -1,17 +1,21 @@
 version: '3.5'
 services:
   db:
-    image: mysql
+    image: postgres
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=ahmadbbatal3d2d3l5y
-      - MYSQL_DATABASE=pojoservicedb
-      - MYSQL_USER=pojoservicedb
-      - MYSQL_PASSWORD=ahmadbbatal3d2d3l5y
+#      - MYSQL_ROOT_PASSWORD=ahmadbbatal3d2d3l5y
+#      - MYSQL_DATABASE=pojoservicedb
+#      - MYSQL_USER=pojoservicedb
+#      - MYSQL_PASSWORD=ahmadbbatal3d2d3l5y
+       - MYSQL_ROOT_PASSWORD=kguITyf41pkYBKeKo7ZIRfdTV2vOKKka
+       - MYSQL_DATABASE=pojo_database
+       - MYSQL_USER=pojo_user_database
+       - MYSQL_PASSWORD=kguITyf41pkYBKeKo7ZIRfdTV2vOKKka
     ports:
-      - "3308:3306"
+      - "54333:5432"
     healthcheck:
-      test: mysqladmin ping -h db4free.net -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+      test: pg_isready ping -h kguITyf41pkYBKeKo7ZIRfdTV2vOKKka@dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com -u$$MYSQL_USER -p$$MYSQL_PASSWORD
       timeout: 30s
       retries: 5
 

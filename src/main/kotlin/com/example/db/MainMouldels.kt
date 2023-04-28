@@ -10,7 +10,7 @@ import com.example.domain.usecases.user.*
 import com.example.utils.Constants
 import org.koin.dsl.module
 import org.ktorm.database.Database
-import org.ktorm.support.mysql.MySqlDialect
+import org.ktorm.support.postgresql.PostgreSqlDialect
 
 val mainModule = module {
 
@@ -18,9 +18,9 @@ val mainModule = module {
         Database.connect(
             url = Constants.DATABASE_URL,
             driver = Constants.DATABASE_DRIVER,
-            user = System.getenv("dbname") ?: "pojoservicedb",
-            password = System.getenv("dbpassword") ?: "ahmadbbatal3d2d3l5y",
-            dialect = MySqlDialect(),
+            user = System.getenv("dbname") ?: "pojo_user_database",
+            password = System.getenv("dbpassword") ?: "kguITyf41pkYBKeKo7ZIRfdTV2vOKKka",
+            dialect = PostgreSqlDialect(),
         )
 //        Database.connect(
 //            url = DATABASE_URL_ROOT,

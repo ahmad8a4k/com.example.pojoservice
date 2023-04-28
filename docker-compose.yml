@@ -4,13 +4,13 @@ services:
     image: postgres:15
     restart: always
     environment:
-      - POSTGRES_DB=pojo_user_database
+      - POSTGRES_DB=pojo_database
       - POSTGRES_USER=pojo_user_database
       - POSTGRES_PASSWORD=kguITyf41pkYBKeKo7ZIRfdTV2vOKKka
     ports:
       - "54333:5432"
     healthcheck:
-      test: pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB
+      test: pg_isready -h dpg-ch5qvrks3fvuoba7f91g-a -u $$POSTGRES_USER -p $$POSTGRES_DB
       timeout: 30s
       retries: 5
 
@@ -39,7 +39,7 @@ services:
       - "3570:9090"
     volumes:
       - ./monitoring:/etc/prometheus/
-    links:
+    depends_on:
       - backend
       - postgres-sandbox
 
@@ -50,7 +50,7 @@ services:
     user: "472"
     volumes:
       - ./monitoring/grafana:/var/lib/grafana
-    links:
+    depends_on:
       - backend
       - prometheus
       - postgres-sandbox

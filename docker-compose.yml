@@ -15,7 +15,7 @@ services:
     ports:
       - "54333:5432"
     healthcheck:
-      test: pg_isready ping -h kguITyf41pkYBKeKo7ZIRfdTV2vOKKka@dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+      test: pg_isready ping -h dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com -u$$MYSQL_USER -p$$MYSQL_PASSWORD
       timeout: 30s
       retries: 5
 

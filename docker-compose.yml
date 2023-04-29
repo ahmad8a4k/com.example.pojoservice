@@ -38,7 +38,7 @@ services:
       - "3510:3500"
 
   prometheus:
-    image: prom/prometheus:v2.31.1
+    image: prom/prometheus
     restart: always
     ports:
       - "3570:9090"

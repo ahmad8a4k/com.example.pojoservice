@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   postgres-sandbox:
     image: postgres:15
@@ -9,13 +10,17 @@ services:
       - POSTGRES_PASSWORD=kguITyf41pkYBKeKo7ZIRfdTV2vOKKka
     ports:
       - "54333:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -h dpg-ch5qvrks3fvuoba7f91g-a -u $$POSTGRES_USER -p $$POSTGRES_DB
+      test: pg_isready -h dpg-ch5qvrks3fvuoba7f91g-a -u $$POSTGRES_USER -p $$POSTGRES_PASSWORD
       timeout: 30s
       retries: 5
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     deploy:
       resources:
         limits:
@@ -33,7 +38,7 @@ services:
       - "3510:3500"
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.31.1
     restart: always
     ports:
       - "3570:9090"
@@ -54,3 +59,6 @@ services:
       - backend
       - prometheus
       - postgres-sandbox
+
+volumes:
+  postgres_data:

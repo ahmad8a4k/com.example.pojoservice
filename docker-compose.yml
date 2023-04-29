@@ -8,12 +8,13 @@ services:
       - POSTGRES_DB=pojo_database
       - POSTGRES_USER=pojo_user_database
       - POSTGRES_PASSWORD=kguITyf41pkYBKeKo7ZIRfdTV2vOKKka
+      - POSTGRES_HOST=dpg-ch5qvrks3fvuoba7f91g-a
     ports:
-      - "54333:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -h dpg-ch5qvrks3fvuoba7f91g-a -u $$POSTGRES_USER -p $$POSTGRES_PASSWORD
+      test: pg_isready -h $$POSTGRES_HOST -u $$POSTGRES_USER -p $$POSTGRES_PASSWORD
       timeout: 30s
       retries: 5
 

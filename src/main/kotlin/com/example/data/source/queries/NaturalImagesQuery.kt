@@ -125,13 +125,13 @@ fun Database.getAllNaturalLiteImagesQuery(
     page: Int,
 ): Query {
     return this.from(NaturalTable)
-        .selectDistinct(
+        .select(
             NaturalTable.id,
             NaturalTable.url
         )
         .limit(pageSize)
         .offset((page - 1) * pageSize)
-        .orderBy(NaturalTable.register.asc())
+        .orderBy(NaturalTable.id.asc())
 }
 
 

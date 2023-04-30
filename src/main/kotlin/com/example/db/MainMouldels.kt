@@ -2,10 +2,7 @@ package com.example.db
 
 import com.example.data.source.dao.*
 import com.example.domain.usecases.image.*
-import com.example.domain.usecases.natural.GetAllNaturalCategoriesUseCase
-import com.example.domain.usecases.natural.GetNaturalImagesByPagingUseCase
-import com.example.domain.usecases.natural.GetNaturalLiteImagesByCategoryUseCase
-import com.example.domain.usecases.natural.GetNaturalLiteImagesByColorUseCase
+import com.example.domain.usecases.natural.*
 import com.example.domain.usecases.user.*
 import com.example.utils.Constants
 import org.koin.dsl.module
@@ -122,5 +119,9 @@ val mainModule = module {
 
     single {
         GetNaturalLiteImagesByColorUseCase(get(), get())
+    }
+
+    single {
+        GetAllNaturalLiteImages(get(), get())
     }
 }

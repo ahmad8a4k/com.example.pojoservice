@@ -36,4 +36,5 @@ sealed class ImageEndPoint(val path: String) {
     object NaturalImages : ImageEndPoint(path = "/natural_images")
     object NaturalByCategories : ImageEndPoint(path = "/natural_by_category")
     object NaturalColors : ImageEndPoint(path = "/natural_by_color")
+    object AllLiteNatural : ImageEndPoint(path = "/all_natural_lite_images")
 }

@@ -3,7 +3,7 @@ package com.example.data.source.queries
 import com.example.data.dto.imageDetails.LiteNaturalDetailsDto
 import com.example.data.dto.imageDetails.NaturalDetailsDto
 import com.example.data.tables.*
-import com.example.domain.queryMapper.natural.liteNaturalDetails
+import com.example.domain.queryMapper.natural.toLiteNaturalDetailsDto
 import com.example.domain.queryMapper.natural.naturalFullDetailsToDto
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
@@ -52,7 +52,7 @@ fun Database.getListOfLiteNaturalDetailsQuery(pageSize: Int, page: Int): List<Li
         .limit(pageSize)
         .offset((page - 1) * pageSize)
         .orderBy()
-        .map { it.liteNaturalDetails() }
+        .map { it.toLiteNaturalDetailsDto() }
 }
 
 fun Database.getListOfLiteNaturalDetailsByCategoryQuery(
@@ -85,7 +85,7 @@ fun Database.getListOfLiteNaturalDetailsByCategoryQuery(
         .limit(pageSize)
         .offset((page - 1) * pageSize)
         .orderBy(NaturalTable.id.asc())
-        .map { it.liteNaturalDetails() }
+        .map { it.toLiteNaturalDetailsDto() }
 }
 
 fun Database.getListOfLiteNaturalsByColorQuery(
@@ -120,6 +120,18 @@ fun Database.getListOfLiteNaturalsByColorQuery(
         .orderBy(NaturalTable.id.asc())
 }
 
-
+fun Database.getAllNaturalLiteImagesQuery(
+    pageSize: Int,
+    page: Int,
+): Query {
+    return this.from(NaturalTable)
+        .selectDistinct(
+            NaturalTable.id,
+            NaturalTable.url
+        )
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+        .orderBy(NaturalTable.register.asc())
+}
 
 

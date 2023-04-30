@@ -3,12 +3,9 @@ package com.example.data.source.dao
 import com.example.data.dto.imageDetails.LiteNaturalDetailsDto
 import com.example.data.dto.imageDetails.NaturalCategoriesDto
 import com.example.data.dto.imageDetails.NaturalDetailsDto
-import com.example.data.source.queries.getListOfLiteNaturalDetailsByCategoryQuery
-import com.example.data.source.queries.getListOfLiteNaturalDetailsQuery
-import com.example.data.source.queries.getListOfLiteNaturalsByColorQuery
-import com.example.data.source.queries.naturalDetailsQuery
+import com.example.data.source.queries.*
 import com.example.data.tables.NaturalCategoryTable
-import com.example.domain.queryMapper.natural.liteNaturalDetails
+import com.example.domain.queryMapper.natural.toLiteNaturalDetailsDto
 import com.example.domain.queryMapper.natural.naturalCategoryDto
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -63,6 +60,22 @@ class NaturalImagesDaoImpl(
                     colorId = colorId,
                 )
             }
-            query.await().map { it.liteNaturalDetails() }
+            query.await().map { it.toLiteNaturalDetailsDto() }
         }
+
+    override suspend fun getAllNaturalLiteImages(
+        pageSize: Int,
+        page: Int,
+    ): List<LiteNaturalDetailsDto> =
+        coroutineScope {
+            val query = async {
+                dataBase.getAllNaturalLiteImagesQuery(
+                    pageSize = pageSize,
+                    page = page,
+                )
+            }
+
+            query.await().map { it.toLiteNaturalDetailsDto() }
+        }
+
 }

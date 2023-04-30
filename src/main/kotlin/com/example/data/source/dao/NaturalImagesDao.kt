@@ -26,4 +26,9 @@ interface NaturalImagesDao {
         colorName: String,
     ): List<LiteNaturalDetailsDto>
 
+    suspend fun getAllNaturalLiteImages(
+        pageSize: Int,
+        page: Int,
+    ): List<LiteNaturalDetailsDto>
+
 }

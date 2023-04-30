@@ -27,7 +27,7 @@ fun QueryRowSet.naturalFullDetailsToDto() = NaturalDetailsDto(
     register = Date.valueOf(this[NaturalTable.register]).time.convertLongToDate()
 )
 
-fun QueryRowSet.liteNaturalDetails() = LiteNaturalDetailsDto(
+fun QueryRowSet.toLiteNaturalDetailsDto() = LiteNaturalDetailsDto(
     natural_id = this[NaturalTable.id] ?: 0,
     natural_url = this[NaturalTable.url] ?: "Empty"
 )

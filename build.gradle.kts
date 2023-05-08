@@ -19,10 +19,17 @@ application {
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
+
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
 }
 
 repositories {
@@ -30,7 +37,7 @@ repositories {
 }
 
 dependencies {
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
 
     // negotiation
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
@@ -53,6 +60,13 @@ dependencies {
 
     // netty
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
+    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
@@ -84,8 +98,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 }
 
-ktor {
-    docker {
-        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
-    }
-}
+//ktor {
+//    docker {
+//        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+//    }
+//}

@@ -6,7 +6,7 @@ import com.example.domain.usecases.natural.GetNaturalImagesByPagingUseCase
 import com.example.domain.usecases.natural.GetNaturalLiteImagesByCategoryUseCase
 import com.example.domain.usecases.natural.GetNaturalLiteImagesByColorUseCase
 import com.example.routes.mapper.image.pagingParameter
-import com.example.routes.mapper.natural.naturalByCategoriesAndPaging
+import com.example.routes.mapper.natural.imagesByCategoryParameters
 import com.example.routes.mapper.natural.naturalByColorsAndPaging
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -30,7 +30,7 @@ fun Route.naturalsImagesRoute() {
     }
 
     put(ImageEndPoint.NaturalByCategories.path) {
-        val naturalByCategoriesAndPagingParameters = naturalByCategoriesAndPaging()
+        val naturalByCategoriesAndPagingParameters = imagesByCategoryParameters()
         val naturalImages = naturalByCategoryAndPaging(
             pageSize = naturalByCategoriesAndPagingParameters.pageSize.toInt(),
             pageNumber = naturalByCategoriesAndPagingParameters.pageNum.toInt(),

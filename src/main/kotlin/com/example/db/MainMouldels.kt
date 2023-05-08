@@ -124,4 +124,12 @@ val mainModule = module {
     single {
         GetAllNaturalLiteImages(get(), get())
     }
+
+    single {
+        GetAllLiteCategoriesUserCase(get())
+    }
+
+    single {
+        GetAllLiteImagesByCategory(get())
+    }
 }

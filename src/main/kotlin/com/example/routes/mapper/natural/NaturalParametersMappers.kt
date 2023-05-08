@@ -6,7 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.util.*
 import io.ktor.util.pipeline.*
 
-fun PipelineContext<*, ApplicationCall>.naturalByCategoriesAndPaging(): NaturalByCategoryDetailsAndPagingRequest {
+fun PipelineContext<*, ApplicationCall>.imagesByCategoryParameters(): NaturalByCategoryDetailsAndPagingRequest {
     val queryParameter = call.request.queryParameters
     return NaturalByCategoryDetailsAndPagingRequest(
         pageSize = queryParameter.getOrFail("page_size"),

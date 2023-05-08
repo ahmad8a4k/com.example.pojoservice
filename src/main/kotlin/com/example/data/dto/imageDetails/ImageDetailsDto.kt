@@ -42,5 +42,5 @@ data class ImageDetailsImageStatsDetailsDto(
     @SerialName("watch_numbers") val watch_numbers: Int,
     @SerialName("download_numbers") val download_numbers: Int,
     @SerialName("save_numbers") val save_numbers: Int,
-    @SerialName("share_numbers") val share_numbers: Int,
+    @SerialName("share_numbers") val share_numbers: Int
 )

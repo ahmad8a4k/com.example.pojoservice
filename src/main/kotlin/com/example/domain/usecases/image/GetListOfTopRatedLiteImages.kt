@@ -1,6 +1,6 @@
 package com.example.domain.usecases.image
 
-import com.example.data.dto.LiteImageDetailsWithLikesCountDto
+import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
 import com.example.data.source.dao.ImageDao
 import com.example.data.tables.ImageDetailsTable
 import com.example.domain.usecases.util.makePageNumberDefaultIfItZero
@@ -14,7 +14,7 @@ class GetListOfTopRatedLiteImages(
     private val imageDao: ImageDao,
 ) {
     suspend operator fun invoke(pageSize: Int, pageNumber: Int)
-            : BaseResponse<List<LiteImageDetailsWithLikesCountDto>> {
+            : BaseResponse<List<LiteImageDetailsWithLikesCountAndTitleDto>> {
 
         val totalPageNumber = imageDao.getTotalPagesTable(ImageDetailsTable, pageSize)
 

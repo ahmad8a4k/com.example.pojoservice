@@ -3,6 +3,7 @@ package com.example.routes
 import com.example.domain.endpoints.ImageEndPoint
 import com.example.domain.usecases.image.*
 import com.example.routes.mapper.image.pagingParameter
+import com.example.routes.mapper.natural.imagesByCategoryParameters
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -15,6 +16,7 @@ fun Route.images() {
     val tenTopRatedImageBasedOnTopWeekOrLastWeek by inject<GetTenTopRatedImagesBasedOnTopWeekOrLastWeek>()
     val listTopRatedImages by inject<GetListOfTopRatedLiteImages>()
     val listOfColorsUseCase by inject<GetAllColorsUseCase>()
+    val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
 
     put(ImageEndPoint.Images.path) {
         val imagePageParameters = pagingParameter()
@@ -58,6 +60,20 @@ fun Route.images() {
         call.respond(
             message = topRatedList,
             status = topRatedList.statuesCode
+        )
+    }
+
+    put(ImageEndPoint.AllLiteImagesByCategory.path) {
+        val imagePageParameters = imagesByCategoryParameters()
+        val images = listLiteImagesByCategoryUseCase(
+            pageSize = imagePageParameters.pageSize.toInt(),
+            page = imagePageParameters.pageNum.toInt(),
+            categoryId = imagePageParameters.category_id,
+            categoryName = imagePageParameters.category_name
+        )
+        call.respond(
+            message = images,
+            status = images.statuesCode
         )
     }
 }

@@ -1,14 +1,19 @@
 package com.example.data.source.queries
 
 import com.example.data.dto.LiteImageDetailsDto
+import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
 import com.example.data.dto.LiteImageDetailsWithLikesCountDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.tables.*
 import com.example.domain.queryMapper.images.imageFullDetailsToDto
 import com.example.domain.queryMapper.images.liteImageDetailsRow
+import com.example.domain.queryMapper.images.liteImageDetailsWithLikeCountRow
 import com.example.domain.queryMapper.images.liteImageDetailsWithLikesCountRow
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
+import org.ktorm.expression.ArgumentExpression
+import org.ktorm.expression.*
+import org.ktorm.schema.ColumnDeclaring
 import java.time.LocalDate
 
 fun Database.imageFullDetailsQuery(pageSize: Int, page: Int): List<ImageDetailsFullDto> {
@@ -75,7 +80,7 @@ fun Database.liteListImageDetailsQuery(pageSize: Int, page: Int): List<LiteImage
 }
 
 fun Database.getTopRatedLiteImagesThisWeekOrLastWeeks():
-        List<LiteImageDetailsWithLikesCountDto> {
+        List<LiteImageDetailsWithLikesCountAndTitleDto> {
     val currentDate = LocalDate.now()
     val oneWeekAgo = currentDate.minusWeeks(1)
     val twoWeeksAgo = currentDate.minusWeeks(2)
@@ -103,7 +108,7 @@ fun Database.getTopRatedLiteImagesThisWeekOrLastWeeks():
 }
 
 fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
-        List<LiteImageDetailsWithLikesCountDto> {
+        List<LiteImageDetailsWithLikesCountAndTitleDto> {
     return this.from(ImageDetailsTable)
         .innerJoin(
             right = UserSocialTable,
@@ -124,10 +129,52 @@ fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
         .map { it.liteImageDetailsWithLikesCountRow() }
 }
 
-fun Database.getAllColorsQuery(): Query {
-    return this.from(ColorsTable).select(
-        ColorsTable.id,
-        ColorsTable.colorName,
-        ColorsTable.colorHex
+fun Database.getAllLiteImagesByCategoryQuery(
+    pageSize: Int,
+    page: Int,
+    categoryId: Int,
+    categoryName: String,
+): Query {
+    return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        )
+        .leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        )
+        .leftJoin(
+            right = ImagesTagsTable,
+            on = ImageDetailsTable.id.eq(ImagesTagsTable.image_id)
+        )
+        .leftJoin(
+            right = TagsTable,
+            on = ImagesTagsTable.tag_id.eq(TagsTable.id)
+        )
+        .selectDistinct(
+            ImageDetailsTable.id,
+            ImageDetailsTable.url,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
+        )
+        .where {
+            TagsTable.tag_name.like("%$categoryName%") or
+                    ImageCategoriesTable.id.eq(categoryId)
+        }
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+        .groupBy(ImageDetailsTable.id)
+}
+
+fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExpression<T> {
+    return FunctionExpression(
+        functionName = "coalesce",
+        arguments = listOf(column.asExpression(), ArgumentExpression(defaultValue, column.sqlType)),
+        sqlType = column.sqlType
     )
 }

@@ -1,17 +1,12 @@
 package com.example.data.source.dao
 
-import com.example.data.dto.ColorDetailsDto
-import com.example.data.dto.ImageDetailsDto
-import com.example.data.dto.LiteImageDetailsDto
-import com.example.data.dto.LiteImageDetailsWithLikesCountDto
+import com.example.data.dto.*
 import com.example.data.dto.imageDetails.ImageCategoryDto
+import com.example.data.dto.imageDetails.ImageCategoryLiteDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.source.queries.*
 import com.example.data.tables.*
-import com.example.domain.queryMapper.images.toColorDetailsMapper
-import com.example.domain.queryMapper.images.imageCategoryMapper
-import com.example.domain.queryMapper.images.imageFullDetailsToDto
-import com.example.domain.queryMapper.images.toImageDetailsDto
+import com.example.domain.queryMapper.images.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.ktorm.database.Database
@@ -73,21 +68,50 @@ class ImageDaoImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek(): List<LiteImageDetailsWithLikesCountDto> {
+    override suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek()
+            : List<LiteImageDetailsWithLikesCountAndTitleDto> {
         return dataBase.getTopRatedLiteImagesThisWeekOrLastWeeks()
     }
 
     override suspend fun getTopRatedLiteImages(
         pageSize: Int,
         pageNumber: Int,
-    ): List<LiteImageDetailsWithLikesCountDto> {
+    ): List<LiteImageDetailsWithLikesCountAndTitleDto> {
         return dataBase.listOfTopRatedLiteImages(pageSize = pageSize, pageNumber = pageNumber)
     }
 
-    override suspend fun getAllColors(): List<ColorDetailsDto> =
-        coroutineScope {
+    override suspend fun getAllColors(): List<ColorDetailsDto> {
+        return coroutineScope {
             val query = async { dataBase.getAllColorsQuery() }
 
             query.await().map { it.toColorDetailsMapper() }
         }
+    }
+
+    override suspend fun getAllLiteCategories(): List<ImageCategoryLiteDto> {
+        return coroutineScope {
+            val query = async { dataBase.getAllImagesCategoriesLite() }
+
+            query.await().map { it.toCategoryLiteDto() }
+        }
+    }
+
+    override suspend fun getAllLiteImageByCategories(
+        pageSize: Int,
+        page: Int,
+        categoryId: Int,
+        categoryName: String,
+    ): List<LiteImageDetailsWithLikesCountDto> {
+        return coroutineScope {
+            val query = async {
+                dataBase.getAllLiteImagesByCategoryQuery(
+                    pageSize = pageSize,
+                    page = page,
+                    categoryId = categoryId,
+                    categoryName = categoryName
+                )
+            }
+            query.await().map { it.liteImageDetailsWithLikeCountRow() }
+        }
+    }
 }

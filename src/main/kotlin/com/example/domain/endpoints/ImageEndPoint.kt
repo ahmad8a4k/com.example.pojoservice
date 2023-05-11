@@ -19,12 +19,15 @@ sealed class ImageEndPoint(val path: String) {
     object ListTenTopRated : ImageEndPoint(path = "/list_top_rated")
     object AllLiteImagesByCategory: ImageEndPoint(path = "/lite_images_by_category")
 
+    object TryEncodeImages : ImageEndPoint(path = "/tryEncodeImages")
+
     /**
      * Categories
      */
     object SevenCategories : ImageEndPoint(path = "/seven_category")
     object AllCategories : ImageEndPoint(path = "/categories")
     object AllLiteCategories : ImageEndPoint(path = "/lite_categories")
+    object EncodeBlurHashCategories : ImageEndPoint(path = "/encode_blurHash_categories")
 
     /**
      * Colors

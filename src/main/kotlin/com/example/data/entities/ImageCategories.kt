@@ -10,5 +10,6 @@ interface ImageCategories : Entity<ImageCategories> {
     var categoryName: String
     var categoryUrl: String
     var adminAdded: Admins
+    var blurHash: String
     var categoryDate: LocalDate
 }

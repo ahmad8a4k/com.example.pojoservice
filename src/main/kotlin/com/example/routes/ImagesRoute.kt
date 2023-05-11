@@ -17,6 +17,7 @@ fun Route.images() {
     val listTopRatedImages by inject<GetListOfTopRatedLiteImages>()
     val listOfColorsUseCase by inject<GetAllColorsUseCase>()
     val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
+    val listLiteImagesByCategoryUseCase2 by inject<UpdateBlurHashForLiteImagesByCategoryId>()
 
     put(ImageEndPoint.Images.path) {
         val imagePageParameters = pagingParameter()
@@ -76,4 +77,12 @@ fun Route.images() {
             status = images.statuesCode
         )
     }
+
+    get(ImageEndPoint.TryEncodeImages.path){
+        listLiteImagesByCategoryUseCase2()
+    }
 }
+data class EncodingImage(
+    val imageUrl :List<String>,
+    val imageEncode: List<String>
+)

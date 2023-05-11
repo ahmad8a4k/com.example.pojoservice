@@ -1,5 +1,6 @@
 package com.example.domain.queryMapper.images
 
+import com.example.data.dto.IdAndUrlImagesWithDto
 import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
 import com.example.data.dto.LiteImageDetailsWithLikesCountDto
@@ -26,5 +27,12 @@ fun QueryRowSet.liteImageDetailsWithLikesCountRow() = LiteImageDetailsWithLikesC
 fun QueryRowSet.liteImageDetailsWithLikeCountRow() = LiteImageDetailsWithLikesCountDto(
     image_id = this[ImageDetailsTable.id] ?: 0,
     image_url = this[ImageDetailsTable.url] ?: "Empty",
-    likes_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] as Int
+    likes_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] as Int,
+    blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
+)
+
+fun QueryRowSet.idAndUrlImageMapperRow() = IdAndUrlImagesWithDto(
+    image_id = this[ImageDetailsTable.id] ?: 0,
+    image_url = this[ImageDetailsTable.url] ?: "Empty",
+    blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
 )

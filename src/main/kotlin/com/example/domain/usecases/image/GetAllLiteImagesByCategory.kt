@@ -2,6 +2,7 @@ package com.example.domain.usecases.image
 
 import com.example.data.dto.LiteImageDetailsWithLikesCountDto
 import com.example.data.source.dao.ImageDao
+import com.example.data.tables.ImageDetailsTable
 import com.example.data.tables.NaturalTable
 import com.example.domain.usecases.util.makePageNumberDefaultIfItZero
 import com.example.domain.usecases.util.makePageSizeInRange
@@ -11,16 +12,16 @@ import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
 
 class GetAllLiteImagesByCategory(
-    private val imageDao: ImageDao
+    private val imageDao: ImageDao,
 ) {
     suspend operator fun invoke(
         pageSize: Int,
         page: Int,
-        categoryId:Int,
-        categoryName:String
-    ) : BaseResponse<List<LiteImageDetailsWithLikesCountDto>>{
+        categoryId: Int,
+        categoryName: String,
+    ): BaseResponse<List<LiteImageDetailsWithLikesCountDto>> {
 
-        val totalPages = imageDao.getTotalPagesTable(NaturalTable, pageSize)
+        val totalPages = imageDao.getTotalPagesTable(ImageDetailsTable, pageSize)
 
         val pageNumberInRange = page.pageNumberToMakeItInRange(totalPages = totalPages)
 
@@ -35,7 +36,7 @@ class GetAllLiteImagesByCategory(
             categoryId = categoryId
         )
 
-        if(images.isEmpty()){
+        if (images.isEmpty()) {
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.FailFetchNaturalLites.message)
         }
 
@@ -46,3 +47,4 @@ class GetAllLiteImagesByCategory(
 
     }
 }
+

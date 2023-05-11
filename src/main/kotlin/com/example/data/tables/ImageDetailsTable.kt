@@ -15,5 +15,6 @@ object ImageDetailsTable : Table<ImageDetails>("image_details") {
     val categoryDetailsId = int("category_details_id").references(CategoryDetailsTable) { it.categoryDetailsId }
     val imgDescription = varchar("img_description").bindTo { it.imgDescription }
     val adminId = int("admin_id").references(AdminsTable) { it.adminId }
+    val blur_hash = varchar("blur_hash").bindTo { it.blurHash }
     val register = date("register").bindTo { it.register }
 }

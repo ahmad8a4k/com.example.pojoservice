@@ -2,12 +2,10 @@ package com.example.data.source.queries
 
 import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
-import com.example.data.dto.LiteImageDetailsWithLikesCountDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.tables.*
 import com.example.domain.queryMapper.images.imageFullDetailsToDto
 import com.example.domain.queryMapper.images.liteImageDetailsRow
-import com.example.domain.queryMapper.images.liteImageDetailsWithLikeCountRow
 import com.example.domain.queryMapper.images.liteImageDetailsWithLikesCountRow
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
@@ -155,6 +153,7 @@ fun Database.getAllLiteImagesByCategoryQuery(
         .selectDistinct(
             ImageDetailsTable.id,
             ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id
@@ -171,6 +170,32 @@ fun Database.getAllLiteImagesByCategoryQuery(
         .groupBy(ImageDetailsTable.id)
 }
 
+fun Database.getIdAnUrlFromAllLiteImages(): Query {
+    return this.from(ImageDetailsTable)
+        .select(
+            ImageDetailsTable.id,
+            ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash
+        )
+        .orderBy(ImageDetailsTable.id.asc())
+}
+
+
+/**
+ * For Admin In Future
+ */
+fun Database.updateImageBlurHashByImageId(imageId: Int, blurHash: String) {
+    this.update(ImageDetailsTable) { imageTable ->
+        set(imageTable.blur_hash, blurHash)
+        where {
+            imageTable.id eq imageId
+        }
+    }
+}
+
+/**
+ *  If Their No Value Set Default Value
+ */
 fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExpression<T> {
     return FunctionExpression(
         functionName = "coalesce",

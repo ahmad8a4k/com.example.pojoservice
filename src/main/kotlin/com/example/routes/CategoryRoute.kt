@@ -1,9 +1,10 @@
 package com.example.routes
 
 import com.example.domain.endpoints.ImageEndPoint
-import com.example.domain.usecases.image.GetAllCategoriesUseCase
-import com.example.domain.usecases.image.GetAllLiteCategoriesUserCase
-import com.example.domain.usecases.image.GetSevenCategoriesUseCases
+import com.example.domain.usecases.category.GetAllCategoriesUseCase
+import com.example.domain.usecases.category.GetAllLiteCategoriesUserCase
+import com.example.domain.usecases.category.GetSevenCategoriesUseCases
+import com.example.domain.usecases.category.UpdateAllBlurHashCategory
 import com.example.domain.usecases.natural.GetAllNaturalCategoriesUseCase
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -16,6 +17,7 @@ fun Route.categoriesRoute() {
     val getAllCategoriesUseCase by inject<GetAllCategoriesUseCase>()
     val naturalCategories by inject<GetAllNaturalCategoriesUseCase>()
     val getAllLiteCategories by inject<GetAllLiteCategoriesUserCase>()
+    val updateBlurHashForALlCategories by inject<UpdateAllBlurHashCategory>()
 
     /**
     Images Category
@@ -33,6 +35,10 @@ fun Route.categoriesRoute() {
     get(ImageEndPoint.AllLiteCategories.path) {
         val categories = getAllLiteCategories()
         call.respond(message = categories, status = categories.statuesCode)
+    }
+
+    get(ImageEndPoint.EncodeBlurHashCategories.path) {
+        updateBlurHashForALlCategories()
     }
 
     /**

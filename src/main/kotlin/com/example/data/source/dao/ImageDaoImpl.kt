@@ -114,4 +114,36 @@ class ImageDaoImpl(
             query.await().map { it.liteImageDetailsWithLikeCountRow() }
         }
     }
+
+    override suspend fun getAllLiteImage(): List<IdAndUrlImagesWithDto> {
+        return coroutineScope {
+            val query = async { dataBase.getIdAnUrlFromAllLiteImages() }
+
+            query.await().map { it.idAndUrlImageMapperRow() }
+        }
+    }
+
+    override suspend fun updateBlurHashForImageByImageId(imageId: Int, blurHash: String) {
+        return coroutineScope {
+            val query = async {
+                dataBase.updateImageBlurHashByImageId(
+                    imageId = imageId,
+                    blurHash = blurHash
+                )
+            }
+            query.await()
+        }
+    }
+
+    override suspend fun updateCategoryBlurHashByCategoryId(categoryId: Int, blurHash: String) {
+        return coroutineScope {
+            val query = async {
+                dataBase.updateCategoryBlurHashByCategoryId(
+                    categoryId = categoryId,
+                    blurHash = blurHash
+                )
+            }
+            query.await()
+        }
+    }
 }

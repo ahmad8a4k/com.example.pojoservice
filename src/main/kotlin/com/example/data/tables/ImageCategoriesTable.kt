@@ -1,6 +1,7 @@
 package com.example.data.tables
 
 import com.example.data.entities.ImageCategories
+import com.example.data.tables.SubscribeTypesTable.bindTo
 
 import org.ktorm.schema.Table
 import org.ktorm.schema.date
@@ -12,5 +13,6 @@ object ImageCategoriesTable : Table<ImageCategories>("img_categories") {
     val categoryName = varchar("category_name").bindTo { it.categoryName }
     val category_url = varchar("category_url").bindTo { it.categoryUrl }
     val adminAdded = int("admin_added").references(AdminsTable) { it.adminAdded }
+    val blur_hash = varchar("blur_hash").bindTo { it.blurHash }
     val categoryDate = date("category_date").bindTo { it.categoryDate }
 }

@@ -8,4 +8,5 @@ fun QueryRowSet.toCategoryLiteDto() = ImageCategoryLiteDto(
     category_id = this[ImageCategoriesTable.id] ?: 0,
     category_name = this[ImageCategoriesTable.categoryName] ?: "",
     category_url =  this[ImageCategoriesTable.category_url] ?: "",
+    category_blur_hash =  this[ImageCategoriesTable.blur_hash] ?: "",
 )

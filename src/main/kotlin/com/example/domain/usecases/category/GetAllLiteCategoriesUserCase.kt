@@ -1,4 +1,4 @@
-package com.example.domain.usecases.image
+package com.example.domain.usecases.category
 
 import com.example.data.dto.imageDetails.ImageCategoryLiteDto
 import com.example.data.source.dao.ImageDao

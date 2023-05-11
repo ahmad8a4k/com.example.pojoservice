@@ -8,13 +8,16 @@ import com.example.utils.Constants.ISSUER
 import com.example.utils.Constants.REFRESH_TOKEN_EXPIRE_DATE
 import com.example.utils.Constants.SALTED_HASH_ALGORITHM
 import com.example.utils.Constants.SECRET
+import io.trbl.blurhash.BlurHash
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import java.net.URL
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.imageio.ImageIO
 
 
 fun String.stringToLocalDateTime(): LocalDateTime {
@@ -52,4 +55,12 @@ fun Long.convertLongToDate(): String {
     val date = Date(this)
     val format = SimpleDateFormat("yyyy/M/dd")
     return format.format(date)
+}
+
+fun String.encodeImageToBlurHashUsingURl(): String {
+    return try {
+        BlurHash.encode(ImageIO.read(URL(this))) ?: ""
+    } catch (e: Exception) {
+        ""
+    }
 }

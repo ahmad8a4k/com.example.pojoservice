@@ -36,8 +36,18 @@ interface ImageDao {
     suspend fun getAllLiteImageByCategories(
         pageSize: Int,
         page: Int,
-        categoryId:Int,
-        categoryName:String
+        categoryId: Int,
+        categoryName: String,
     ): List<LiteImageDetailsWithLikesCountDto>
+
+    suspend fun getAllLiteImage(): List<IdAndUrlImagesWithDto>
+
+
+    /**
+     *  For Admin In The Future
+     */
+    suspend fun updateBlurHashForImageByImageId(imageId: Int, blurHash: String)
+
+    suspend fun updateCategoryBlurHashByCategoryId(categoryId: Int, blurHash: String)
 
 }

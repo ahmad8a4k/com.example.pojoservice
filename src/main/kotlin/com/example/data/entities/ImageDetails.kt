@@ -13,5 +13,6 @@ interface ImageDetails : Entity<ImageDetails> {
     var categoryDetailsId:CategoryDetails
     var imgDescription:String
     var adminId:Admins
+    var blurHash: String
     var register:LocalDate
 }

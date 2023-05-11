@@ -61,12 +61,6 @@ dependencies {
     // netty
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
-    implementation("de.jaggl.sqlbuilder:sqlbuilder-core:2.7.2")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
@@ -94,8 +88,11 @@ dependencies {
     // PostGer
     implementation("org.ktorm:ktorm-support-postgresql:3.6.0")
     implementation("org.postgresql:postgresql:42.5.4")
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+
+    implementation ("io.trbl:blurhash:1.0.0")
+
+
 }
 
 //ktor {

@@ -1,6 +1,10 @@
 package com.example.db
 
 import com.example.data.source.dao.*
+import com.example.domain.usecases.category.GetAllCategoriesUseCase
+import com.example.domain.usecases.category.GetAllLiteCategoriesUserCase
+import com.example.domain.usecases.category.GetSevenCategoriesUseCases
+import com.example.domain.usecases.category.UpdateAllBlurHashCategory
 import com.example.domain.usecases.image.*
 import com.example.domain.usecases.natural.*
 import com.example.domain.usecases.user.*
@@ -131,5 +135,13 @@ val mainModule = module {
 
     single {
         GetAllLiteImagesByCategory(get())
+    }
+
+    single {
+        UpdateBlurHashForLiteImagesByCategoryId(get())
+    }
+
+    single {
+        UpdateAllBlurHashCategory(get())
     }
 }

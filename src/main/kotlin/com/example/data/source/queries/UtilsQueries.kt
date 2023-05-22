@@ -8,7 +8,8 @@ import org.ktorm.schema.Table
 import kotlin.math.ceil
 
 fun <T : Entity<T>> Database.getCountOfTableItemsQuery(table: Table<T>): Int {
-    return this.from(table).select().map { }.count()
+    return this.from(table).select(count())
+        .map { it[count().aliased("items_numbers")] ?: 0 }.first()
 }
 
 fun Database.checkIfExistByName(columnName: Column<String>, name: String): Boolean {
@@ -16,6 +17,7 @@ fun Database.checkIfExistByName(columnName: Column<String>, name: String): Boole
 }
 
 fun <T : Entity<T>> Database.getTotalPagesTableQuery(table: Table<T>, pageSize: Int): Int {
-    val itemCount = this.from(table).select().map {}.count()
+    val itemCount = this.from(table).select(count())
+        .map { it[count().aliased("items_numbers")] ?: 0 }.first()
     return ceil(itemCount.toDouble() / pageSize.toDouble()).toInt()
 }

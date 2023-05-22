@@ -28,6 +28,11 @@ sealed class ResponseMessages(val message: String) {
     object FailFetchImageDetails : ResponseMessages("Fail_Fetch_Image_Details")
     object FailFetchImageDetailsPageCause : ResponseMessages("PageNumber_More_Then_Exist")
     object EmptyImages : ResponseMessages("Empty_Image")
+    object EmptyFetchImages : ResponseMessages("Empty_Fetch_Image")
+
+    object NotFoundImageByImageID : ResponseMessages("Not_Found_Image_By_ImageID :")
+
+    object SuccessFetchImages : ResponseMessages("Success_Fetch_Images")
     /**
      * Category Response Messages
      */

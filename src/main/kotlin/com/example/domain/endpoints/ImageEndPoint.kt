@@ -17,8 +17,9 @@ sealed class ImageEndPoint(val path: String) {
     object Download : ImageEndPoint(path = "/image_download")
     object TenTopRated : ImageEndPoint(path = "/ten_top_rated")
     object ListTenTopRated : ImageEndPoint(path = "/list_top_rated")
-    object AllLiteImagesByCategory: ImageEndPoint(path = "/lite_images_by_category")
+    object AllLiteImagesByCategory : ImageEndPoint(path = "/lite_images_by_category")
 
+    object ImageCompleteDetails : ImageEndPoint(path = "/images_complete_details")
     object TryEncodeImages : ImageEndPoint(path = "/tryEncodeImages")
 
     /**

@@ -134,10 +134,6 @@ fun Database.getAllLiteImagesByCategoryQuery(
     categoryName: String,
 ): Query {
     return this.from(ImageDetailsTable)
-        .innerJoin(
-            right = ImageCategoriesTable,
-            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
-        )
         .leftJoin(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
@@ -150,10 +146,21 @@ fun Database.getAllLiteImagesByCategoryQuery(
             right = TagsTable,
             on = ImagesTagsTable.tag_id.eq(TagsTable.id)
         )
-        .selectDistinct(
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        )
+        .innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        )
+        .select(
             ImageDetailsTable.id,
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash,
+            ImageCategoriesTable.id,
+            ColorsTable.id,
+            ColorsTable.colorHex,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id
@@ -165,9 +172,13 @@ fun Database.getAllLiteImagesByCategoryQuery(
             TagsTable.tag_name.like("%$categoryName%") or
                     ImageCategoriesTable.id.eq(categoryId)
         }
-        .limit(pageSize)
+        .orderBy(ImageDetailsTable.id.desc())
+        .groupBy(
+            ImageDetailsTable.id,
+            ImageCategoriesTable.id,
+            ColorsTable.id
+        ).limit(pageSize)
         .offset((page - 1) * pageSize)
-        .groupBy(ImageDetailsTable.id)
 }
 
 fun Database.getIdAnUrlFromAllLiteImages(): Query {
@@ -177,9 +188,172 @@ fun Database.getIdAnUrlFromAllLiteImages(): Query {
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash
         )
-        .orderBy(ImageDetailsTable.id.asc())
+        .orderBy(ImageDetailsTable.id.desc())
 }
 
+fun Database.getImageDetailsByImageIdQuery(imageId: Int): Query {
+    return this.from(ImageDetailsTable)
+        .innerJoin(
+            ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId eq ImageCategoriesTable.id
+        ).innerJoin(
+            ColorsTable,
+            on = ImageDetailsTable.colorId eq ColorsTable.id
+        ).innerJoin(
+            UserTable,
+            on = ImageDetailsTable.userAdd.eq(UserTable.userId)
+        ).leftJoin(
+            right = ImageUsersWatchTable,
+            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
+        ).leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        ).select(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.imgDescription,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count"),
+            coalesce(
+                count(
+                    ImageUsersWatchTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("watch_count")
+        ).where {
+            ImageDetailsTable.id.eq(imageId)
+        }.groupBy(
+            ImageDetailsTable.id,
+            UserTable.userId
+        ).limit(1)
+}
+
+fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
+    categoryID: Int,
+    colorId: Int,
+): Query {
+    return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        ).innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        ).innerJoin(
+            UserTable,
+            on = ImageDetailsTable.userAdd.eq(UserTable.userId)
+        ).leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        ).leftJoin(
+            right = ImageUsersWatchTable,
+            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
+        )
+        .selectDistinct(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.imgDescription,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count"),
+            coalesce(
+                count(
+                    ImageUsersWatchTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("watch_count")
+        )
+        .where {
+            ImageCategoriesTable.id.eq(categoryID) or
+                    ColorsTable.id.eq(colorId)
+        }
+        .orderBy(
+            ImageDetailsTable.id.desc()
+        )
+        .groupBy(
+            ImageDetailsTable.id,
+            UserTable.userId
+        ).limit(59)
+}
+
+fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int): Query {
+    val randomCategoryId = (1..10).shuffled().random()
+    return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        ).innerJoin(
+            UserTable,
+            on = ImageDetailsTable.userAdd.eq(UserTable.userId)
+        ).leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        ).leftJoin(
+            right = ImageUsersWatchTable,
+            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
+        )
+        .selectDistinct(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.imgDescription,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count"),
+            coalesce(
+                count(
+                    ImageUsersWatchTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("watch_count")
+        )
+        .where {
+            ImageCategoriesTable.id.eq(randomCategoryId)
+        }
+        .orderBy(
+            ImageDetailsTable.id.desc()
+        )
+        .groupBy(
+            ImageDetailsTable.id,
+            UserTable.userId
+        ).limit(limit)
+}
+
+/**
+ *  If Their No Value Set Default Value
+ */
+
+fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExpression<T> {
+    return FunctionExpression(
+        functionName = "coalesce",
+        arguments = listOf(column.asExpression(), ArgumentExpression(defaultValue, column.sqlType)),
+        sqlType = column.sqlType
+    )
+}
 
 /**
  * For Admin In Future
@@ -191,15 +365,4 @@ fun Database.updateImageBlurHashByImageId(imageId: Int, blurHash: String) {
             imageTable.id eq imageId
         }
     }
-}
-
-/**
- *  If Their No Value Set Default Value
- */
-fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExpression<T> {
-    return FunctionExpression(
-        functionName = "coalesce",
-        arguments = listOf(column.asExpression(), ArgumentExpression(defaultValue, column.sqlType)),
-        sqlType = column.sqlType
-    )
 }

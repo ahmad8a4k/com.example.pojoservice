@@ -1,6 +1,6 @@
 package com.example.data.request
 
-data class NaturalByCategoryDetailsAndPagingRequest(
+data class CategoryDetailsAndPagingRequest(
     val pageSize :String,
     val pageNum:String,
     val category_id:Int,

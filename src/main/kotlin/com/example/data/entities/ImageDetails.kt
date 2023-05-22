@@ -5,14 +5,16 @@ import java.time.LocalDate
 
 interface ImageDetails : Entity<ImageDetails> {
     companion object : Entity.Factory<ImageDetails>()
-    var id:Int
-    var imgTitle:String
-    var url:String
-    var categoryId:ImageCategories
-    var colorId:Colors
-    var categoryDetailsId:CategoryDetails
-    var imgDescription:String
-    var adminId:Admins
+
+    var id: Int
+    var imgTitle: String
+    var url: String
+    var categoryId: ImageCategories
+    var colorId: Colors
+    var categoryDetailsId: CategoryDetails
+    var imgDescription: String
+    var adminId: Admins
     var blurHash: String
-    var register:LocalDate
+    var userAdd: UserEntity
+    var register: LocalDate
 }

@@ -1,14 +1,14 @@
 package com.example.routes.mapper.natural
 
-import com.example.data.request.NaturalByCategoryDetailsAndPagingRequest
+import com.example.data.request.CategoryDetailsAndPagingRequest
 import com.example.data.request.NaturalByColorAndPagingRequest
 import io.ktor.server.application.*
 import io.ktor.server.util.*
 import io.ktor.util.pipeline.*
 
-fun PipelineContext<*, ApplicationCall>.imagesByCategoryParameters(): NaturalByCategoryDetailsAndPagingRequest {
+fun PipelineContext<*, ApplicationCall>.imagesByCategoryParameters(): CategoryDetailsAndPagingRequest {
     val queryParameter = call.request.queryParameters
-    return NaturalByCategoryDetailsAndPagingRequest(
+    return CategoryDetailsAndPagingRequest(
         pageSize = queryParameter.getOrFail("page_size"),
         pageNum = queryParameter.getOrFail("page_number"),
         category_id = queryParameter.getOrFail("category_id").toInt(),

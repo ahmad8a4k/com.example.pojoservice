@@ -144,4 +144,8 @@ val mainModule = module {
     single {
         UpdateAllBlurHashCategory(get())
     }
+
+    single {
+        GetImagesDetailsBasedOnCategoryOrColorUseCase(get())
+    }
 }

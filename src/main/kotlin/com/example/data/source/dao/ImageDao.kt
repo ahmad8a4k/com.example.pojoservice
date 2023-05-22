@@ -50,4 +50,12 @@ interface ImageDao {
 
     suspend fun updateCategoryBlurHashByCategoryId(categoryId: Int, blurHash: String)
 
+    suspend fun getImagesDetailsBasedOnCategoryORColorId(
+        categoryId: Int,
+        colorID: Int,
+    ): List<ImageDetailsWithLikesAndWatchAndUser>
+
+    suspend fun getImageDetailsBasedOnImagedId(imageId: Int): ImageDetailsWithLikesAndWatchAndUser
+
+    suspend fun getImagesDetailsBasedOnRandomCategoryID(limit: Int): List<ImageDetailsWithLikesAndWatchAndUser>
 }

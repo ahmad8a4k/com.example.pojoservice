@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.domain.endpoints.ImageEndPoint
 import com.example.domain.usecases.image.*
+import com.example.routes.mapper.image.imageCategoryColorParameters
 import com.example.routes.mapper.image.pagingParameter
 import com.example.routes.mapper.natural.imagesByCategoryParameters
 import io.ktor.server.application.*
@@ -18,6 +19,7 @@ fun Route.images() {
     val listOfColorsUseCase by inject<GetAllColorsUseCase>()
     val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
     val listLiteImagesByCategoryUseCase2 by inject<UpdateBlurHashForLiteImagesByCategoryId>()
+    val listOfImagesDetailsUseCase by inject<GetImagesDetailsBasedOnCategoryOrColorUseCase>()
 
     put(ImageEndPoint.Images.path) {
         val imagePageParameters = pagingParameter()
@@ -78,11 +80,22 @@ fun Route.images() {
         )
     }
 
-    get(ImageEndPoint.TryEncodeImages.path){
+    get(ImageEndPoint.ImageCompleteDetails.path) {
+        val parameters = imageCategoryColorParameters()
+        val imagesDetails = listOfImagesDetailsUseCase(
+            imageId = parameters.imageId,
+            categoryId = parameters.categoryId,
+            colorId = parameters.colorId
+        )
+        call.respond(message = imagesDetails, status = imagesDetails.statuesCode)
+    }
+
+    get(ImageEndPoint.TryEncodeImages.path) {
         listLiteImagesByCategoryUseCase2()
     }
 }
+
 data class EncodingImage(
-    val imageUrl :List<String>,
-    val imageEncode: List<String>
+    val imageUrl: List<String>,
+    val imageEncode: List<String>,
 )

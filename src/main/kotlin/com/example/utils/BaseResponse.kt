@@ -11,7 +11,7 @@ sealed class BaseResponse<T>(@JsonIgnore open val statuesCode: HttpStatusCode) {
     data class SuccessResponse<T>(
         val status: Boolean = true,
         val data: T? = null,
-        val message: String = "",
+        val message: String = ResponseMessages.SuccessFetchImageDetails.message,
         val statusCode: HttpStatusCode = HttpStatusCode.OK,
     ) : BaseResponse<T>(statusCode)
 

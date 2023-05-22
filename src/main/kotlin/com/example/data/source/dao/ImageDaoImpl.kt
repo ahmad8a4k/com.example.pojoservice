@@ -146,4 +146,44 @@ class ImageDaoImpl(
             query.await()
         }
     }
+
+    override suspend fun getImagesDetailsBasedOnCategoryORColorId(
+        categoryId: Int,
+        colorID: Int,
+    ): List<ImageDetailsWithLikesAndWatchAndUser> {
+        return coroutineScope {
+            val q = async {
+                dataBase.getImagesDetailsByColorIdAndCategoryIdQuery(
+                    categoryID = categoryId,
+                    colorId = colorID
+                )
+            }
+            q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }
+        }
+    }
+
+    override suspend fun getImageDetailsBasedOnImagedId(imageId: Int): ImageDetailsWithLikesAndWatchAndUser {
+        return coroutineScope {
+            val q = async {
+                dataBase.getImageDetailsByImageIdQuery(
+                    imageId = imageId
+                )
+            }
+            q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }.first()
+        }
+    }
+
+    override suspend fun getImagesDetailsBasedOnRandomCategoryID(
+        limit:Int
+    ): List<ImageDetailsWithLikesAndWatchAndUser> {
+        return coroutineScope {
+            val q = async {
+                dataBase.getImagesDetailsBasedOnRandomCategoryIdQuery(
+                    limit = limit
+                )
+            }
+            q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }
+        }
+    }
+
 }

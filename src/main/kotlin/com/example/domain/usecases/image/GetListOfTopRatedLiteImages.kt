@@ -16,7 +16,7 @@ class GetListOfTopRatedLiteImages(
     suspend operator fun invoke(pageSize: Int, pageNumber: Int)
             : BaseResponse<List<LiteImageDetailsWithLikesCountAndTitleDto>> {
 
-        val totalPageNumber = imageDao.getTotalPagesTable(ImageDetailsTable, pageSize)
+        val totalPageNumber = imageDao.getTotalPagesTable(ImageDetailsTable.id, pageSize)
 
         val pageNumberInRange = pageNumber.pageNumberToMakeItInRange(
             totalPages = totalPageNumber

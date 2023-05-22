@@ -16,8 +16,8 @@ fun Database.checkIfExistByName(columnName: Column<String>, name: String): Boole
     return this.from(columnName.table).select().where { columnName eq name }.map {}.isNotEmpty()
 }
 
-fun <T : Entity<T>> Database.getTotalPagesTableQuery(table: Table<T>, pageSize: Int): Int {
-    val itemCount = this.from(table).select(count())
-        .map { it[count().aliased("items_numbers")] ?: 0 }.first()
+fun Database.getTotalPagesTableQuery(columnName: Column<Int>, pageSize: Int): Int {
+    val itemCount = this.from(columnName.table).select(count(columnName).aliased("items_numbers"))
+        .map { it[count(columnName).aliased("items_numbers")] ?: 0 }.first()
     return ceil(itemCount.toDouble() / pageSize.toDouble()).toInt()
 }

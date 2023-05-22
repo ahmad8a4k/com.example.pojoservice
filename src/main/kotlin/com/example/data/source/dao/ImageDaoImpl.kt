@@ -12,6 +12,7 @@ import kotlinx.coroutines.coroutineScope
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
+import org.ktorm.schema.Column
 import org.ktorm.schema.Table
 
 class ImageDaoImpl(
@@ -35,8 +36,8 @@ class ImageDaoImpl(
         return dataBase.getCountOfTableItemsQuery(table = table)
     }
 
-    override suspend fun <T : Entity<T>> getTotalPagesTable(table: Table<T>, pageSize: Int): Int {
-        return dataBase.getTotalPagesTableQuery(table, pageSize)
+    override suspend fun getTotalPagesTable(columnName: Column<Int>, pageSize: Int): Int {
+        return dataBase.getTotalPagesTableQuery(columnName, pageSize)
     }
 
     override suspend fun getSevenImageCategory(): List<ImageCategoryDto> {

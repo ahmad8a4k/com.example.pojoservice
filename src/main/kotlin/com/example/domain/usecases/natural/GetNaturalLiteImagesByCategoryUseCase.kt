@@ -22,7 +22,7 @@ class GetNaturalLiteImagesByCategoryUseCase(
         categoryName: String = "trees",
     ): BaseResponse<List<LiteNaturalDetailsDto>> {
 
-        val totalPages = imageDao.getTotalPagesTable(NaturalTable, pageSize)
+        val totalPages = imageDao.getTotalPagesTable(NaturalTable.id, pageSize)
 
         val pageNumberInRange = pageNumber.pageNumberToMakeItInRange(totalPages = totalPages)
 

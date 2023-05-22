@@ -25,7 +25,7 @@ class GetNaturalLiteImagesByColorUseCase(
     ): BaseResponse<List<LiteNaturalDetailsDto>> {
         return coroutineScope {
 
-            val totalPagesAsync = async { imageDao.getTotalPagesTable(NaturalTable, pageSize) }
+            val totalPagesAsync = async { imageDao.getTotalPagesTable(NaturalTable.id, pageSize) }
             val totalPages = totalPagesAsync.await()
 
             val pageNumberInRange = pageNumber.pageNumberToMakeItInRange(totalPages = totalPages)

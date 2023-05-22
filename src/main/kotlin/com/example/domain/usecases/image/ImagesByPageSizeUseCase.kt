@@ -16,7 +16,7 @@ class ImagesByPageSizeUseCase(
 
     suspend operator fun invoke(pageSize: Int = 15, pageNumber: Int = 1): BaseResponse<List<ImageDetailsFullDto>> {
 
-        val totalPageNumber = imageDao.getTotalPagesTable(ImageDetailsTable, pageSize)
+        val totalPageNumber = imageDao.getTotalPagesTable(ImageDetailsTable.id, pageSize)
 
         val pageNumberInRange = pageNumber.pageNumberToMakeItInRange(
             totalPages = totalPageNumber

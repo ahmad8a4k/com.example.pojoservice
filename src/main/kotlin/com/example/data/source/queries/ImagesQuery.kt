@@ -134,6 +134,14 @@ fun Database.getAllLiteImagesByCategoryQuery(
     categoryName: String,
 ): Query {
     return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        )
+        .innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        )
         .leftJoin(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
@@ -145,14 +153,6 @@ fun Database.getAllLiteImagesByCategoryQuery(
         .leftJoin(
             right = TagsTable,
             on = ImagesTagsTable.tag_id.eq(TagsTable.id)
-        )
-        .innerJoin(
-            right = ImageCategoriesTable,
-            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
-        )
-        .innerJoin(
-            right = ColorsTable,
-            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
         )
         .select(
             ImageDetailsTable.id,
@@ -172,13 +172,13 @@ fun Database.getAllLiteImagesByCategoryQuery(
             TagsTable.tag_name.like("%$categoryName%") or
                     ImageCategoriesTable.id.eq(categoryId)
         }
-        .orderBy(ImageDetailsTable.id.desc())
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
         .groupBy(
             ImageDetailsTable.id,
             ImageCategoriesTable.id,
             ColorsTable.id
-        ).limit(pageSize)
-        .offset((page - 1) * pageSize)
+        ).orderBy(ImageDetailsTable.id.desc())
 }
 
 fun Database.getIdAnUrlFromAllLiteImages(): Query {
@@ -229,12 +229,13 @@ fun Database.getImageDetailsByImageIdQuery(imageId: Int): Query {
                 ),
                 defaultValue = 0
             ).aliased("watch_count")
-        ).where {
+        ).limit(1)
+        .where {
             ImageDetailsTable.id.eq(imageId)
         }.groupBy(
             ImageDetailsTable.id,
             UserTable.userId
-        ).limit(1)
+        )
 }
 
 fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
@@ -284,13 +285,14 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
             ImageCategoriesTable.id.eq(categoryID) or
                     ColorsTable.id.eq(colorId)
         }
+        .limit(59)
         .orderBy(
             ImageDetailsTable.id.desc()
         )
         .groupBy(
             ImageDetailsTable.id,
             UserTable.userId
-        ).limit(59)
+        )
 }
 
 fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int): Query {
@@ -334,13 +336,14 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int): Query {
         .where {
             ImageCategoriesTable.id.eq(randomCategoryId)
         }
+        .limit(limit)
         .orderBy(
             ImageDetailsTable.id.desc()
         )
         .groupBy(
             ImageDetailsTable.id,
             UserTable.userId
-        ).limit(limit)
+        )
 }
 
 /**

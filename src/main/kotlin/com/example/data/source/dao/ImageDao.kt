@@ -3,6 +3,7 @@ package com.example.data.source.dao
 import com.example.data.dto.*
 import com.example.data.dto.imageDetails.*
 import org.ktorm.entity.Entity
+import org.ktorm.schema.Column
 import org.ktorm.schema.Table
 
 interface ImageDao {
@@ -13,7 +14,7 @@ interface ImageDao {
 
     suspend fun <T : Entity<T>> getCountOfTableItems(table: Table<T>): Int
 
-    suspend fun <T : Entity<T>> getTotalPagesTable(table: Table<T>, pageSize: Int): Int
+    suspend fun getTotalPagesTable(columnName: Column<Int>, pageSize: Int): Int
 
     suspend fun getSevenImageCategory(): List<ImageCategoryDto>
 

@@ -17,7 +17,7 @@ class GetAllNaturalLiteImages(
 ) {
     suspend operator fun invoke(pageSize: Int, pageNumber: Int): BaseResponse<List<LiteNaturalDetailsDto>> {
 
-        val totalPages = imageDao.getTotalPagesTable(NaturalTable, pageSize)
+        val totalPages = imageDao.getTotalPagesTable(NaturalTable.id, pageSize)
         val pageNumberInRange = pageNumber.pageNumberToMakeItInRange(totalPages = totalPages)
 
         if (!pageNumberInRange.pageNumberToCheckIfPageExist(totalPages = totalPages)) {

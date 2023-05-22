@@ -10,6 +10,8 @@ import com.example.domain.usecases.util.pageNumberToCheckIfPageExist
 import com.example.domain.usecases.util.pageNumberToMakeItInRange
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
+import io.ktor.client.engine.*
+import org.apache.commons.logging.Log
 
 class GetAllLiteImagesByCategory(
     private val imageDao: ImageDao,
@@ -21,7 +23,7 @@ class GetAllLiteImagesByCategory(
         categoryName: String,
     ): BaseResponse<List<LiteImageDetailsWithLikesCountDto>> {
 
-        val totalPages = imageDao.getTotalPagesTable(ImageDetailsTable, pageSize)
+        val totalPages = imageDao.getTotalPagesTable(ImageDetailsTable.id, pageSize)
 
         val pageNumberInRange = page.pageNumberToMakeItInRange(totalPages = totalPages)
 

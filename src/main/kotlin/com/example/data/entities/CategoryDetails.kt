@@ -8,6 +8,6 @@ interface CategoryDetails : Entity<CategoryDetails> {
     var id:Int
     var categoryId: ImageCategories
     var details:String
-    var adminId:Admins
+    var adminId:AdminEnitiy
     var register: LocalDate
 }

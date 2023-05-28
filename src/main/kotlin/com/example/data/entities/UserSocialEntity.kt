@@ -6,6 +6,6 @@ interface UserSocialEntity : Entity<UserSocialEntity> {
     companion object : Entity.Factory<UserSocialEntity>()
 
     var userEntity: UserEntity
-    var imageDetailsEntity: ImageDetails
+    var imageDetailsEntity: ImageDetailsEntity
     var socialDetailsEntity: SocialDetailsEntity
 }

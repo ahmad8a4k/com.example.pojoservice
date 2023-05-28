@@ -9,7 +9,7 @@ interface ImageCategories : Entity<ImageCategories> {
     var id: Int
     var categoryName: String
     var categoryUrl: String
-    var adminAdded: Admins
+    var adminAdded: AdminEnitiy
     var blurHash: String
     var categoryDate: LocalDate
 }

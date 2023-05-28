@@ -6,5 +6,5 @@ interface ImageUserLikes: Entity<ImageUserLikes> {
     companion object : Entity.Factory<ImageUserLikes>()
 
     var userId:UserEntity
-    var imageId:ImageDetails
+    var imageId:ImageDetailsEntity
 }

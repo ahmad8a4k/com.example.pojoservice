@@ -6,7 +6,7 @@ interface ImageNumDetails : Entity<ImageNumDetails> {
     companion object : Entity.Factory<ImageNumDetails>()
 
     var id: Int
-    var imageId: ImageDetails
+    var imageId: ImageDetailsEntity
     var likesNum: Int
     var sharNum: Int
     var downloadNum: Int

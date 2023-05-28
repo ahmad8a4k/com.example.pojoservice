@@ -33,6 +33,9 @@ sealed class ResponseMessages(val message: String) {
     object NotFoundImageByImageID : ResponseMessages("Not_Found_Image_By_ImageID :")
 
     object SuccessFetchImages : ResponseMessages("Success_Fetch_Images")
+
+    object SuccessFetchList : ResponseMessages("Success_Fetch_list")
+
     /**
      * Category Response Messages
      */
@@ -44,5 +47,10 @@ sealed class ResponseMessages(val message: String) {
      *  Natural Response Messages
      */
     object FailFetchNaturalLites : ResponseMessages("Fail_Fetch_natural_lites")
+
+    /**
+     *  Others Response Messages
+     */
+    object EmptyFetchList : ResponseMessages("Empty_list")
 
 }

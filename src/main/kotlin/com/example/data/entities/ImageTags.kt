@@ -4,6 +4,6 @@ import org.ktorm.entity.Entity
 
 interface ImageTags : Entity<ImageTags> {
     companion object : Entity.Factory<ImageTags>()
-    var imageId: ImageDetails
+    var imageId: ImageDetailsEntity
     var tagId: Tags
 }

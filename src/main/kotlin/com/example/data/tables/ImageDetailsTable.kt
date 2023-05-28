@@ -1,12 +1,12 @@
 package com.example.data.tables
 
-import com.example.data.entities.ImageDetails
+import com.example.data.entities.ImageDetailsEntity
 import org.ktorm.schema.Table
 import org.ktorm.schema.date
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
-object ImageDetailsTable : Table<ImageDetails>("image_details") {
+object ImageDetailsTable : Table<ImageDetailsEntity>("image_details") {
     val id = int("id").bindTo { it.id }.primaryKey()
     val imgTitle = varchar("img_title").bindTo { it.imgTitle }
     val url = varchar("url").bindTo { it.url }

@@ -1,6 +1,7 @@
 package com.example.utils
 
 object Constants {
+
     /**
      * Mysql
      */
@@ -12,7 +13,8 @@ object Constants {
     /**
      * PostGer
      */
-    const val DATABASE_URL = "jdbc:postgresql://dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com:5432/pojo_database"
+    const val DATABASE_URL =
+        "jdbc:postgresql://dpg-ch5qvrks3fvuoba7f91g-a.frankfurt-postgres.render.com:5432/pojo_database"
     const val DATABASE_DRIVER = "org.postgresql.Driver"
     const val DATABASE_USER = "pojo_user_database"
     const val DATABASE_PASSWORD = "kguITyf41pkYBKeKo7ZIRfdTV2vOKKka"
@@ -25,6 +27,7 @@ object Constants {
     const val DATABASE_PASSWORD_ROOT = "ghgh"
 
     const val SALTED_HASH_ALGORITHM = "SHA1PRNG"
+
     /**
      * Jwt
      */
@@ -35,4 +38,9 @@ object Constants {
     const val ISSUER = "http://db4free.net"
     const val AUDIENCE = "http://db4free.net/pojoservicedb"
     const val REFRESH_TOKEN_EXPIRE_DATE = (365L * 1000L * 60L * 60L * 24L)
+
+    /**
+     * Other Issues
+     */
+    const val FIFTEEN_LIMIT_IMAGE = 15
 }

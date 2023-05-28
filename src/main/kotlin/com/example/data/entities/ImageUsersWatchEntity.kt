@@ -6,5 +6,5 @@ interface ImageUsersWatchEntity : Entity<ImageUsersWatchEntity> {
     companion object : Entity.Factory<ImageUsersWatchEntity>()
 
     var userId:UserEntity
-    var imageId:ImageDetails
+    var imageId:ImageDetailsEntity
 }

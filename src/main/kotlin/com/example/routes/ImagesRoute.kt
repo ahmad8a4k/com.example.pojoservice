@@ -94,8 +94,3 @@ fun Route.images() {
         listLiteImagesByCategoryUseCase2()
     }
 }
-
-data class EncodingImage(
-    val imageUrl: List<String>,
-    val imageEncode: List<String>,
-)

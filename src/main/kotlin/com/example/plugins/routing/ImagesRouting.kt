@@ -1,6 +1,7 @@
 package com.example.plugins.routing
 
 import com.example.routes.categoriesRoute
+import com.example.routes.collections
 import com.example.routes.images
 import com.example.routes.naturalsImagesRoute
 import io.ktor.server.application.*
@@ -11,20 +12,26 @@ fun Application.imageConfigRouting() {
         /**
          * Images
          */
-        route("pojo_images") {
+        route(path = "pojo_images") {
             images()
         }
         /**
          * Categories
          */
-        route("pojo_category") {
+        route(path = "pojo_category") {
             categoriesRoute()
         }
         /**
          * Naturals
          */
-        route("pojo_naturals"){
+        route(path = "pojo_naturals") {
             naturalsImagesRoute()
+        }
+        /**
+         * Collections
+         */
+        route(path = "pojo_collections") {
+            collections()
         }
     }
 }

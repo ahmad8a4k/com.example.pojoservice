@@ -7,7 +7,7 @@ interface Colors: Entity<Colors> {
     companion object : Entity.Factory<Colors>()
     var id:Int
     var colorName:String
-    var adminAdded:Admins
+    var adminAdded:AdminEnitiy
     var colorDate: LocalDate
     var colorHex:String
 }

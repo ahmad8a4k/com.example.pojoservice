@@ -3,8 +3,8 @@ package com.example.data.entities
 import org.ktorm.entity.Entity
 import java.time.LocalDate
 
-interface ImageDetails : Entity<ImageDetails> {
-    companion object : Entity.Factory<ImageDetails>()
+interface ImageDetailsEntity : Entity<ImageDetailsEntity> {
+    companion object : Entity.Factory<ImageDetailsEntity>()
 
     var id: Int
     var imgTitle: String
@@ -13,7 +13,7 @@ interface ImageDetails : Entity<ImageDetails> {
     var colorId: Colors
     var categoryDetailsId: CategoryDetails
     var imgDescription: String
-    var adminId: Admins
+    var adminId: AdminEnitiy
     var blurHash: String
     var userAdd: UserEntity
     var register: LocalDate

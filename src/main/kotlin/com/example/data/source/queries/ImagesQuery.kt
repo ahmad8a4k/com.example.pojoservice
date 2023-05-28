@@ -7,6 +7,7 @@ import com.example.data.tables.*
 import com.example.domain.queryMapper.images.imageFullDetailsToDto
 import com.example.domain.queryMapper.images.liteImageDetailsRow
 import com.example.domain.queryMapper.images.liteImageDetailsWithLikesCountRow
+import com.example.utils.Constants.FIFTEEN_LIMIT_IMAGE
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.expression.ArgumentExpression
@@ -132,6 +133,63 @@ fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
                 defaultValue = 0
             ).aliased("likes_count").desc()
         )
+        .limit(pageSize)
+        .offset((pageNumber - 1) * pageSize)
+        .map { it.liteImageDetailsWithLikesCountRow() }
+}
+
+fun Database.getTopFifteenImageGetLikes(): List<LiteImageDetailsWithLikesCountAndTitleDto> {
+    return this.from(ImageDetailsTable)
+        .leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        )
+        .select(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("likes_count")
+        )
+        .groupBy(ImageDetailsTable.id)
+        .orderBy(
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("likes_count").desc()
+        )
+        .limit(FIFTEEN_LIMIT_IMAGE)
+        .map { it.liteImageDetailsWithLikesCountRow() }
+
+}
+
+fun Database.getLatestImagesOrderByDate(pageSize: Int, pageNumber: Int):
+        List<LiteImageDetailsWithLikesCountAndTitleDto> {
+    return this.from(ImageDetailsTable)
+        .leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        )
+        .select(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("likes_count"),
+            ImageDetailsTable.register
+        )
+        .groupBy(ImageDetailsTable.id)
+        .orderBy(ImageDetailsTable.register.desc())
         .limit(pageSize)
         .offset((pageNumber - 1) * pageSize)
         .map { it.liteImageDetailsWithLikesCountRow() }

@@ -11,6 +11,6 @@ interface NaturalImage : Entity<NaturalImage> {
     var url: String
     var nCategoryId: NaturalCategories
     var colorId: Colors
-    var adminId: Admins
+    var adminId: AdminEnitiy
     var register: LocalDate
 }

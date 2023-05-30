@@ -5,6 +5,6 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.int
 
 object UserImageCollectionTable : Table<UserImageCollectionEntity>("user_image_collection") {
-    var user_id = int("collection_id").references(UserCollectionTable) { it.userCollectionId }
+    var collection_id = int("collection_id").references(UserCollectionTable) { it.userCollectionId }
     var image_id = int("image_id").references(ImageDetailsTable) { it.imageDetailsEntity }
 }

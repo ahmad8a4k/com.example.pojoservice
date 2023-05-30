@@ -11,7 +11,7 @@ data class CollectionWithUserDto(
     @SerialName("collection_url") val collection_url: String,
     @SerialName("user_id") val user_id: Int,
     @SerialName("user_name") val user_name: String,
-    @SerialName("user_url") val user_url: String,
+    @SerialName("user_url") val user_url: String
 )
 
 data class CollectionDto(

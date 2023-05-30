@@ -6,6 +6,8 @@ import com.example.domain.usecases.category.GetAllLiteCategoriesUserCase
 import com.example.domain.usecases.category.GetSevenCategoriesUseCases
 import com.example.domain.usecases.category.UpdateAllBlurHashCategory
 import com.example.domain.usecases.collections.GetAdminsCollectionsUseCase
+import com.example.domain.usecases.collections.GetImagesAdminsCollectionsUseCase
+import com.example.domain.usecases.collections.GetImagesUserCollectionsUseCase
 import com.example.domain.usecases.collections.GetUsersCollectionsUseCase
 import com.example.domain.usecases.image.*
 import com.example.domain.usecases.natural.*
@@ -155,6 +157,10 @@ val mainModule = module {
         GetImagesDetailsBasedOnCategoryOrColorUseCase(get())
     }
 
+    /**
+    Collections
+     */
+
     single {
         GetUsersCollectionsUseCase(get())
     }
@@ -162,4 +168,13 @@ val mainModule = module {
     single {
         GetAdminsCollectionsUseCase(get())
     }
+
+    single {
+        GetImagesUserCollectionsUseCase(get())
+    }
+
+    single {
+        GetImagesAdminsCollectionsUseCase(get())
+    }
+
 }

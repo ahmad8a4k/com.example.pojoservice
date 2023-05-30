@@ -12,6 +12,5 @@ object AdminCollectionTable : Table<AdminCollectionEntity>("admin_collections") 
     val collectionName = varchar("collection_name").bindTo { it.aCollectionName }
     val collectionDescription = varchar("collection_description").bindTo { it.aCollectionDescription }
     val collectionInvisibility = boolean("collection_invisibility").bindTo { it.aCollectionInvisibility }
-    val likesCount = int("likes_count").bindTo { it.aLikesCount }
     val collectionUrl = varchar("collection_url").bindTo { it.collectionUrl }
 }

@@ -50,4 +50,7 @@ sealed class ImageEndPoint(val path: String) {
     object UsersCollections: ImageEndPoint(path = "/users_collections")
     object AdminsCollections: ImageEndPoint(path = "/admins_collections")
 
+    object ImagesByUsersCollections : ImageEndPoint(path = "/images_users_collections")
+    object ImagesByAdminsCollections : ImageEndPoint(path = "/images_admins_collections")
+
 }

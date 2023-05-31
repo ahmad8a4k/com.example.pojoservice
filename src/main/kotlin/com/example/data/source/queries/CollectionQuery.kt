@@ -92,6 +92,9 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
         ).innerJoin(
             right = UserCollectionTable,
             on = UserCollectionTable.id.eq(UserImageCollectionTable.collection_id)
+        ).innerJoin(
+            right = UserTable,
+            on = UserTable.userId.eq(UserCollectionTable.userId)
         ).leftJoin(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
@@ -102,6 +105,9 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
             ImageCategoriesTable.id,
             ColorsTable.id,
             ColorsTable.colorHex,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id
@@ -114,7 +120,8 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
         .groupBy(
             ImageDetailsTable.id,
             ImageCategoriesTable.id,
-            ColorsTable.id
+            ColorsTable.id,
+            UserTable.userId
         ).orderBy(ImageDetailsTable.id.desc())
 }
 

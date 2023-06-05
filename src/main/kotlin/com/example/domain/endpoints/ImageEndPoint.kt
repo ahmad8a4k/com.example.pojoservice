@@ -8,19 +8,12 @@ sealed class ImageEndPoint(val path: String) {
     object Images : ImageEndPoint(path = "/images")
     object LiteImages : ImageEndPoint(path = "/lite_images")
     object FifteenImages : ImageEndPoint(path = "/fifteen_top_images")
-    object Details : ImageEndPoint(path = "/image_details")
-    object LastUpload : ImageEndPoint(path = "/image_last_upload")
-    object Categories : ImageEndPoint(path = "/image_categories")
-    object Populars : ImageEndPoint(path = "/image_populars")
-    object Like : ImageEndPoint(path = "/image_like")
-    object Share : ImageEndPoint(path = "/image_share")
-    object Download : ImageEndPoint(path = "/image_download")
     object TenTopRated : ImageEndPoint(path = "/ten_top_rated")
     object ListTenTopRated : ImageEndPoint(path = "/list_top_rated")
     object AllLiteImagesByCategory : ImageEndPoint(path = "/lite_images_by_category")
-
     object ImageCompleteDetails : ImageEndPoint(path = "/images_complete_details")
     object TryEncodeImages : ImageEndPoint(path = "/tryEncodeImages")
+    object LiteImagesByDetails: ImageEndPoint(path = "/images_by_date")
 
     /**
      * Categories
@@ -53,5 +46,7 @@ sealed class ImageEndPoint(val path: String) {
     object ImagesByUsersCollections : ImageEndPoint(path = "/images_users_collections")
     object ImagesByAdminsCollections : ImageEndPoint(path = "/images_admins_collections")
     object LimitAdminsCollections: ImageEndPoint(path = "/limit_admins_collections")
+    object UserCollectionDetails : ImageEndPoint(path = "/user_collection_details")
+    object AdminCollectionDetails: ImageEndPoint(path = "/admin_collection_details")
 
 }

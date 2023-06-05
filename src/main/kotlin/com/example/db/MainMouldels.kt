@@ -84,6 +84,10 @@ val mainModule = module {
         GetAllColorsUseCase(get())
     }
 
+    single {
+        GetLiteImagesOrderByDateUseCase(get())
+    }
+
     /* Categories */
     single {
         GetAllCategoriesUseCase(get())
@@ -176,6 +180,14 @@ val mainModule = module {
 
     single {
         GetLimitAdminsCollectionsUseCase(get())
+    }
+
+    single {
+        GetUserCollectionDetailsUseCase(get())
+    }
+
+    single {
+        GetAdminCollectionDetailsUseCase(get())
     }
 
 }

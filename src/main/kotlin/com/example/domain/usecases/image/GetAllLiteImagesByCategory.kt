@@ -1,17 +1,14 @@
 package com.example.domain.usecases.image
 
-import com.example.data.dto.LiteImageDetailsWithLikesCountDto
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.source.dao.ImageDao
 import com.example.data.tables.ImageDetailsTable
-import com.example.data.tables.NaturalTable
 import com.example.domain.usecases.util.makePageNumberDefaultIfItZero
 import com.example.domain.usecases.util.makePageSizeInRange
 import com.example.domain.usecases.util.pageNumberToCheckIfPageExist
 import com.example.domain.usecases.util.pageNumberToMakeItInRange
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
-import io.ktor.client.engine.*
-import org.apache.commons.logging.Log
 
 class GetAllLiteImagesByCategory(
     private val imageDao: ImageDao,
@@ -21,7 +18,7 @@ class GetAllLiteImagesByCategory(
         page: Int,
         categoryId: Int,
         categoryName: String,
-    ): BaseResponse<List<LiteImageDetailsWithLikesCountDto>> {
+    ): BaseResponse<List<LiteImageDetailsDto>> {
 
         val totalPages = imageDao.getTotalPagesTable(ImageDetailsTable.id, pageSize)
 

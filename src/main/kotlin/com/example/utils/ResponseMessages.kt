@@ -53,4 +53,6 @@ sealed class ResponseMessages(val message: String) {
      */
     object EmptyFetchList : ResponseMessages("Empty_list")
 
+    object EmptyFetchData : ResponseMessages("Empty_data")
+
 }

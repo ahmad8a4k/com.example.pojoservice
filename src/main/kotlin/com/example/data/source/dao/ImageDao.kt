@@ -22,9 +22,9 @@ interface ImageDao {
 
     suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto>
 
-    suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDto>
+    suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDtoDeplecated>
 
-    suspend fun getPagingLiteImageByDate(news: Boolean): List<LiteImageDetailsDto>
+    suspend fun getLiteImagesByDate(pageSize: Int, page: Int): List<LiteImageDetailsDto>
 
     suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek(): List<LiteImageDetailsWithLikesCountAndTitleDto>
 
@@ -39,7 +39,7 @@ interface ImageDao {
         page: Int,
         categoryId: Int,
         categoryName: String,
-    ): List<LiteImageDetailsWithLikesCountDto>
+    ): List<LiteImageDetailsDto>
 
     suspend fun getAllLiteImage(): List<IdAndUrlImagesWithDto>
 

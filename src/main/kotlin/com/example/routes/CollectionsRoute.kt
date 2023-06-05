@@ -14,6 +14,8 @@ fun Route.collections() {
     val imagesFromUsersCollectionsUseCase by inject<GetImagesUserCollectionsUseCase>()
     val imagesFromAdminsCollectionsUseCase by inject<GetImagesAdminsCollectionsUseCase>()
     val limitAdminsCollectionsUseCase by inject<GetLimitAdminsCollectionsUseCase>()
+    val userCollectionDetailsUseCase by inject<GetUserCollectionDetailsUseCase>()
+    val adminCollectionDetailsUseCase by inject<GetAdminCollectionDetailsUseCase>()
 
     get(path = ImageEndPoint.UsersCollections.path) {
         val collections = listOfUsersCollectionsUseCase()
@@ -41,5 +43,17 @@ fun Route.collections() {
         val limit = call.request.queryParameters.getOrFail("limit")
         val collections = limitAdminsCollectionsUseCase(limit = limit.toInt())
         call.respond(message = collections, status = collections.statuesCode)
+    }
+
+    put(path = ImageEndPoint.UserCollectionDetails.path) {
+        val collectionId = call.request.queryParameters.getOrFail("collection_id")
+        val collection = userCollectionDetailsUseCase(collectionId = collectionId.toInt())
+        call.respond(message = collection, status = collection.statuesCode)
+    }
+
+    put(path = ImageEndPoint.AdminCollectionDetails.path) {
+        val collectionId = call.request.queryParameters.getOrFail("collection_id")
+        val collection = adminCollectionDetailsUseCase(collectionId = collectionId.toInt())
+        call.respond(message = collection, status = collection.statuesCode)
     }
 }

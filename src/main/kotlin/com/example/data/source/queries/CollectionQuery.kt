@@ -74,6 +74,7 @@ fun Database.getAdminCollections(): Query {
             AdminCollectionTable.id,
         )
 }
+
 fun Database.getLimitAdminCollections(limit: Int): Query {
     return this.from(AdminCollectionTable)
         .leftJoin(
@@ -193,4 +194,63 @@ fun Database.getAllImageAdminCollectionsByCollectionIdQuery(collectionId: Int): 
             ImageCategoriesTable.id,
             ColorsTable.id
         ).orderBy(ImageDetailsTable.id.desc())
+}
+
+fun Database.getUserCollectionDetails(collectionId: Int): Query {
+    return this.from(UserCollectionTable)
+        .innerJoin(
+            right = UserTable,
+            on = UserTable.userId.eq(UserCollectionTable.userId)
+        )
+        .leftJoin(
+            right = UserCollectionsLikeTable,
+            on = UserCollectionTable.id.eq(UserCollectionsLikeTable.collection_id)
+        )
+        .select(
+            UserCollectionTable.id,
+            UserCollectionTable.collectionName,
+            UserCollectionTable.collectionDescription,
+            UserCollectionTable.collectionUrl,
+            UserCollectionTable.collectionInvisibility,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
+            coalesce(
+                count(
+                    UserCollectionsLikeTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
+        ).where {
+            UserCollectionTable.id.eq(collectionId)
+        }
+        .groupBy(
+            UserCollectionTable.id,
+            UserTable.userId
+        ).limit(1)
+}
+fun Database.getAdminCollectionDetails(collectionId: Int): Query {
+    return this.from(AdminCollectionTable)
+        .leftJoin(
+            right = UserAdminCollectionLikeTable,
+            on = AdminCollectionTable.id.eq(UserAdminCollectionLikeTable.collection_id)
+        )
+        .select(
+            AdminCollectionTable.id,
+            AdminCollectionTable.collectionName,
+            AdminCollectionTable.collectionDescription,
+            AdminCollectionTable.collectionUrl,
+            AdminCollectionTable.collectionInvisibility,
+            coalesce(
+                count(
+                    UserAdminCollectionLikeTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
+        ).where {
+            AdminCollectionTable.id.eq(collectionId)
+        }
+        .groupBy(
+            AdminCollectionTable.id,
+        ).limit(1)
 }

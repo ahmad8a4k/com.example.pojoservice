@@ -11,6 +11,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Route.images() {
+
     val imagesUseCase by inject<ImagesByPageSizeUseCase>()
     val fifteenImagesDetailsUseCase by inject<GetFifteenImagesDetailsUseCase>()
     val liteImagesUseCase by inject<GetLiteImageDetailsUseCase>()
@@ -20,6 +21,7 @@ fun Route.images() {
     val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
     val listLiteImagesByCategoryUseCase2 by inject<UpdateBlurHashForLiteImagesByCategoryId>()
     val listOfImagesDetailsUseCase by inject<GetImagesDetailsBasedOnCategoryOrColorUseCase>()
+    val listOfLiteImagesDetailsByDateUseCase by inject<GetLiteImagesOrderByDateUseCase>()
 
     put(ImageEndPoint.Images.path) {
         val imagePageParameters = pagingParameter()
@@ -92,5 +94,14 @@ fun Route.images() {
 
     get(ImageEndPoint.TryEncodeImages.path) {
         listLiteImagesByCategoryUseCase2()
+    }
+
+    put(ImageEndPoint.LiteImagesByDetails.path) {
+        val imagePageParameters = pagingParameter()
+        val images = listOfLiteImagesDetailsByDateUseCase(
+            pageSize = imagePageParameters.pageSize.toInt(),
+            pageNumber = imagePageParameters.pageNum.toInt()
+        )
+        call.respond(message = images, status = images.statuesCode)
     }
 }

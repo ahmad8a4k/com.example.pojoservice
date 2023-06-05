@@ -1,6 +1,6 @@
 package com.example.data.source.queries
 
-import com.example.data.dto.LiteImageDetailsDto
+import com.example.data.dto.LiteImageDetailsDtoDeplecated
 import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.tables.*
@@ -65,7 +65,7 @@ fun Database.imageFullDetailsQuery(pageSize: Int, page: Int): List<ImageDetailsF
         .map { it.imageFullDetailsToDto() }
 }
 
-fun Database.liteListImageDetailsQuery(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
+fun Database.liteListImageDetailsQuery(pageSize: Int, page: Int): List<LiteImageDetailsDtoDeplecated> {
     return this.from(ImageDetailsTable)
         .select(
             ImageDetailsTable.id,
@@ -169,30 +169,42 @@ fun Database.getTopFifteenImageGetLikes(): List<LiteImageDetailsWithLikesCountAn
 
 }
 
-fun Database.getLatestImagesOrderByDate(pageSize: Int, pageNumber: Int):
-        List<LiteImageDetailsWithLikesCountAndTitleDto> {
+fun Database.getLiteImagesOrderByDate(pageSize: Int, page: Int): Query {
     return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        )
+        .innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        )
         .leftJoin(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
         )
         .select(
             ImageDetailsTable.id,
-            ImageDetailsTable.imgTitle,
             ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.register,
+            ImageCategoriesTable.id,
+            ColorsTable.id,
+            ColorsTable.colorHex,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id
                 ),
                 defaultValue = 0
-            ).aliased("likes_count"),
-            ImageDetailsTable.register
+            ).aliased("like_count")
         )
-        .groupBy(ImageDetailsTable.id)
-        .orderBy(ImageDetailsTable.register.desc())
         .limit(pageSize)
-        .offset((pageNumber - 1) * pageSize)
-        .map { it.liteImageDetailsWithLikesCountRow() }
+        .offset((page - 1) * pageSize)
+        .groupBy(
+            ImageDetailsTable.id,
+            ImageCategoriesTable.id,
+            ColorsTable.id
+        ).orderBy(ImageDetailsTable.register.desc())
 }
 
 fun Database.getAllLiteImagesByCategoryQuery(

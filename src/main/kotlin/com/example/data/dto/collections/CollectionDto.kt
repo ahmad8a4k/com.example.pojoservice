@@ -15,7 +15,7 @@ data class CollectionWithUserDto(
 )
 
 data class CollectionDto(
-    @SerialName("collection_id") val collection_id: Int,
+    @SerialName("collection_id") val collection_id: Int = 0,
     @SerialName("collection_name") val collection_name: String,
     @SerialName("collection_description") val collection_description: String,
     @SerialName("collection_invisibility") val collection_invisibility: Boolean,

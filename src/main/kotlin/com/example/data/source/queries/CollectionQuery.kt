@@ -1,7 +1,6 @@
 package com.example.data.source.queries
 
 import com.example.data.tables.*
-import com.example.domain.endpoints.ImageEndPoint
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 
@@ -75,6 +74,38 @@ fun Database.getAdminCollections(): Query {
             AdminCollectionTable.id,
         )
 }
+fun Database.getLimitAdminCollections(limit: Int): Query {
+    return this.from(AdminCollectionTable)
+        .leftJoin(
+            right = UserAdminCollectionLikeTable,
+            on = AdminCollectionTable.id.eq(UserAdminCollectionLikeTable.collection_id)
+        )
+        .select(
+            AdminCollectionTable.id,
+            AdminCollectionTable.collectionName,
+            AdminCollectionTable.collectionDescription,
+            AdminCollectionTable.collectionUrl,
+            AdminCollectionTable.collectionInvisibility,
+            coalesce(
+                count(
+                    UserAdminCollectionLikeTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
+        )
+        .orderBy(
+            coalesce(
+                count(
+                    UserAdminCollectionLikeTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count").desc()
+        )
+        .limit(limit)
+        .groupBy(
+            AdminCollectionTable.id,
+        )
+}
 
 fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Query {
     return this.from(ImageDetailsTable)
@@ -105,9 +136,6 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
             ImageCategoriesTable.id,
             ColorsTable.id,
             ColorsTable.colorHex,
-            UserTable.userId,
-            UserTable.userName,
-            UserTable.userUrl,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id

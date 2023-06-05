@@ -4,10 +4,7 @@ import com.example.data.dto.LiteImageDetailsWithLikesCountDto
 import com.example.data.dto.LiteImageDetailsWithLiteUserInformationDto
 import com.example.data.dto.collections.CollectionDto
 import com.example.data.dto.collections.CollectionWithUserDto
-import com.example.data.source.queries.getAdminCollections
-import com.example.data.source.queries.getAllImageAdminCollectionsByCollectionIdQuery
-import com.example.data.source.queries.getAllImageUserCollectionsByCollectionIdQuery
-import com.example.data.source.queries.getUsersCollections
+import com.example.data.source.queries.*
 import com.example.domain.queryMapper.collection.rowToAdminCollectionDto
 import com.example.domain.queryMapper.collection.rowToUserCollectionDto
 import com.example.domain.queryMapper.images.liteImageDetailsWithLikeCountRow
@@ -36,14 +33,13 @@ class CollectionDaoImpl(
     }
 
     override suspend fun getImagesFromUsersCollectionsByCollectionId(collectionId: Int):
-            List<LiteImageDetailsWithLiteUserInformationDto> {
+            List<LiteImageDetailsWithLikesCountDto> {
         return coroutineScope {
             val query = async {
                 dataBase.getAllImageUserCollectionsByCollectionIdQuery(collectionId = collectionId)
             }
-            query.await().map { it.liteImageDetailsWithLiteUserInformationRow() }
+            query.await().map { it.liteImageDetailsWithLikeCountRow() }
         }
-
     }
 
     override suspend fun getImagesFromAdminsCollectionsByCollectionId(collectionId: Int):
@@ -56,4 +52,12 @@ class CollectionDaoImpl(
         }
     }
 
+    override suspend fun getLimitAdminCollections(limit: Int): List<CollectionDto> {
+        return coroutineScope {
+            val query = async {
+                dataBase.getLimitAdminCollections(limit = limit)
+            }
+            query.await().map { it.rowToAdminCollectionDto() }
+        }
+    }
 }

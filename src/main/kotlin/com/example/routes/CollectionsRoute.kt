@@ -1,10 +1,7 @@
 package com.example.routes
 
 import com.example.domain.endpoints.ImageEndPoint
-import com.example.domain.usecases.collections.GetAdminsCollectionsUseCase
-import com.example.domain.usecases.collections.GetImagesAdminsCollectionsUseCase
-import com.example.domain.usecases.collections.GetImagesUserCollectionsUseCase
-import com.example.domain.usecases.collections.GetUsersCollectionsUseCase
+import com.example.domain.usecases.collections.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,6 +13,7 @@ fun Route.collections() {
     val listOfAdminsCollectionsUseCase by inject<GetAdminsCollectionsUseCase>()
     val imagesFromUsersCollectionsUseCase by inject<GetImagesUserCollectionsUseCase>()
     val imagesFromAdminsCollectionsUseCase by inject<GetImagesAdminsCollectionsUseCase>()
+    val limitAdminsCollectionsUseCase by inject<GetLimitAdminsCollectionsUseCase>()
 
     get(path = ImageEndPoint.UsersCollections.path) {
         val collections = listOfUsersCollectionsUseCase()
@@ -39,4 +37,9 @@ fun Route.collections() {
         call.respond(message = images, status = images.statuesCode)
     }
 
+    put(path = ImageEndPoint.LimitAdminsCollections.path) {
+        val limit = call.request.queryParameters.getOrFail("limit")
+        val collections = limitAdminsCollectionsUseCase(limit = limit.toInt())
+        call.respond(message = collections, status = collections.statuesCode)
+    }
 }

@@ -5,10 +5,7 @@ import com.example.domain.usecases.category.GetAllCategoriesUseCase
 import com.example.domain.usecases.category.GetAllLiteCategoriesUserCase
 import com.example.domain.usecases.category.GetSevenCategoriesUseCases
 import com.example.domain.usecases.category.UpdateAllBlurHashCategory
-import com.example.domain.usecases.collections.GetAdminsCollectionsUseCase
-import com.example.domain.usecases.collections.GetImagesAdminsCollectionsUseCase
-import com.example.domain.usecases.collections.GetImagesUserCollectionsUseCase
-import com.example.domain.usecases.collections.GetUsersCollectionsUseCase
+import com.example.domain.usecases.collections.*
 import com.example.domain.usecases.image.*
 import com.example.domain.usecases.natural.*
 import com.example.domain.usecases.user.*
@@ -175,6 +172,10 @@ val mainModule = module {
 
     single {
         GetImagesAdminsCollectionsUseCase(get())
+    }
+
+    single {
+        GetLimitAdminsCollectionsUseCase(get())
     }
 
 }

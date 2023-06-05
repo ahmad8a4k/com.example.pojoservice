@@ -1,20 +1,17 @@
 package com.example.domain.usecases.collections
 
-import com.example.data.dto.LiteImageDetailsWithLikesCountDto
-import com.example.data.dto.LiteImageDetailsWithLiteUserInformationDto
+import com.example.data.dto.collections.CollectionDto
 import com.example.data.source.dao.CollectionDao
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
 
-class GetImagesUserCollectionsUseCase(
+class GetLimitAdminsCollectionsUseCase(
     private val collectionDao: CollectionDao,
 ) {
-    suspend operator fun invoke(collectionId: Int): BaseResponse<List<LiteImageDetailsWithLikesCountDto>> {
-
-        if (collectionId == 0 || collectionId < 0)
-            return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchList.message)
-
-        val collections = collectionDao.getImagesFromUsersCollectionsByCollectionId(collectionId)
+    suspend operator fun invoke(limit: Int): BaseResponse<List<CollectionDto>> {
+        val collections = collectionDao.getLimitAdminCollections(
+            limit = limit.makeLimitCollectionLessThen20()
+        )
 
         if (collections.isEmpty()) {
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchList.message)
@@ -26,3 +23,5 @@ class GetImagesUserCollectionsUseCase(
         )
     }
 }
+
+private fun Int.makeLimitCollectionLessThen20() = this.coerceIn(5..20)

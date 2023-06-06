@@ -26,7 +26,7 @@ interface ImageDao {
 
     suspend fun getLiteImagesByDate(pageSize: Int, page: Int): List<LiteImageDetailsDto>
 
-    suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek(): List<LiteImageDetailsWithLikesCountAndTitleDto>
+    suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int): List<LiteImageDetailsDto>
 
     suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int): List<LiteImageDetailsWithLikesCountAndTitleDto>
 

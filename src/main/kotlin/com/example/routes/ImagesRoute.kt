@@ -8,6 +8,7 @@ import com.example.routes.mapper.natural.imagesByCategoryParameters
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 import org.koin.ktor.ext.inject
 
 fun Route.images() {
@@ -15,7 +16,7 @@ fun Route.images() {
     val imagesUseCase by inject<ImagesByPageSizeUseCase>()
     val fifteenImagesDetailsUseCase by inject<GetFifteenImagesDetailsUseCase>()
     val liteImagesUseCase by inject<GetLiteImageDetailsUseCase>()
-    val tenTopRatedImageBasedOnTopWeekOrLastWeek by inject<GetTenTopRatedImagesBasedOnTopWeekOrLastWeek>()
+    val getTopRatedLiteImagesThreeWeeksAgoUseCase by inject<GetTopRatedLiteImagesThreeWeeksAgoUseCase>()
     val listTopRatedImages by inject<GetListOfTopRatedLiteImages>()
     val listOfColorsUseCase by inject<GetAllColorsUseCase>()
     val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
@@ -40,8 +41,9 @@ fun Route.images() {
         call.respond(message = images, status = images.statuesCode)
     }
 
-    get(ImageEndPoint.TenTopRated.path) {
-        val topRatedList = tenTopRatedImageBasedOnTopWeekOrLastWeek()
+    get(ImageEndPoint.ThreeWeeksAgoTopRatedImages.path) {
+        val limit = call.request.queryParameters.getOrFail("limit")
+        val topRatedList = getTopRatedLiteImagesThreeWeeksAgoUseCase(limit = limit.toInt())
         call.respond(
             message = topRatedList,
             status = topRatedList.statuesCode

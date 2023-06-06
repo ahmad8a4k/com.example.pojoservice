@@ -110,7 +110,7 @@ val mainModule = module {
     }
 
     single {
-        GetTenTopRatedImagesBasedOnTopWeekOrLastWeek(get())
+        GetTopRatedLiteImagesThreeWeeksAgoUseCase(get())
     }
 
     single {

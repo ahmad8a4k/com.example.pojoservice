@@ -8,7 +8,7 @@ sealed class ImageEndPoint(val path: String) {
     object Images : ImageEndPoint(path = "/images")
     object LiteImages : ImageEndPoint(path = "/lite_images")
     object FifteenImages : ImageEndPoint(path = "/fifteen_top_images")
-    object TenTopRated : ImageEndPoint(path = "/ten_top_rated")
+    object ThreeWeeksAgoTopRatedImages : ImageEndPoint(path = "/top_rated_recently")
     object ListTenTopRated : ImageEndPoint(path = "/list_top_rated")
     object AllLiteImagesByCategory : ImageEndPoint(path = "/lite_images_by_category")
     object ImageCompleteDetails : ImageEndPoint(path = "/images_complete_details")

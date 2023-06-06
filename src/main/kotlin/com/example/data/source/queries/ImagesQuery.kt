@@ -5,7 +5,7 @@ import com.example.data.dto.LiteImageDetailsWithLikesCountAndTitleDto
 import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.tables.*
 import com.example.domain.queryMapper.images.imageFullDetailsToDto
-import com.example.domain.queryMapper.images.liteImageDetailsRow
+import com.example.domain.queryMapper.images.liteImageDetailsRowDeplected
 import com.example.domain.queryMapper.images.liteImageDetailsWithLikesCountRow
 import com.example.utils.Constants.FIFTEEN_LIMIT_IMAGE
 import org.ktorm.database.Database
@@ -75,35 +75,56 @@ fun Database.liteListImageDetailsQuery(pageSize: Int, page: Int): List<LiteImage
         .limit(pageSize)
         .offset((page - 1) * pageSize)
         .orderBy()
-        .map { it.liteImageDetailsRow() }
+        .map { it.liteImageDetailsRowDeplected() }
 }
 
-fun Database.getTopRatedLiteImagesThisWeekOrLastWeeks():
-        List<LiteImageDetailsWithLikesCountAndTitleDto> {
-    val currentDate = LocalDate.now()
-    val oneWeekAgo = currentDate.minusWeeks(1)
-    val twoWeeksAgo = currentDate.minusWeeks(2)
+fun Database.getTopRatedLiteImagesThreeWeeksAgoQuery(limit: Int):
+        Query {
     return this.from(ImageDetailsTable)
         .innerJoin(
-            right = UserSocialTable,
-            on = UserSocialTable.image_details_id eq ImageDetailsTable.id
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
         )
-        .select(
+        .innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        )
+        .leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+        )
+        .selectDistinct(
             ImageDetailsTable.id,
-            ImageDetailsTable.imgTitle,
             ImageDetailsTable.url,
-            count(UserSocialTable.image_details_id).aliased("likes_count")
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.register,
+            ImageCategoriesTable.id,
+            ColorsTable.id,
+            ColorsTable.colorHex,
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
         )
         .where {
-            (ImageDetailsTable.register greaterEq oneWeekAgo) or
-                    (ImageDetailsTable.register greaterEq twoWeeksAgo)
+            (ImageDetailsTable.register.greaterEq(LocalDate.now().minusWeeks(3)))
         }
         .groupBy(
-            ImageDetailsTable.id
+            ImageDetailsTable.id,
+            ImageCategoriesTable.id,
+            ColorsTable.id
         )
-        .orderBy(count(UserSocialTable.image_details_id).desc())
-        .limit(10)
-        .map { it.liteImageDetailsWithLikesCountRow() }
+        .orderBy(
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count").desc()
+        )
+        .limit(n = limit)
 }
 
 fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int):
@@ -429,7 +450,6 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int): Query {
 /**
  *  If Their No Value Set Default Value
  */
-
 fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExpression<T> {
     return FunctionExpression(
         functionName = "coalesce",
@@ -437,6 +457,7 @@ fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExp
         sqlType = column.sqlType
     )
 }
+
 
 /**
  * For Admin In Future

@@ -6,7 +6,7 @@ import com.example.data.dto.collections.CollectionWithUserDto
 import com.example.data.source.queries.*
 import com.example.domain.queryMapper.collection.rowToAdminCollectionDto
 import com.example.domain.queryMapper.collection.rowToUserCollectionDto
-import com.example.domain.queryMapper.images.liteImageDetailsWithLikeCountRow
+import com.example.domain.queryMapper.images.liteImageDetailsRow
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.ktorm.database.Database
@@ -33,7 +33,7 @@ class CollectionDaoImpl(
             val query = async {
                 dataBase.getAllImageUserCollectionsByCollectionIdQuery(collectionId = collectionId)
             }
-            query.await().map { it.liteImageDetailsWithLikeCountRow() }
+            query.await().map { it.liteImageDetailsRow() }
         }
     }
     override suspend fun getImagesFromAdminsCollectionsByCollectionId(collectionId: Int):
@@ -42,7 +42,7 @@ class CollectionDaoImpl(
             val query = async {
                 dataBase.getAllImageAdminCollectionsByCollectionIdQuery(collectionId = collectionId)
             }
-            query.await().map { it.liteImageDetailsWithLikeCountRow() }
+            query.await().map { it.liteImageDetailsRow() }
         }
     }
     override suspend fun getLimitAdminCollections(limit: Int): List<CollectionDto> {

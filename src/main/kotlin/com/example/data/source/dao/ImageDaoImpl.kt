@@ -68,13 +68,16 @@ class ImageDaoImpl(
     override suspend fun getLiteImagesByDate(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
         return coroutineScope {
             val query = async { dataBase.getLiteImagesOrderByDate(pageSize = pageSize, page = page) }
-            query.await().map { it.liteImageDetailsWithLikeCountRow() }
+            query.await().map { it.liteImageDetailsRow() }
         }
     }
 
-    override suspend fun getTenTopRatedLiteImagesThisWeekORLastWeek()
-            : List<LiteImageDetailsWithLikesCountAndTitleDto> {
-        return dataBase.getTopRatedLiteImagesThisWeekOrLastWeeks()
+    override suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int)
+            : List<LiteImageDetailsDto> {
+        return coroutineScope {
+            val query = async { dataBase.getTopRatedLiteImagesThreeWeeksAgoQuery(limit) }
+            query.await().map { it.liteImageDetailsRow() }
+        }
     }
 
     override suspend fun getTopRatedLiteImages(
@@ -115,7 +118,7 @@ class ImageDaoImpl(
                     categoryName = categoryName
                 )
             }
-            query.await().map { it.liteImageDetailsWithLikeCountRow() }
+            query.await().map { it.liteImageDetailsRow() }
         }
     }
 

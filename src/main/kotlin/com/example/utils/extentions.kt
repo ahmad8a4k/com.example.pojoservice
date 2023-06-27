@@ -37,13 +37,13 @@ fun String.generateSaltedHash(): SaltedHash {
 }
 
 /**
- *  String Should Be UserName
+ *  Integer Should Be UserId
  */
-fun String.generateToken(): String =
+fun Int.generateToken(): String =
     JWT.create()
         .withAudience(AUDIENCE)
         .withIssuer(ISSUER)
-        .withClaim("username", this)
+        .withClaim("user_id", this)
         .withExpiresAt(Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_DATE))
         .sign(Algorithm.HMAC256(SECRET))
 

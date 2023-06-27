@@ -69,7 +69,7 @@ val mainModule = module {
     }
 
     single {
-        SignInUseCase(get())
+        UserSignInByUserNameUseCase(get())
     }
 
     single {
@@ -79,6 +79,14 @@ val mainModule = module {
     single {
         GetUserDetailsByIDUserCase(get())
     }
+
+    single {
+        UserSignInByUserEmailUserCase(get())
+    }
+
+    /**
+     * Others
+     */
 
     single {
         GetAllColorsUseCase(get())

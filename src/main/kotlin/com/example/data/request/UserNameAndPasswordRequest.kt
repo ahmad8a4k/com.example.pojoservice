@@ -1,6 +1,6 @@
 package com.example.data.request
 
 data class UserNameAndPasswordRequest(
-    val username :String,
+    val usernameOrEmail :String,
     val password:String
 )

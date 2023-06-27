@@ -11,16 +11,18 @@ import com.example.utils.verifyPassword
 class UpdateUserPasswordUseCase(
     private val userDao: UserDao,
 ) {
-
     suspend operator fun invoke(parameters: UpdateUserPasswordRequest): BaseResponse<Boolean> {
-        val userDto = userDao.getUserByUserName(userName = parameters.username)
 
         if (
             parameters.password.isEmpty() ||
-            parameters.newPassword.isEmpty()
+            parameters.newPassword.isEmpty() ||
+            parameters.username.isEmpty()
         ) {
             return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message, data = false)
         }
+
+        val userDto = userDao.getUserByUserName(userName = parameters.username)
+            ?: return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message, data = false)
 
         if (userDto.user_name == "Empty") {
             return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message, data = false)

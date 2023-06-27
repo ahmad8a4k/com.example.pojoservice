@@ -12,7 +12,7 @@ fun <T : Entity<T>> Database.getCountOfTableItemsQuery(table: Table<T>): Int {
         .map { it[count().aliased("items_numbers")] ?: 0 }.first()
 }
 
-fun Database.checkIfExistByName(columnName: Column<String>, name: String): Boolean {
+fun Database.checkIfExistByNameAndTableName(columnName: Column<String>, name: String): Boolean {
     return this.from(columnName.table).select().where { columnName eq name }.map {}.isNotEmpty()
 }
 

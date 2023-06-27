@@ -34,7 +34,7 @@ object Constants {
     const val ROOT_ISSUER = "http://127.0.0.1:8080"
     const val ROOT_AUDIENCE = "user_root"
 
-    val SECRET = System.getenv("JWT_SECRET") ?: "jwt-secret"
+    val SECRET = System.getenv("JWT_SECRET") ?: "jwtsecret"
     const val ISSUER = "http://db4free.net"
     const val AUDIENCE = "http://db4free.net/pojoservicedb"
     const val REFRESH_TOKEN_EXPIRE_DATE = (365L * 1000L * 60L * 60L * 24L)

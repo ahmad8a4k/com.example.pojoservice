@@ -3,7 +3,7 @@ package com.example.data.source.dao
 import com.example.data.dto.UserDto
 import com.example.data.setMapper.toUserEntityByBuilder
 import com.example.data.setMapper.toUserEntityUpdatePasswordByBuilder
-import com.example.data.source.queries.checkIfExistByName
+import com.example.data.source.queries.checkIfExistByNameAndTableName
 import com.example.data.source.queries.checkIfUserExistByUsingUserId
 import com.example.data.source.queries.getUserDetailsByUserId
 import com.example.data.tables.UserTable
@@ -15,13 +15,24 @@ class UserDaoImpl(
     private var dataBase: Database,
 ) : UserDao {
 
-    override suspend fun checkIfUserExistByName(username: String): Boolean {
-        return dataBase.checkIfExistByName(UserTable.userName, username)
+    override suspend fun checkIfUserNameExist(username: String): Boolean {
+        return dataBase.checkIfExistByNameAndTableName(UserTable.userName, username)
+    }
+
+    override suspend fun checkIfUserEmailExist(email: String): Boolean {
+        return dataBase.checkIfExistByNameAndTableName(UserTable.email, email)
     }
 
     override suspend fun getUserByUserName(userName: String): UserDto {
         return dataBase.from(UserTable).select()
             .where { UserTable.userName eq userName }.map {
+                it.toUserDetailsDto()
+            }.first()
+    }
+
+    override suspend fun getUserByUserEmail(email: String): UserDto {
+        return dataBase.from(UserTable).select()
+            .where { UserTable.email eq email }.map {
                 it.toUserDetailsDto()
             }.first()
     }

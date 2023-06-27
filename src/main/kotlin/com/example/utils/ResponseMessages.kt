@@ -11,10 +11,12 @@ sealed class ResponseMessages(val message: String) {
     object IncorrectPassword : ResponseMessages("INCORRECT PASSWORD")
     object SuccessSignIn : ResponseMessages("SUCCESS SIGN IN")
     object IncorrectRequest : ResponseMessages("INCORRECT REQUEST")
-    object UserAlreadyExist : ResponseMessages("USER ALREADY EXIST!")
+    object UserNameAlreadyExist : ResponseMessages("USER ALREADY EXIST!")
+    object UserEmailIsAlreadyExist : ResponseMessages("USER EMAIL ALREADY EXIST!")
     object SuccessSignup : ResponseMessages("SUCCESS SIGNUP")
     object SuccessDeleteUser : ResponseMessages("SUCCESS DELETE USER")
     object SuccessUpdatePassword : ResponseMessages("SUCCESS UPDATE USER")
+    object NotFoundUserEmail : ResponseMessages("Not Found User With This UserEmail")
     object NotFoundUser : ResponseMessages("Not Found User With This UserName")
     object NotFoundUserID : ResponseMessages("Not Found User With This UserID")
 

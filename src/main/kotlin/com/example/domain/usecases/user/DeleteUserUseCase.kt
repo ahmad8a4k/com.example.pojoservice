@@ -11,7 +11,9 @@ class DeleteUserUseCase(
 ) {
 
     suspend operator fun invoke(userName: String, userPassword: String): BaseResponse<Boolean> {
+
         val userDto = userDao.getUserByUserName(userName = userName)
+            ?: return BaseResponse.ErrorResponse(message = ResponseMessages.NotFoundUser.message, data = false)
 
         if (userName.isEmpty()) {
             return BaseResponse.ErrorResponse(message = ResponseMessages.EmptyField.message, data = false)

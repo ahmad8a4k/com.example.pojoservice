@@ -74,6 +74,9 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.6.4")
+
+
 
     // Mysql Connector
 //    implementation("mysql:mysql-connector-java:8.0.32")
@@ -91,8 +94,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
     implementation ("io.trbl:blurhash:1.0.0")
-
-
 }
 
 //ktor {

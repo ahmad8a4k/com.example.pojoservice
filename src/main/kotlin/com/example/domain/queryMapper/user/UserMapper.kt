@@ -5,9 +5,10 @@ import com.example.data.dto.UserDto
 import com.example.data.tables.SubscribeTypesTable
 import com.example.data.tables.UserTable
 import org.ktorm.dsl.QueryRowSet
+import org.ktorm.support.postgresql.DefaultValueExpression
 
 fun QueryRowSet.toUserDetailsDto() = UserDto(
-    user_id = this[UserTable.userId] ?: 0,
+    user_id = this[UserTable.userId] ?:0,
     user_name = this[UserTable.userName] ?: "0",
     full_name = this[UserTable.fullName] ?: "0",
     user_email = this[UserTable.email] ?: "0",

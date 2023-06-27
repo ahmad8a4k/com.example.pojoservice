@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.domain.endpoints.UserEndPoint
 import com.example.domain.usecases.user.*
+import com.example.domain.usecases.util.isValidEmail
 import com.example.routes.mapper.user.updatePasswordMapper.userIdParameters
 import com.example.routes.mapper.user.updatePasswordMapper.userUpdatePasswordParameters
 import com.example.routes.mapper.user.signInMapper.userNameAndPasswordRequest
@@ -16,7 +17,8 @@ import org.koin.ktor.ext.inject
 
 fun Route.userRoute(){
     val signUpUseCase by inject<SignUpUseCase>()
-    val signInUseCase by inject<SignInUseCase>()
+    val userSignInByUserNameUseCase by inject<UserSignInByUserNameUseCase>()
+    val userSignInByUserEmailUseCase by inject<UserSignInByUserEmailUserCase>()
     val authUserUserCase by inject<AuthUserUserCase>()
     val updateUserPasswordUseCase by inject<UpdateUserPasswordUseCase>()
     val deleteUserUseCase by inject<DeleteUserUseCase>()
@@ -30,8 +32,18 @@ fun Route.userRoute(){
 
     post(UserEndPoint.SignIn.path) {
         val signInParameters = userNameAndPasswordRequest()
-        val signInToken = signInUseCase(signInParameters.username, signInParameters.password)
-        call.respond(message = signInToken, status = signInToken.statuesCode)
+        if(signInParameters.usernameOrEmail.isValidEmail()) {
+            val signInToken = userSignInByUserEmailUseCase(
+                signInParameters.usernameOrEmail,
+                signInParameters.password
+            )
+            call.respond(message = signInToken, status = signInToken.statuesCode)
+        }else{
+            val signInToken = userSignInByUserNameUseCase(
+                signInParameters.usernameOrEmail, signInParameters.password
+            )
+            call.respond(message = signInToken, status = signInToken.statuesCode)
+        }
     }
 
     authenticate {
@@ -43,7 +55,7 @@ fun Route.userRoute(){
 
     get(UserEndPoint.DeleteUserByUsernameAndPassword.path) {
         val signInParameters = userNameAndPasswordRequest()
-        val signInToken = deleteUserUseCase(signInParameters.username, signInParameters.password)
+        val signInToken = deleteUserUseCase(signInParameters.usernameOrEmail, signInParameters.password)
         call.respond(message = signInToken, status = signInToken.statuesCode)
     }
 

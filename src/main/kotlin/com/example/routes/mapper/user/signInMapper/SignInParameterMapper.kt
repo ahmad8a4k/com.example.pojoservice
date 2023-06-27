@@ -8,7 +8,7 @@ import io.ktor.util.pipeline.*
 fun PipelineContext<*, ApplicationCall>.userNameAndPasswordRequest(): UserNameAndPasswordRequest {
     val userParameters = call.request.queryParameters
     return UserNameAndPasswordRequest(
-        username = userParameters.getOrFail("name"),
+        usernameOrEmail = userParameters.getOrFail("nameOrEmail"),
         password = userParameters.getOrFail("password"),
     )
 }

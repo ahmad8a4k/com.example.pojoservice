@@ -11,6 +11,7 @@ class SignUpUseCase (
     private val userDao: UserDao,
 ) {
     suspend operator fun invoke(user: UserDto): BaseResponse<UserResponseWithToken> {
+
         if (
             user.user_email.isEmpty() ||
             user.user_name.isEmpty() ||
@@ -24,9 +25,16 @@ class SignUpUseCase (
             )
         }
 
-        if (userDao.checkIfUserExistByName(username = user.user_name)) {
+        if (userDao.checkIfUserNameExist(username = user.user_name)) {
             return BaseResponse.ErrorResponse(
-                message = ResponseMessages.UserAlreadyExist.message,
+                message = ResponseMessages.UserNameAlreadyExist.message,
+                data = UserResponseWithToken()
+            )
+        }
+
+        if (userDao.checkIfUserEmailExist(email = user.user_email)) {
+            return BaseResponse.ErrorResponse(
+                message = ResponseMessages.UserEmailIsAlreadyExist.message,
                 data = UserResponseWithToken()
             )
         }
@@ -37,7 +45,7 @@ class SignUpUseCase (
             message = ResponseMessages.SuccessSignup.message, data = UserResponseWithToken(
                 userID = userInsert.user_id,
                 userName = userInsert.user_name,
-                token = userInsert.user_name.generateToken()
+                token = userInsert.user_id.generateToken()
             )
         )
     }

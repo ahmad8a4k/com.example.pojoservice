@@ -5,6 +5,7 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.datetime
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
+import org.ktorm.support.postgresql.defaultValue
 
 object UserTable : Table<UserEntity>("pojo_user") {
     val userId = int("id").bindTo { it.userId }.primaryKey()

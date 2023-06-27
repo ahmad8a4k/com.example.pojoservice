@@ -29,7 +29,7 @@ fun Application.module() {
         issuer = ISSUER,
         audience = AUDIENCE,
         expiresIn = 365L * 1000L * 60L * 60L * 24L,
-        secret = System.getenv("JWT_SECRET") ?: "jwt-secret"
+        secret = System.getenv("JWT_SECRET") ?: "jwtsecret"
     )
 
     configureSecurity(tokenConfig)

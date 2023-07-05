@@ -45,7 +45,8 @@ class UserSignInByUserNameUseCase(
         return BaseResponse.SuccessResponse(
             data = UserTokenResponse(
                 token = userDto.user_id.generateToken()
-            )
+            ),
+            message = ResponseMessages.SuccessSignIn.message
         )
     }
 }

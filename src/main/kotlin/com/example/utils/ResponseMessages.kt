@@ -6,22 +6,19 @@ sealed class ResponseMessages(val message: String) {
      */
     object SuccessAuthentication : ResponseMessages("SUCCESS AUTHENTICATION")
     object FailAuthentication : ResponseMessages("FAIL AUTHENTICATION")
-    object IncorrectPasswordORUserName : ResponseMessages("INCORRECT USERNAME OR PASSWORD")
     object EmptyField : ResponseMessages("EMPTY FILED")
-    object IncorrectPassword : ResponseMessages("INCORRECT PASSWORD")
+    object SuccessSignup : ResponseMessages("SUCCESS SIGNUP")
+    object IncorrectPassword : ResponseMessages("INCORRECT USER PASSWORD!")
     object SuccessSignIn : ResponseMessages("SUCCESS SIGN IN")
     object IncorrectRequest : ResponseMessages("INCORRECT REQUEST")
     object UserNameAlreadyExist : ResponseMessages("USER ALREADY EXIST!")
+    object NotFoundUserEmail : ResponseMessages("NOT FOUND USER EMAIL!")
+    object NotFoundUser : ResponseMessages("NOT FOUND USERNAME!")
     object UserEmailIsAlreadyExist : ResponseMessages("USER EMAIL ALREADY EXIST!")
-    object SuccessSignup : ResponseMessages("SUCCESS SIGNUP")
     object SuccessDeleteUser : ResponseMessages("SUCCESS DELETE USER")
     object SuccessUpdatePassword : ResponseMessages("SUCCESS UPDATE USER")
-    object NotFoundUserEmail : ResponseMessages("Not Found User With This UserEmail")
-    object NotFoundUser : ResponseMessages("Not Found User With This UserName")
     object NotFoundUserID : ResponseMessages("Not Found User With This UserID")
-
     object SuccessFetchUserByID : ResponseMessages("SUCCESS FITCH USER")
-
 
     /**
      * Image Response Messages

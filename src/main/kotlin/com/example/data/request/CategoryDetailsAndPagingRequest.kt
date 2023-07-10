@@ -4,6 +4,7 @@ data class CategoryDetailsAndPagingRequest(
     val pageSize :String,
     val pageNum:String,
     val category_id:Int,
-    val category_name:String
+    val category_name:String,
+    val userId: Int
 )
 

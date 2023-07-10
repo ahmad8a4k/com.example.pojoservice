@@ -12,7 +12,8 @@ fun PipelineContext<*, ApplicationCall>.imagesByCategoryParameters(): CategoryDe
         pageSize = queryParameter.getOrFail("page_size"),
         pageNum = queryParameter.getOrFail("page_number"),
         category_id = queryParameter.getOrFail("category_id").toInt(),
-        category_name = queryParameter.getOrFail("category_name")
+        category_name = queryParameter.getOrFail("category_name"),
+        userId = queryParameter.getOrFail("user_id").toInt()
     )
 }
 

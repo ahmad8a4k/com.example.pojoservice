@@ -8,12 +8,15 @@ import com.example.utils.ResponseMessages
 class GetImagesUserCollectionsUseCase(
     private val collectionDao: CollectionDao,
 ) {
-    suspend operator fun invoke(collectionId: Int): BaseResponse<List<LiteImageDetailsDto>> {
+    suspend operator fun invoke(collectionId: Int, userId: Int): BaseResponse<List<LiteImageDetailsDto>> {
 
         if (collectionId == 0 || collectionId < 0)
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchList.message)
 
-        val collections = collectionDao.getImagesFromUsersCollectionsByCollectionId(collectionId)
+        val collections = collectionDao.getImagesFromUsersCollectionsByCollectionId(
+            collectionId = collectionId,
+            userId = userId
+        )
 
         if (collections.isEmpty()) {
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchList.message)

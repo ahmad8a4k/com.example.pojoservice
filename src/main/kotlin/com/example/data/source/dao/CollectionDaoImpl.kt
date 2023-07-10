@@ -27,20 +27,26 @@ class CollectionDaoImpl(
             query.await().map { it.rowToAdminCollectionDto() }
         }
     }
-    override suspend fun getImagesFromUsersCollectionsByCollectionId(collectionId: Int):
+    override suspend fun getImagesFromUsersCollectionsByCollectionId(collectionId: Int, userId: Int):
             List<LiteImageDetailsDto> {
         return coroutineScope {
             val query = async {
-                dataBase.getAllImageUserCollectionsByCollectionIdQuery(collectionId = collectionId)
+                dataBase.getAllImageUserCollectionsByCollectionIdQuery(
+                    collectionId = collectionId,
+                    userId = userId
+                )
             }
             query.await().map { it.liteImageDetailsRow() }
         }
     }
-    override suspend fun getImagesFromAdminsCollectionsByCollectionId(collectionId: Int):
+    override suspend fun getImagesFromAdminsCollectionsByCollectionId(collectionId: Int, userId: Int):
             List<LiteImageDetailsDto> {
         return coroutineScope {
             val query = async {
-                dataBase.getAllImageAdminCollectionsByCollectionIdQuery(collectionId = collectionId)
+                dataBase.getAllImageAdminCollectionsByCollectionIdQuery(
+                    collectionId = collectionId,
+                    userId = userId
+                )
             }
             query.await().map { it.liteImageDetailsRow() }
         }

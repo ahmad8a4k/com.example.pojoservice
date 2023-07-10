@@ -29,13 +29,15 @@ fun Route.collections() {
 
     put(path = ImageEndPoint.ImagesByUsersCollections.path) {
         val collectionId = call.request.queryParameters.getOrFail("collection_id")
-        val images = imagesFromUsersCollectionsUseCase(collectionId = collectionId.toInt())
+        val userId = call.request.queryParameters.getOrFail("user_id").toInt()
+        val images = imagesFromUsersCollectionsUseCase(collectionId = collectionId.toInt(), userId = userId )
         call.respond(message = images, status = images.statuesCode)
     }
 
     put(path = ImageEndPoint.ImagesByAdminsCollections.path) {
         val collectionId = call.request.queryParameters.getOrFail("collection_id")
-        val images = imagesFromAdminsCollectionsUseCase(collectionId = collectionId.toInt())
+        val userId = call.request.queryParameters.getOrFail("user_id").toInt()
+        val images = imagesFromAdminsCollectionsUseCase(collectionId = collectionId.toInt(), userId = userId)
         call.respond(message = images, status = images.statuesCode)
     }
 

@@ -11,6 +11,7 @@ fun PipelineContext<*, ApplicationCall>.pagingParameter(): ImagePaging {
     return ImagePaging(
         pageSize = callParameters.getOrFail("page_size"),
         pageNum = callParameters.getOrFail("page_number"),
+        userId = callParameters.getOrFail("user_id").toInt()
     )
 }
 
@@ -19,6 +20,7 @@ fun PipelineContext<*, ApplicationCall>.imageCategoryColorParameters(): ImageCat
     return ImageCategoryColorRequest(
         imageId = callParameters.getOrFail("image_id").toInt(),
         categoryId = callParameters.getOrFail("category_id").toInt(),
-        colorId = callParameters.getOrFail("color_id").toInt()
+        colorId = callParameters.getOrFail("color_id").toInt(),
+        userId = callParameters.getOrFail("user_id").toInt()
     )
 }

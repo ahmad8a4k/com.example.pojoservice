@@ -13,9 +13,6 @@ import org.koin.ktor.ext.inject
 
 fun Route.images() {
 
-    val imagesUseCase by inject<ImagesByPageSizeUseCase>()
-    val fifteenImagesDetailsUseCase by inject<GetFifteenImagesDetailsUseCase>()
-    val liteImagesUseCase by inject<GetLiteImageDetailsUseCase>()
     val getTopRatedLiteImagesThreeWeeksAgoUseCase by inject<GetTopRatedLiteImagesThreeWeeksAgoUseCase>()
     val listTopRatedImages by inject<GetListOfTopRatedLiteImages>()
     val listOfColorsUseCase by inject<GetAllColorsUseCase>()
@@ -24,26 +21,13 @@ fun Route.images() {
     val listOfImagesDetailsUseCase by inject<GetImagesDetailsBasedOnCategoryOrColorUseCase>()
     val listOfLiteImagesDetailsByDateUseCase by inject<GetLiteImagesOrderByDateUseCase>()
 
-    put(ImageEndPoint.Images.path) {
-        val imagePageParameters = pagingParameter()
-        val images = imagesUseCase(imagePageParameters.pageSize.toInt(), imagePageParameters.pageNum.toInt())
-        call.respond(message = images, status = images.statuesCode)
-    }
-
-    put(ImageEndPoint.LiteImages.path) {
-        val imagePageParameters = pagingParameter()
-        val images = liteImagesUseCase(imagePageParameters.pageSize.toInt(), imagePageParameters.pageNum.toInt())
-        call.respond(message = images, status = images.statuesCode)
-    }
-
-    get(ImageEndPoint.FifteenImages.path) {
-        val images = fifteenImagesDetailsUseCase()
-        call.respond(message = images, status = images.statuesCode)
-    }
-
     get(ImageEndPoint.ThreeWeeksAgoTopRatedImages.path) {
         val limit = call.request.queryParameters.getOrFail("limit")
-        val topRatedList = getTopRatedLiteImagesThreeWeeksAgoUseCase(limit = limit.toInt())
+        val userId = call.request.queryParameters.getOrFail("user_id").toInt()
+        val topRatedList = getTopRatedLiteImagesThreeWeeksAgoUseCase(
+            limit = limit.toInt(),
+            userId = userId
+        )
         call.respond(
             message = topRatedList,
             status = topRatedList.statuesCode
@@ -59,10 +43,11 @@ fun Route.images() {
     }
 
     put(ImageEndPoint.ListTenTopRated.path) {
-        val imagePageParameters = pagingParameter()
+        val parameters = pagingParameter()
         val topRatedList = listTopRatedImages(
-            pageSize = imagePageParameters.pageSize.toInt(),
-            pageNumber = imagePageParameters.pageNum.toInt()
+            pageSize = parameters.pageSize.toInt(),
+            pageNumber = parameters.pageNum.toInt(),
+            userId = parameters.userId
         )
         call.respond(
             message = topRatedList,
@@ -71,12 +56,13 @@ fun Route.images() {
     }
 
     put(ImageEndPoint.AllLiteImagesByCategory.path) {
-        val imagePageParameters = imagesByCategoryParameters()
+        val parameters = imagesByCategoryParameters()
         val images = listLiteImagesByCategoryUseCase(
-            pageSize = imagePageParameters.pageSize.toInt(),
-            page = imagePageParameters.pageNum.toInt(),
-            categoryId = imagePageParameters.category_id,
-            categoryName = imagePageParameters.category_name
+            pageSize = parameters.pageSize.toInt(),
+            page = parameters.pageNum.toInt(),
+            categoryId = parameters.category_id,
+            categoryName = parameters.category_name,
+            userId = parameters.userId
         )
         call.respond(
             message = images,
@@ -89,7 +75,8 @@ fun Route.images() {
         val imagesDetails = listOfImagesDetailsUseCase(
             imageId = parameters.imageId,
             categoryId = parameters.categoryId,
-            colorId = parameters.colorId
+            colorId = parameters.colorId,
+            userId = parameters.userId
         )
         call.respond(message = imagesDetails, status = imagesDetails.statuesCode)
     }
@@ -99,11 +86,13 @@ fun Route.images() {
     }
 
     put(ImageEndPoint.LiteImagesByDetails.path) {
-        val imagePageParameters = pagingParameter()
+        val parameters = pagingParameter()
         val images = listOfLiteImagesDetailsByDateUseCase(
-            pageSize = imagePageParameters.pageSize.toInt(),
-            pageNumber = imagePageParameters.pageNum.toInt()
+            pageSize = parameters.pageSize.toInt(),
+            pageNumber = parameters.pageNum.toInt(),
+            userId = parameters.userId
         )
         call.respond(message = images, status = images.statuesCode)
     }
+
 }

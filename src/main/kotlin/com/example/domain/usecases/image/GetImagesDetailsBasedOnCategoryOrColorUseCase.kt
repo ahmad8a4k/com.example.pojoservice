@@ -12,33 +12,39 @@ class GetImagesDetailsBasedOnCategoryOrColorUseCase(
         imageId: Int,
         categoryId: Int,
         colorId: Int,
+        userId: Int,
     ): BaseResponse<List<ImageDetailsWithLikesAndWatchAndUser>> {
 
         val imagesDetails = mutableListOf<ImageDetailsWithLikesAndWatchAndUser>()
 
-        val imageDetails = imageDao.getImageDetailsBasedOnImagedId(imageId= imageId)
+        val imageDetails = imageDao.getImageDetailsBasedOnImagedId(imageId = imageId, userId = userId)
 
-        if(imageDetails.image_id == 0){
+        if (imageDetails.image_id == 0) {
             return BaseResponse.ErrorLiseResponse(message = ResponseMessages.NotFoundImageByImageID.message)
         }
 
         val images = imageDao.getImagesDetailsBasedOnCategoryORColorId(
             categoryId = categoryId,
-            colorID = colorId)
+            colorID = colorId,
+            userId = userId
+        )
 
-        if (images.isEmpty()){
-           return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchImages.message)
+        if (images.isEmpty()) {
+            return BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchImages.message)
         }
 
         imagesDetails.addAll(images)
 
         imagesDetails.shuffled()
 
-        if(images.size <= 58){
-            val imageDetailsRandom = imageDao.getImagesDetailsBasedOnRandomCategoryID(60 - images.size - 1)
-            return if (imageDetailsRandom.isEmpty()){
+        if (images.size <= 58) {
+            val imageDetailsRandom = imageDao.getImagesDetailsBasedOnRandomCategoryID(
+                limit = 60 - images.size - 1,
+                userId = userId
+            )
+            return if (imageDetailsRandom.isEmpty()) {
                 BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchImages.message)
-            }else{
+            } else {
                 imagesDetails.addAll(imageDetailsRandom)
                 BaseResponse.SuccessResponse(
                     data = imagesDetails
@@ -46,7 +52,7 @@ class GetImagesDetailsBasedOnCategoryOrColorUseCase(
             }
         }
 
-        imagesDetails.add(0,imageDetails)
+        imagesDetails.add(0, imageDetails)
 
         return BaseResponse.SuccessResponse(
             data = imagesDetails

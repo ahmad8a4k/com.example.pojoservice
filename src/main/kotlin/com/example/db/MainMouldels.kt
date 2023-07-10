@@ -102,14 +102,6 @@ val mainModule = module {
     }
 
     single {
-        GetLiteImageDetailsUseCase(get())
-    }
-
-    single {
-        GetFifteenImagesDetailsUseCase(get())
-    }
-
-    single {
         GetAllNaturalCategoriesUseCase(get())
     }
 
@@ -126,9 +118,6 @@ val mainModule = module {
     }
 
     /*Categories*/
-    single {
-        ImagesByPageSizeUseCase(get())
-    }
 
     single {
         GetNaturalImagesByPagingUseCase(get(), get())
@@ -197,5 +186,4 @@ val mainModule = module {
     single {
         GetAdminCollectionDetailsUseCase(get())
     }
-
 }

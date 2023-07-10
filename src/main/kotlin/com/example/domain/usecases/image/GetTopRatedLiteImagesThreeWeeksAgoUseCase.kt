@@ -8,9 +8,9 @@ import com.example.utils.ResponseMessages
 class GetTopRatedLiteImagesThreeWeeksAgoUseCase(
     private val imagesDao: ImageDao,
 ) {
-    suspend operator fun invoke(limit: Int): BaseResponse<List<LiteImageDetailsDto>> {
+    suspend operator fun invoke(limit: Int, userId: Int): BaseResponse<List<LiteImageDetailsDto>> {
 
-        val theList = imagesDao.getTenTopRatedLiteImagesThreeWeeksAgo(limit)
+        val theList = imagesDao.getTenTopRatedLiteImagesThreeWeeksAgo(limit = limit, userId = userId)
 
         return if (theList.isNotEmpty())
             BaseResponse.SuccessResponse(

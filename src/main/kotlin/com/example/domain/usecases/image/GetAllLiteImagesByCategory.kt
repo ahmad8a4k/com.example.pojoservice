@@ -18,6 +18,7 @@ class GetAllLiteImagesByCategory(
         page: Int,
         categoryId: Int,
         categoryName: String,
+        userId: Int,
     ): BaseResponse<List<LiteImageDetailsDto>> {
 
         val totalPages = imageDao.getTotalPagesTable(ImageDetailsTable.id, pageSize)
@@ -32,7 +33,8 @@ class GetAllLiteImagesByCategory(
             pageSize = pageSize.makePageSizeInRange(),
             page = pageNumberInRange.makePageNumberDefaultIfItZero(),
             categoryName = categoryName,
-            categoryId = categoryId
+            categoryId = categoryId,
+            userId = userId
         )
 
         if (images.isEmpty()) {

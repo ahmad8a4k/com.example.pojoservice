@@ -5,43 +5,18 @@ import com.example.data.source.queries.coalesce
 import com.example.data.tables.*
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.count
-
-fun QueryRowSet.liteImageDetailsRowDeplected() = LiteImageDetailsDtoDeplecated(
-    image_id = this[ImageDetailsTable.id] ?: 0,
-    image_Title = this[ImageDetailsTable.imgTitle] ?: "Empty",
-    image_url = this[ImageDetailsTable.url] ?: "Empty"
-)
-
-fun QueryRowSet.liteImageDetailsWithLikesCountRow() = LiteImageDetailsWithLikesCountAndTitleDto(
-    image_id = this[ImageDetailsTable.id] ?: 0,
-    image_Title = this[ImageDetailsTable.imgTitle] ?: "Empty",
-    image_url = this[ImageDetailsTable.url] ?: "Empty",
-    likes_count = this[count(UserSocialTable.image_details_id).aliased("likes_count")] ?: 0
-)
+import org.ktorm.dsl.isNotNull
 
 fun QueryRowSet.liteImageDetailsRow() = LiteImageDetailsDto(
     image_id = this[ImageDetailsTable.id] ?: 0,
     image_url = this[ImageDetailsTable.url] ?: "Empty",
-    likes_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] as Int,
-    blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
-    category_id = this[ImageCategoriesTable.id] ?: 0,
-    color_id = this[ColorsTable.id] ?: 0,
-    color_hex = this[ColorsTable.colorHex] ?: "#2d3436"
-)
-
-fun QueryRowSet.liteImageDetailsWithLiteUserInformationRow() = LiteImageDetailsWithLiteUserInformationDto(
-    image_id = this[ImageDetailsTable.id] ?: 0,
-    image_url = this[ImageDetailsTable.url] ?: "Empty",
-    likes_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] as Int,
+    likes_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] ?: 0,
     blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
     category_id = this[ImageCategoriesTable.id] ?: 0,
     color_id = this[ColorsTable.id] ?: 0,
     color_hex = this[ColorsTable.colorHex] ?: "#2d3436",
-    user_id = this[UserTable.userId] ?: 0,
-    user_name = this[UserTable.userName] ?: "Empty",
-    user_url = this[UserTable.userUrl] ?: "Empty"
+    userLiked = this[ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")] ?: false
 )
-
 
 fun QueryRowSet.imageDetailsWithLikeAndWatchCountRowMapper() = ImageDetailsWithLikesAndWatchAndUser(
     image_id = this[ImageDetailsTable.id] ?: 0,
@@ -53,7 +28,8 @@ fun QueryRowSet.imageDetailsWithLikeAndWatchCountRowMapper() = ImageDetailsWithL
     blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
     user_id = this[UserTable.userId] ?: 0,
     user_name = this[UserTable.userName] ?: "Empty",
-    user_url = this[UserTable.userUrl] ?: "Empty"
+    user_url = this[UserTable.userUrl] ?: "Empty",
+    user_liked = this[ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")] ?: false
 )
 
 fun QueryRowSet.idAndUrlImageMapperRow() = IdAndUrlImagesWithDto(

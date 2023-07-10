@@ -108,7 +108,7 @@ fun Database.getLimitAdminCollections(limit: Int): Query {
         )
 }
 
-fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Query {
+fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int, userId: Int): Query {
     return this.from(ImageDetailsTable)
         .innerJoin(
             right = ImageCategoriesTable,
@@ -129,7 +129,8 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
             on = UserTable.userId.eq(UserCollectionTable.userId)
         ).leftJoin(
             right = ImageUserLikesTable,
-            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
+                    (ImageUserLikesTable.user_id.eq(userId))
         ).select(
             ImageDetailsTable.id,
             ImageDetailsTable.url,
@@ -142,7 +143,8 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
                     ImageUserLikesTable.user_id
                 ),
                 defaultValue = 0
-            ).aliased("like_count")
+            ).aliased("like_count"),
+            ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         ).where {
             UserCollectionTable.id.eq(collectionId)
         }
@@ -150,11 +152,16 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int): Q
             ImageDetailsTable.id,
             ImageCategoriesTable.id,
             ColorsTable.id,
-            UserTable.userId
+            UserTable.userId,
+            ImageUserLikesTable.image_id,
+            ImageUserLikesTable.user_id
         ).orderBy(ImageDetailsTable.id.desc())
 }
 
-fun Database.getAllImageAdminCollectionsByCollectionIdQuery(collectionId: Int): Query {
+fun Database.getAllImageAdminCollectionsByCollectionIdQuery(
+    collectionId: Int,
+    userId: Int,
+): Query {
     return this.from(ImageDetailsTable)
         .innerJoin(
             right = ImageCategoriesTable,
@@ -172,7 +179,8 @@ fun Database.getAllImageAdminCollectionsByCollectionIdQuery(collectionId: Int): 
             on = AdminCollectionTable.id.eq(AdminImageCollectionTable.collection_id)
         ).leftJoin(
             right = ImageUserLikesTable,
-            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id)
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
+                    (ImageUserLikesTable.user_id.eq(userId))
         ).select(
             ImageDetailsTable.id,
             ImageDetailsTable.url,
@@ -185,14 +193,17 @@ fun Database.getAllImageAdminCollectionsByCollectionIdQuery(collectionId: Int): 
                     ImageUserLikesTable.user_id
                 ),
                 defaultValue = 0
-            ).aliased("like_count")
+            ).aliased("like_count"),
+            ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         ).where {
             AdminCollectionTable.id.eq(collectionId)
         }
         .groupBy(
+            ImageUserLikesTable.image_id,
             ImageDetailsTable.id,
             ImageCategoriesTable.id,
-            ColorsTable.id
+            ColorsTable.id,
+            ImageUserLikesTable.user_id
         ).orderBy(ImageDetailsTable.id.desc())
 }
 
@@ -229,6 +240,7 @@ fun Database.getUserCollectionDetails(collectionId: Int): Query {
             UserTable.userId
         ).limit(1)
 }
+
 fun Database.getAdminCollectionDetails(collectionId: Int): Query {
     return this.from(AdminCollectionTable)
         .leftJoin(

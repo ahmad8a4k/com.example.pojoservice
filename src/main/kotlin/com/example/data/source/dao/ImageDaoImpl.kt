@@ -3,7 +3,6 @@ package com.example.data.source.dao
 import com.example.data.dto.*
 import com.example.data.dto.imageDetails.ImageCategoryDto
 import com.example.data.dto.imageDetails.ImageCategoryLiteDto
-import com.example.data.dto.imageDetails.ImageDetailsFullDto
 import com.example.data.source.queries.*
 import com.example.data.tables.*
 import com.example.domain.queryMapper.images.*
@@ -26,10 +25,6 @@ class ImageDaoImpl(
             .limit(pageSize)
             .offset((page - 1) * pageSize)
             .map { it.toImageDetailsDto() }
-    }
-
-    override suspend fun getImagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto> {
-        return dataBase.imageFullDetailsQuery(pageSize = pageSize, page = page)
     }
 
     override suspend fun <T : Entity<T>> getCountOfTableItems(table: Table<T>): Int {
@@ -57,25 +52,28 @@ class ImageDaoImpl(
             ).select().map { it.imageCategoryMapper() }
     }
 
-    override suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto> {
-        return dataBase.from(ImageDetailsTable).select().limit(15).map { it.imageFullDetailsToDto() }
-    }
-
-    override suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDtoDeplecated> {
-        return dataBase.liteListImageDetailsQuery(pageSize = pageSize, page = page)
-    }
-
-    override suspend fun getLiteImagesByDate(pageSize: Int, page: Int): List<LiteImageDetailsDto> {
+    override suspend fun getLiteImagesByDate(pageSize: Int, page: Int, userId: Int): List<LiteImageDetailsDto> {
         return coroutineScope {
-            val query = async { dataBase.getLiteImagesOrderByDate(pageSize = pageSize, page = page) }
+            val query = async {
+                dataBase.getLiteImagesOrderByDate(
+                    pageSize = pageSize,
+                    page = page,
+                    userId = userId
+                )
+            }
             query.await().map { it.liteImageDetailsRow() }
         }
     }
 
-    override suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int)
+    override suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int, userId: Int)
             : List<LiteImageDetailsDto> {
         return coroutineScope {
-            val query = async { dataBase.getTopRatedLiteImagesThreeWeeksAgoQuery(limit) }
+            val query = async {
+                dataBase.getTopRatedLiteImagesThreeWeeksAgoQuery(
+                    limit = limit,
+                    userId = userId
+                )
+            }
             query.await().map { it.liteImageDetailsRow() }
         }
     }
@@ -83,8 +81,18 @@ class ImageDaoImpl(
     override suspend fun getTopRatedLiteImages(
         pageSize: Int,
         pageNumber: Int,
-    ): List<LiteImageDetailsWithLikesCountAndTitleDto> {
-        return dataBase.listOfTopRatedLiteImages(pageSize = pageSize, pageNumber = pageNumber)
+        userId: Int,
+    ): List<LiteImageDetailsDto> {
+        return coroutineScope {
+            val query = async {
+                dataBase.listOfTopRatedLiteImages(
+                    pageSize = pageSize,
+                    pageNumber = pageNumber,
+                    userId = userId
+                )
+            }
+            query.await().map { it.liteImageDetailsRow() }
+        }
     }
 
     override suspend fun getAllColors(): List<ColorDetailsDto> {
@@ -108,6 +116,7 @@ class ImageDaoImpl(
         page: Int,
         categoryId: Int,
         categoryName: String,
+        userId: Int,
     ): List<LiteImageDetailsDto> {
         return coroutineScope {
             val query = async {
@@ -115,7 +124,8 @@ class ImageDaoImpl(
                     pageSize = pageSize,
                     page = page,
                     categoryId = categoryId,
-                    categoryName = categoryName
+                    categoryName = categoryName,
+                    userId = userId
                 )
             }
             query.await().map { it.liteImageDetailsRow() }
@@ -157,23 +167,27 @@ class ImageDaoImpl(
     override suspend fun getImagesDetailsBasedOnCategoryORColorId(
         categoryId: Int,
         colorID: Int,
+        userId: Int,
     ): List<ImageDetailsWithLikesAndWatchAndUser> {
         return coroutineScope {
             val q = async {
                 dataBase.getImagesDetailsByColorIdAndCategoryIdQuery(
                     categoryID = categoryId,
-                    colorId = colorID
+                    colorId = colorID,
+                    userId = userId
                 )
             }
             q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }
         }
     }
 
-    override suspend fun getImageDetailsBasedOnImagedId(imageId: Int): ImageDetailsWithLikesAndWatchAndUser {
+    override suspend fun getImageDetailsBasedOnImagedId(imageId: Int, userId: Int):
+            ImageDetailsWithLikesAndWatchAndUser {
         return coroutineScope {
             val q = async {
                 dataBase.getImageDetailsByImageIdQuery(
-                    imageId = imageId
+                    imageId = imageId,
+                    userId = userId
                 )
             }
             q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }.first()
@@ -182,15 +196,16 @@ class ImageDaoImpl(
 
     override suspend fun getImagesDetailsBasedOnRandomCategoryID(
         limit: Int,
+        userId: Int
     ): List<ImageDetailsWithLikesAndWatchAndUser> {
         return coroutineScope {
             val q = async {
                 dataBase.getImagesDetailsBasedOnRandomCategoryIdQuery(
-                    limit = limit
+                    limit = limit,
+                    userId = userId
                 )
             }
             q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }
         }
     }
-
 }

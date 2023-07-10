@@ -10,8 +10,6 @@ interface ImageDao {
 
     suspend fun listOfImages(pageSize: Int, page: Int): List<ImageDetailsDto>
 
-    suspend fun getImagesByPageSizeAndPageNumber(pageSize: Int, page: Int): List<ImageDetailsFullDto>
-
     suspend fun <T : Entity<T>> getCountOfTableItems(table: Table<T>): Int
 
     suspend fun getTotalPagesTable(columnName: Column<Int>, pageSize: Int): Int
@@ -20,15 +18,12 @@ interface ImageDao {
 
     suspend fun getAllCategoryImage(): List<ImageCategoryDto>
 
-    suspend fun getFifteenImagesDetails(): List<ImageDetailsFullDto>
+    suspend fun getLiteImagesByDate(pageSize: Int, page: Int, userId: Int): List<LiteImageDetailsDto>
 
-    suspend fun getPagingLiteImageDetails(pageSize: Int, page: Int): List<LiteImageDetailsDtoDeplecated>
+    suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int, userId: Int): List<LiteImageDetailsDto>
 
-    suspend fun getLiteImagesByDate(pageSize: Int, page: Int): List<LiteImageDetailsDto>
-
-    suspend fun getTenTopRatedLiteImagesThreeWeeksAgo(limit: Int): List<LiteImageDetailsDto>
-
-    suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int): List<LiteImageDetailsWithLikesCountAndTitleDto>
+    suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int, userId: Int):
+            List<LiteImageDetailsDto>
 
     suspend fun getAllColors(): List<ColorDetailsDto>
 
@@ -39,6 +34,7 @@ interface ImageDao {
         page: Int,
         categoryId: Int,
         categoryName: String,
+        userId: Int,
     ): List<LiteImageDetailsDto>
 
     suspend fun getAllLiteImage(): List<IdAndUrlImagesWithDto>
@@ -54,9 +50,13 @@ interface ImageDao {
     suspend fun getImagesDetailsBasedOnCategoryORColorId(
         categoryId: Int,
         colorID: Int,
+        userId: Int,
     ): List<ImageDetailsWithLikesAndWatchAndUser>
 
-    suspend fun getImageDetailsBasedOnImagedId(imageId: Int): ImageDetailsWithLikesAndWatchAndUser
+    suspend fun getImageDetailsBasedOnImagedId(imageId: Int, userId: Int): ImageDetailsWithLikesAndWatchAndUser
 
-    suspend fun getImagesDetailsBasedOnRandomCategoryID(limit: Int): List<ImageDetailsWithLikesAndWatchAndUser>
+    suspend fun getImagesDetailsBasedOnRandomCategoryID(
+        limit: Int,
+        userId: Int,
+    ): List<ImageDetailsWithLikesAndWatchAndUser>
 }

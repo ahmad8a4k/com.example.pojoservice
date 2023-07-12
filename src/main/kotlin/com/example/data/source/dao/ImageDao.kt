@@ -25,8 +25,6 @@ interface ImageDao {
     suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int, userId: Int):
             List<LiteImageDetailsDto>
 
-    suspend fun getAllColors(): List<ColorDetailsDto>
-
     suspend fun getAllLiteCategories(): List<ImageCategoryLiteDto>
 
     suspend fun getAllLiteImageByCategories(
@@ -59,4 +57,9 @@ interface ImageDao {
         limit: Int,
         userId: Int,
     ): List<ImageDetailsWithLikesAndWatchAndUser>
+
+    suspend fun checkIfUserLikedImageUseCase(userId: Int, imageId:Int): Boolean
+    suspend fun addUserLikeImageUseCase(userId: Int, imageId:Int): Boolean
+    suspend fun removeUserLikeImageUseCase(userId: Int, imageId:Int): Boolean
+    suspend fun updateImageWatchCount(imageId: Int): Boolean
 }

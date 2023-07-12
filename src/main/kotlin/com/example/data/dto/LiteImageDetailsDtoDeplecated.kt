@@ -10,7 +10,8 @@ data class LiteImageDetailsDto(
     @SerialName("color_id") val color_id: Int,
     @SerialName("category_id") val category_id: Int,
     @SerialName("color_hex") val color_hex: String,
-    @SerialName("user_liked") val userLiked : Boolean
+    @SerialName("user_liked") val userLiked : Boolean,
+    @SerialName("watch_count") val watch_count: Int
  )
 
 data class ImageDetailsWithLikesAndWatchAndUser(

@@ -15,11 +15,12 @@ fun Route.images() {
 
     val getTopRatedLiteImagesThreeWeeksAgoUseCase by inject<GetTopRatedLiteImagesThreeWeeksAgoUseCase>()
     val listTopRatedImages by inject<GetListOfTopRatedLiteImages>()
-    val listOfColorsUseCase by inject<GetAllColorsUseCase>()
     val listLiteImagesByCategoryUseCase by inject<GetAllLiteImagesByCategory>()
     val listLiteImagesByCategoryUseCase2 by inject<UpdateBlurHashForLiteImagesByCategoryId>()
     val listOfImagesDetailsUseCase by inject<GetImagesDetailsBasedOnCategoryOrColorUseCase>()
     val listOfLiteImagesDetailsByDateUseCase by inject<GetLiteImagesOrderByDateUseCase>()
+    val updateImageUseCase by inject<UpdateUserLikedImage>()
+    val updateWatchImageCount by inject<UpdateWatchImageCountUseCase>()
 
     get(ImageEndPoint.ThreeWeeksAgoTopRatedImages.path) {
         val limit = call.request.queryParameters.getOrFail("limit")
@@ -31,14 +32,6 @@ fun Route.images() {
         call.respond(
             message = topRatedList,
             status = topRatedList.statuesCode
-        )
-    }
-
-    get(ImageEndPoint.AllColors.path) {
-        val listOfColorUseCase = listOfColorsUseCase()
-        call.respond(
-            message = listOfColorUseCase,
-            status = listOfColorUseCase.statuesCode
         )
     }
 
@@ -93,6 +86,19 @@ fun Route.images() {
             userId = parameters.userId
         )
         call.respond(message = images, status = images.statuesCode)
+    }
+
+    put(ImageEndPoint.UpdateUserLikedImage.path) {
+        val imageId = call.request.queryParameters.getOrFail("image_id").toInt()
+        val userId = call.request.queryParameters.getOrFail("user_id").toInt()
+        val updateImages = updateImageUseCase(userId = userId, imageId = imageId)
+        call.respond(message = updateImages, status = updateImages.statuesCode)
+    }
+
+    put(ImageEndPoint.UpdateWatchImage.path) {
+        val imageId = call.request.queryParameters.getOrFail("image_id").toInt()
+        val updateWatch = updateWatchImageCount(imageId = imageId)
+        call.respond(message = updateWatch, status = updateWatch.statuesCode)
     }
 
 }

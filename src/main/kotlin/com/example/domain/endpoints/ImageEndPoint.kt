@@ -13,6 +13,12 @@ sealed class ImageEndPoint(val path: String) {
     object LiteImagesByDetails: ImageEndPoint(path = "/images_by_date")
 
     /**
+     * Update Image
+     * */
+    object UpdateUserLikedImage : ImageEndPoint(path = "/update_liked_image")
+    object UpdateWatchImage: ImageEndPoint(path = "/update_watch_image")
+
+    /**
      * Categories
      */
     object SevenCategories : ImageEndPoint(path = "/seven_category")
@@ -23,11 +29,13 @@ sealed class ImageEndPoint(val path: String) {
     /**
      * Colors
      */
-    object AllColors : ImageEndPoint(path = "/all_colors")
+
+    //  object AllColors : ImageEndPoint(path = "/all_colors")
 
     /**
      * Natural
      */
+
     object AllNaturalCategories : ImageEndPoint(path = "/natural_categories")
     object NaturalImages : ImageEndPoint(path = "/natural_images")
     object NaturalByCategories : ImageEndPoint(path = "/natural_by_category")
@@ -37,6 +45,7 @@ sealed class ImageEndPoint(val path: String) {
     /**
      * Collections
      */
+
     object UsersCollections: ImageEndPoint(path = "/users_collections")
     object AdminsCollections: ImageEndPoint(path = "/admins_collections")
 
@@ -45,5 +54,4 @@ sealed class ImageEndPoint(val path: String) {
     object LimitAdminsCollections: ImageEndPoint(path = "/limit_admins_collections")
     object UserCollectionDetails : ImageEndPoint(path = "/user_collection_details")
     object AdminCollectionDetails: ImageEndPoint(path = "/admin_collection_details")
-
 }

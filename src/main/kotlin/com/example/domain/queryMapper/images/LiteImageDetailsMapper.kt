@@ -15,7 +15,8 @@ fun QueryRowSet.liteImageDetailsRow() = LiteImageDetailsDto(
     category_id = this[ImageCategoriesTable.id] ?: 0,
     color_id = this[ColorsTable.id] ?: 0,
     color_hex = this[ColorsTable.colorHex] ?: "#2d3436",
-    userLiked = this[ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")] ?: false
+    userLiked = this[ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")] ?: false,
+    watch_count = this[ImageDetailsTable.watchCount] ?: 0
 )
 
 fun QueryRowSet.imageDetailsWithLikeAndWatchCountRowMapper() = ImageDetailsWithLikesAndWatchAndUser(
@@ -24,7 +25,7 @@ fun QueryRowSet.imageDetailsWithLikeAndWatchCountRowMapper() = ImageDetailsWithL
     image_title = this[ImageDetailsTable.imgTitle] ?: "Empty",
     image_description = this[ImageDetailsTable.imgDescription] ?: "Empty",
     like_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("like_count")] as Int,
-    watch_count = this[coalesce(count(ImageUserLikesTable.user_id), 0).aliased("watch_count")] as Int,
+    watch_count = this[ImageDetailsTable.watchCount] ?: 0,
     blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
     user_id = this[UserTable.userId] ?: 0,
     user_name = this[UserTable.userName] ?: "Empty",

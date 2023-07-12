@@ -136,6 +136,7 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int, us
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash,
             ImageCategoriesTable.id,
+            ImageDetailsTable.watchCount,
             ColorsTable.id,
             ColorsTable.colorHex,
             coalesce(
@@ -186,6 +187,7 @@ fun Database.getAllImageAdminCollectionsByCollectionIdQuery(
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash,
             ImageCategoriesTable.id,
+            ImageDetailsTable.watchCount,
             ColorsTable.id,
             ColorsTable.colorHex,
             coalesce(

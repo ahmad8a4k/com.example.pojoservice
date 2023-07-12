@@ -18,4 +18,5 @@ object ImageDetailsTable : Table<ImageDetailsEntity>("image_details") {
     val blur_hash = varchar("blur_hash").bindTo { it.blurHash }
     val register = date("register").bindTo { it.register }
     val userAdd = int("user_add_id").references(UserTable) { it.userAdd }
+    val watchCount = int("watch_count").bindTo { it.watchCount }
 }

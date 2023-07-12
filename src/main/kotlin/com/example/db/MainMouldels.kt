@@ -89,10 +89,6 @@ val mainModule = module {
      */
 
     single {
-        GetAllColorsUseCase(get())
-    }
-
-    single {
         GetLiteImagesOrderByDateUseCase(get())
     }
 
@@ -185,5 +181,25 @@ val mainModule = module {
 
     single {
         GetAdminCollectionDetailsUseCase(get())
+    }
+
+    /**
+     * Images
+     */
+
+    single {
+        UpdateUserLikedImage(get())
+    }
+
+    single {
+        AddUserLikeImageUseCase(get())
+    }
+
+    single {
+        RemoveUserLikeImageUseCase(get())
+    }
+
+    single {
+        UpdateWatchImageCountUseCase(get())
     }
 }

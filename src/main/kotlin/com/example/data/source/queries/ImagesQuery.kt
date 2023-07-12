@@ -30,6 +30,7 @@ fun Database.getTopRatedLiteImagesThreeWeeksAgoQuery(limit: Int, userId: Int):
             ImageDetailsTable.blur_hash,
             ImageDetailsTable.register,
             ImageCategoriesTable.id,
+            ImageDetailsTable.watchCount,
             ColorsTable.id,
             ColorsTable.colorHex,
             coalesce(
@@ -81,6 +82,7 @@ fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int, userId: In
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash,
             ImageDetailsTable.register,
+            ImageDetailsTable.watchCount,
             ImageCategoriesTable.id,
             ColorsTable.id,
             ColorsTable.colorHex,
@@ -134,6 +136,7 @@ fun Database.getLiteImagesOrderByDate(pageSize: Int, page: Int, userId: Int): Qu
             ImageCategoriesTable.id,
             ColorsTable.id,
             ColorsTable.colorHex,
+            ImageDetailsTable.watchCount,
             coalesce(
                 count(
                     ImageUserLikesTable.user_id
@@ -150,7 +153,7 @@ fun Database.getLiteImagesOrderByDate(pageSize: Int, page: Int, userId: Int): Qu
             ColorsTable.id,
             ImageUserLikesTable.user_id,
             ImageUserLikesTable.image_id
-        ).orderBy(ImageDetailsTable.id.asc())
+        ).orderBy(ImageDetailsTable.register.desc())
 }
 
 fun Database.getAllLiteImagesByCategoryQuery(
@@ -187,6 +190,7 @@ fun Database.getAllLiteImagesByCategoryQuery(
             ImageDetailsTable.url,
             ImageDetailsTable.blur_hash,
             ImageCategoriesTable.id,
+            ImageDetailsTable.watchCount,
             ColorsTable.id,
             ColorsTable.colorHex,
             coalesce(
@@ -234,9 +238,6 @@ fun Database.getImageDetailsByImageIdQuery(imageId: Int, userId: Int): Query {
             UserTable,
             on = ImageDetailsTable.userAdd.eq(UserTable.userId)
         ).leftJoin(
-            right = ImageUsersWatchTable,
-            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
-        ).leftJoin(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
                     (ImageUserLikesTable.user_id.eq(userId))
@@ -255,12 +256,7 @@ fun Database.getImageDetailsByImageIdQuery(imageId: Int, userId: Int): Query {
                 ),
                 defaultValue = 0
             ).aliased("like_count"),
-            coalesce(
-                count(
-                    ImageUsersWatchTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("watch_count"),
+            ImageDetailsTable.watchCount,
             ImageUserLikesTable.image_id.isNotNull().aliased("image_liked")
         ).limit(1)
         .where {
@@ -292,11 +288,7 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
                     (ImageUserLikesTable.user_id.eq(userId))
-        ).leftJoin(
-            right = ImageUsersWatchTable,
-            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
-        )
-        .selectDistinct(
+        ).selectDistinct(
             ImageDetailsTable.id,
             ImageDetailsTable.imgTitle,
             ImageDetailsTable.url,
@@ -311,12 +303,7 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
                 ),
                 defaultValue = 0
             ).aliased("like_count"),
-            coalesce(
-                count(
-                    ImageUsersWatchTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("watch_count"),
+            ImageDetailsTable.watchCount,
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         )
         .where {
@@ -348,11 +335,7 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int, userId: In
             right = ImageUserLikesTable,
             on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
                     (ImageUserLikesTable.user_id.eq(userId))
-        ).leftJoin(
-            right = ImageUsersWatchTable,
-            on = ImageDetailsTable.id.eq(ImageUsersWatchTable.image_id)
-        )
-        .selectDistinct(
+        ).selectDistinct(
             ImageDetailsTable.id,
             ImageDetailsTable.imgTitle,
             ImageDetailsTable.url,
@@ -367,12 +350,7 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int, userId: In
                 ),
                 defaultValue = 0
             ).aliased("like_count"),
-            coalesce(
-                count(
-                    ImageUsersWatchTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("watch_count"),
+            ImageDetailsTable.watchCount,
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         )
         .where {
@@ -388,6 +366,41 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int, userId: In
         )
 }
 
+fun Database.removeUserLikeImage(userId: Int, imageId: Int): Int {
+    return this.delete(ImageUserLikesTable) {
+        it.user_id.eq(userId) and it.image_id.eq(imageId)
+    }
+}
+
+fun Database.addUserLikeImage(userId: Int, imageId: Int): Int {
+    return this.insert(ImageUserLikesTable) {
+        this.set(ImageUserLikesTable.user_id, userId)
+        this.set(ImageUserLikesTable.image_id, imageId)
+    }
+}
+
+fun Database.checkIfUserLikedImage(userId: Int, imageId: Int): Query {
+    return this.from(ImageUserLikesTable)
+        .select(
+            coalesce(
+                count(
+                    ImageUserLikesTable.user_id
+                ),
+                defaultValue = 0
+            ).aliased("like_count")
+        ).where {
+            ImageUserLikesTable.user_id.eq(userId) and
+                    ImageUserLikesTable.image_id.eq(imageId)
+        }
+}
+
+fun Database.updateWatchImage(imageId: Int): Int {
+    return this.update(ImageDetailsTable) {
+        set(ImageDetailsTable.watchCount, ImageDetailsTable.watchCount + 1)
+        this.where { ImageDetailsTable.id.eq(imageId) }
+    }
+}
+
 /**
  *  If Their No Value Set Default Value
  */
@@ -398,7 +411,6 @@ fun <T : Any> coalesce(column: ColumnDeclaring<T>, defaultValue: T): FunctionExp
         sqlType = column.sqlType
     )
 }
-
 
 /**
  * For Admin In Future

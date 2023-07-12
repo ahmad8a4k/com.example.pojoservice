@@ -95,14 +95,6 @@ class ImageDaoImpl(
         }
     }
 
-    override suspend fun getAllColors(): List<ColorDetailsDto> {
-        return coroutineScope {
-            val query = async { dataBase.getAllColorsQuery() }
-
-            query.await().map { it.toColorDetailsMapper() }
-        }
-    }
-
     override suspend fun getAllLiteCategories(): List<ImageCategoryLiteDto> {
         return coroutineScope {
             val query = async { dataBase.getAllImagesCategoriesLite() }
@@ -206,6 +198,48 @@ class ImageDaoImpl(
                 )
             }
             q.await().map { it.imageDetailsWithLikeAndWatchCountRowMapper() }
+        }
+    }
+
+    override suspend fun checkIfUserLikedImageUseCase(userId: Int, imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.checkIfUserLikedImage(userId = userId, imageId = imageId)
+            }
+            query.await().map {
+                it[coalesce(
+                    count(ImageUserLikesTable.user_id),
+                    defaultValue = 0
+                )
+                    .aliased("like_count")]
+            }.first() != 0
+        }
+    }
+
+    override suspend fun addUserLikeImageUseCase(userId: Int, imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.addUserLikeImage(userId = userId, imageId = imageId)
+            }
+            query.await() != 0
+        }
+    }
+
+    override suspend fun removeUserLikeImageUseCase(userId: Int, imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.removeUserLikeImage(userId = userId, imageId = imageId)
+            }
+            query.await() != 0
+        }
+    }
+
+    override suspend fun updateImageWatchCount(imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.updateWatchImage(imageId = imageId)
+            }
+            query.await() != 0
         }
     }
 }

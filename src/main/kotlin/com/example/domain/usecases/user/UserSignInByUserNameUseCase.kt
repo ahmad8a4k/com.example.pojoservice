@@ -1,6 +1,6 @@
 package com.example.domain.usecases.user
 
-import com.example.data.response.UserTokenResponse
+import com.example.data.response.UserResponseWithToken
 import com.example.data.source.dao.UserDao
 import com.example.domain.SaltedHash
 import com.example.utils.BaseResponse
@@ -11,7 +11,7 @@ import com.example.utils.verifyPassword
 class UserSignInByUserNameUseCase(
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(userName: String, userPassword: String): BaseResponse<UserTokenResponse> {
+    suspend operator fun invoke(userName: String, userPassword: String): BaseResponse<UserResponseWithToken> {
 
         if (
             userName.isEmpty() ||
@@ -19,14 +19,14 @@ class UserSignInByUserNameUseCase(
         ) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.EmptyField.message,
-                data = UserTokenResponse()
+                data = UserResponseWithToken()
             )
         }
 
         if (!userDao.checkIfUserNameExist(userName)) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.NotFoundUser.message,
-                data = UserTokenResponse()
+                data = UserResponseWithToken()
             )
         }
 
@@ -38,13 +38,15 @@ class UserSignInByUserNameUseCase(
         if (!validationPassword) {
             return BaseResponse.ErrorResponse(
                 message = ResponseMessages.IncorrectPassword.message,
-                data = UserTokenResponse()
+                data = UserResponseWithToken()
             )
         }
 
         return BaseResponse.SuccessResponse(
-            data = UserTokenResponse(
-                token = userDto.user_id.generateToken()
+            data = UserResponseWithToken(
+                token = userDto.user_id.generateToken(),
+                userID = userDto.user_id,
+                userName = userDto.user_name
             ),
             message = ResponseMessages.SuccessSignIn.message
         )

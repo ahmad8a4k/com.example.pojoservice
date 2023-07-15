@@ -19,4 +19,5 @@ object ImageDetailsTable : Table<ImageDetailsEntity>("image_details") {
     val register = date("register").bindTo { it.register }
     val userAdd = int("user_add_id").references(UserTable) { it.userAdd }
     val watchCount = int("watch_count").bindTo { it.watchCount }
+    val likeCount = int("like_count").bindTo { it.likeCount }
 }

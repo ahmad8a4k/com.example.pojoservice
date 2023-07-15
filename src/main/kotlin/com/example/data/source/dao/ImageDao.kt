@@ -58,8 +58,10 @@ interface ImageDao {
         userId: Int,
     ): List<ImageDetailsWithLikesAndWatchAndUser>
 
-    suspend fun checkIfUserLikedImageUseCase(userId: Int, imageId:Int): Boolean
-    suspend fun addUserLikeImageUseCase(userId: Int, imageId:Int): Boolean
-    suspend fun removeUserLikeImageUseCase(userId: Int, imageId:Int): Boolean
+    suspend fun checkIfUserLikedImageUseCase(userId: Int, imageId: Int): Boolean
+    suspend fun addUserLikeImageUseCase(userId: Int, imageId: Int): Boolean
+    suspend fun removeUserLikeImageUseCase(userId: Int, imageId: Int): Boolean
     suspend fun updateImageWatchCount(imageId: Int): Boolean
+    suspend fun updateLikedImageCountByIncrease(imageId: Int): Boolean
+    suspend fun updateLikedImageCountByDecrease(imageId: Int): Boolean
 }

@@ -139,12 +139,7 @@ fun Database.getAllImageUserCollectionsByCollectionIdQuery(collectionId: Int, us
             ImageDetailsTable.watchCount,
             ColorsTable.id,
             ColorsTable.colorHex,
-            coalesce(
-                count(
-                    ImageUserLikesTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("like_count"),
+            ImageDetailsTable.likeCount,
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         ).where {
             UserCollectionTable.id.eq(collectionId)
@@ -188,14 +183,9 @@ fun Database.getAllImageAdminCollectionsByCollectionIdQuery(
             ImageDetailsTable.blur_hash,
             ImageCategoriesTable.id,
             ImageDetailsTable.watchCount,
+            ImageDetailsTable.likeCount,
             ColorsTable.id,
             ColorsTable.colorHex,
-            coalesce(
-                count(
-                    ImageUserLikesTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("like_count"),
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         ).where {
             AdminCollectionTable.id.eq(collectionId)
@@ -228,12 +218,7 @@ fun Database.getUserCollectionDetails(collectionId: Int): Query {
             UserTable.userId,
             UserTable.userName,
             UserTable.userUrl,
-            coalesce(
-                count(
-                    UserCollectionsLikeTable.user_id
-                ),
-                defaultValue = 0
-            ).aliased("like_count")
+            ImageDetailsTable.likeCount
         ).where {
             UserCollectionTable.id.eq(collectionId)
         }

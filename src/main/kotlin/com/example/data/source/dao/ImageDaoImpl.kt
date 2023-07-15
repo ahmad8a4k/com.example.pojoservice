@@ -242,4 +242,22 @@ class ImageDaoImpl(
             query.await() != 0
         }
     }
+
+    override suspend fun updateLikedImageCountByIncrease(imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.updateLikedImageCountByIncrease(imageId = imageId)
+            }
+            query.await() != 0
+        }
+    }
+
+    override suspend fun updateLikedImageCountByDecrease(imageId: Int): Boolean {
+        return coroutineScope {
+            val query = async {
+                dataBase.updateLikedImageCountByDecrease(imageId = imageId)
+            }
+            query.await() != 0
+        }
+    }
 }

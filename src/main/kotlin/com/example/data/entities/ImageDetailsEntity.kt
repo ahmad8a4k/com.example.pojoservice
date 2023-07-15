@@ -17,5 +17,6 @@ interface ImageDetailsEntity : Entity<ImageDetailsEntity> {
     var blurHash: String
     var userAdd: UserEntity
     var watchCount: Int
+    var likeCount: Int
     var register: LocalDate
 }

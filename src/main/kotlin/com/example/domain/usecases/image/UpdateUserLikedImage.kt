@@ -3,6 +3,7 @@ package com.example.domain.usecases.image
 import com.example.data.source.dao.ImageDao
 import com.example.utils.BaseResponse
 import com.example.utils.ResponseMessages
+
 class UpdateUserLikedImage(
     private val imageDao: ImageDao
 ) {
@@ -14,16 +15,17 @@ class UpdateUserLikedImage(
 
         val checkIfLiked = imageDao.checkIfUserLikedImageUseCase(userId = userId, imageId = imageId)
 
-        return if(checkIfLiked){
+        return if (checkIfLiked) {
             val removeLiked = imageDao.removeUserLikeImageUseCase(userId = userId, imageId = imageId)
-
-            if (!removeLiked) {
-                 BaseResponse.ErrorResponse(message = ResponseMessages.UnKnowFail.message, data = false)
+            val updateImageLiked = imageDao.updateLikedImageCountByDecrease(imageId = imageId)
+            if (!removeLiked || !updateImageLiked) {
+                BaseResponse.ErrorResponse(message = ResponseMessages.UnKnowFail.message, data = false)
             }
-             BaseResponse.SuccessResponse(message = ResponseMessages.SuccessRemoveLikeImage.message, data = true)
-        }else{
+            BaseResponse.SuccessResponse(message = ResponseMessages.SuccessRemoveLikeImage.message, data = true)
+        } else {
             val addLiked = imageDao.addUserLikeImageUseCase(userId = userId, imageId = imageId)
-            if (!addLiked) {
+            val updateImageLiked = imageDao.updateLikedImageCountByIncrease(imageId = imageId)
+            if (!addLiked || !updateImageLiked) {
                 return BaseResponse.ErrorResponse(message = ResponseMessages.UnKnowFail.message, data = false)
             }
             return BaseResponse.SuccessResponse(message = ResponseMessages.SuccessAddLikeImage.message, data = true)

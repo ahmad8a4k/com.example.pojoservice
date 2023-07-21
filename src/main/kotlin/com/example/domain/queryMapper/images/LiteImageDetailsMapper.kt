@@ -4,6 +4,7 @@ import com.example.data.dto.*
 import com.example.data.tables.*
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.isNotNull
+import java.sql.ResultSet
 
 fun QueryRowSet.liteImageDetailsRow() = LiteImageDetailsDto(
     image_id = this[ImageDetailsTable.id] ?: 0,
@@ -35,4 +36,16 @@ fun QueryRowSet.idAndUrlImageMapperRow() = IdAndUrlImagesWithDto(
     image_id = this[ImageDetailsTable.id] ?: 0,
     image_url = this[ImageDetailsTable.url] ?: "Empty",
     blur_hash = this[ImageDetailsTable.blur_hash] ?: "Empty",
+)
+
+fun ResultSet.liteImageDetailsResultSet() = LiteImageDetailsDto(
+    image_id = getInt("id"),
+    image_url = getString("url") ?: "Empty",
+    likes_count = getInt("like_count"),
+    blur_hash = getString("blur_hash") ?: "Empty",
+    category_id = getInt("id") ,
+    color_id = getInt("id"),
+    color_hex = getString("color_hex") ?: "#2d3436",
+    userLiked = getObject("user_liked") as? Boolean ?: false,
+    watch_count = getInt("watch_count")
 )

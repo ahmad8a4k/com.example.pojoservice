@@ -25,6 +25,9 @@ interface ImageDao {
     suspend fun getTopRatedLiteImages(pageSize: Int, pageNumber: Int, userId: Int):
             List<LiteImageDetailsDto>
 
+    suspend fun searchImagesByImageTitle(userId: Int, imageTitle: String): List<LiteImageDetailsDto>
+    suspend fun getImageSearchResultByTagName(userId: Int, tagName: String): List<LiteImageDetailsDto>
+
     suspend fun getAllLiteCategories(): List<ImageCategoryLiteDto>
 
     suspend fun getAllLiteImageByCategories(

@@ -95,6 +95,18 @@ class ImageDaoImpl(
         }
     }
 
+    override suspend fun searchImagesByImageTitle(userId: Int, imageTitle: String): List<LiteImageDetailsDto> {
+        return dataBase.searchImagesByImageTitleName(userId = userId, title = imageTitle)
+    }
+
+    override suspend fun getImageSearchResultByTagName(userId: Int, tagName: String): List<LiteImageDetailsDto> {
+        return coroutineScope {
+            val query = async { dataBase.getImageSearchResultByTagName(userId = userId, tagName = tagName) }
+
+            query.await().map { it.liteImageDetailsRow() }
+        }
+    }
+
     override suspend fun getAllLiteCategories(): List<ImageCategoryLiteDto> {
         return coroutineScope {
             val query = async { dataBase.getAllImagesCategoriesLite() }

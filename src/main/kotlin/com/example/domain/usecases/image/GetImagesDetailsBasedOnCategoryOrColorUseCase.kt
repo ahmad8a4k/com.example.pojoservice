@@ -46,6 +46,7 @@ class GetImagesDetailsBasedOnCategoryOrColorUseCase(
                 BaseResponse.ErrorLiseResponse(message = ResponseMessages.EmptyFetchImages.message)
             } else {
                 imagesDetails.addAll(imageDetailsRandom)
+                imagesDetails.add(0, imageDetails)
                 BaseResponse.SuccessResponse(
                     data = imagesDetails
                 )

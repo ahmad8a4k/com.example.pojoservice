@@ -1,6 +1,8 @@
 package com.example.data.source.queries
 
+import com.example.data.dto.LiteImageDetailsDto
 import com.example.data.tables.*
+import com.example.domain.queryMapper.images.liteImageDetailsResultSet
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.expression.ArgumentExpression
@@ -37,7 +39,7 @@ fun Database.getTopRatedLiteImagesThreeWeeksAgoQuery(limit: Int, userId: Int):
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         )
         .where {
-            (ImageDetailsTable.register.greaterEq(LocalDate.now().minusWeeks(3)))
+            ImageDetailsTable.register.greaterEq(LocalDate.now().minusWeeks(4))
         }
         .groupBy(
             ImageDetailsTable.id,
@@ -46,10 +48,10 @@ fun Database.getTopRatedLiteImagesThreeWeeksAgoQuery(limit: Int, userId: Int):
             ImageUserLikesTable.user_id,
             ImageUserLikesTable.image_id
         )
+        .limit(n = limit)
         .orderBy(
             ImageDetailsTable.likeCount.desc()
         )
-        .limit(n = limit)
 }
 
 fun Database.listOfTopRatedLiteImages(pageSize: Int, pageNumber: Int, userId: Int): Query {
@@ -240,11 +242,11 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
 ): Query {
     return this.from(ImageDetailsTable)
         .innerJoin(
-            right = ImageCategoriesTable,
-            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
-        ).innerJoin(
             right = ColorsTable,
             on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        ).innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
         ).innerJoin(
             UserTable,
             on = ImageDetailsTable.userAdd.eq(UserTable.userId)
@@ -263,6 +265,7 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
             UserTable.userUrl,
             ImageDetailsTable.likeCount,
             ImageDetailsTable.watchCount,
+            ImageDetailsTable.register,
             ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
         )
         .where {
@@ -274,11 +277,11 @@ fun Database.getImagesDetailsByColorIdAndCategoryIdQuery(
             UserTable.userId,
             ImageUserLikesTable.user_id,
             ImageUserLikesTable.image_id
-        )
-        .limit(59)
-        .orderBy(
+        ).orderBy(
+            ImageDetailsTable.register.desc(),
             ImageDetailsTable.id.desc()
         )
+        .limit(59)
 }
 
 fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int, userId: Int): Query {
@@ -316,7 +319,90 @@ fun Database.getImagesDetailsBasedOnRandomCategoryIdQuery(limit: Int, userId: In
         )
         .groupBy(
             ImageDetailsTable.id,
-            UserTable.userId
+            UserTable.userId,
+            ImageUserLikesTable.image_id
+        )
+}
+
+fun Database.searchImagesByImageTitleName(userId: Int, title: String): List<LiteImageDetailsDto> {
+    val qResult = mutableListOf<LiteImageDetailsDto>()
+    this.useConnection { conn ->
+        val queryResult = conn.prepareStatement(
+            """
+            SELECT 
+                image_details.id, 
+                image_details.img_title,
+                image_details.url, 
+                image_details.blur_hash,
+                image_details.register,
+                image_details.watch_count,
+                image_details.like_count,
+                img_categories.id,
+                colors.id,
+                colors.color_hex,
+                CASE WHEN images_user_likes.image_id IS NULL THEN false ELSE true END AS user_liked
+            FROM 
+                image_details
+            INNER JOIN 
+                img_categories ON image_details.category_id = img_categories.id
+            INNER JOIN 
+                colors ON image_details.color_id = colors.id
+            LEFT JOIN 
+                images_user_likes ON image_details.id = images_user_likes.image_id AND 
+                images_user_likes.user_id = $userId
+            WHERE 
+                to_tsvector('english', img_title) @@ to_tsquery('english', '$title')
+            ORDER BY image_details.register DESC
+            LIMIT 200
+        """
+        ).executeQuery()
+        while (queryResult.next()) {
+            qResult.add(queryResult.liteImageDetailsResultSet())
+        }
+        return qResult.toList()
+    }
+}
+
+fun Database.getImageSearchResultByTagName(userId: Int, tagName: String): Query {
+    return this.from(ImageDetailsTable)
+        .innerJoin(
+            right = ColorsTable,
+            on = ImageDetailsTable.colorId.eq(ColorsTable.id)
+        ).innerJoin(
+            right = ImageCategoriesTable,
+            on = ImageDetailsTable.categoryId.eq(ImageCategoriesTable.id)
+        ).innerJoin(
+            right = UserTable,
+            on = ImageDetailsTable.userAdd.eq(UserTable.userId)
+        ).innerJoin(
+            right = ImagesTagsTable,
+            on = ImageDetailsTable.id.eq(ImagesTagsTable.image_id)
+        ).innerJoin(
+            right = TagsTable,
+            on = TagsTable.id.eq(ImagesTagsTable.tag_id)
+        ).leftJoin(
+            right = ImageUserLikesTable,
+            on = ImageDetailsTable.id.eq(ImageUserLikesTable.image_id) and
+                    (ImageUserLikesTable.user_id.eq(userId))
+        ).selectDistinct(
+            ImageDetailsTable.id,
+            ImageDetailsTable.imgTitle,
+            ImageDetailsTable.url,
+            ImageDetailsTable.blur_hash,
+            ImageDetailsTable.imgDescription,
+            UserTable.userId,
+            UserTable.userName,
+            UserTable.userUrl,
+            ImageDetailsTable.likeCount,
+            ImageDetailsTable.watchCount,
+            ImageDetailsTable.register,
+            ImageUserLikesTable.image_id.isNotNull().aliased("user_liked")
+        ).where {
+            TagsTable.tag_name.like("%$tagName%")
+        }.orderBy(
+            ImageDetailsTable.register.desc()
+        ).limit(
+            200
         )
 }
 
@@ -354,6 +440,7 @@ fun Database.updateWatchImage(imageId: Int): Int {
         this.where { ImageDetailsTable.id.eq(imageId) }
     }
 }
+
 fun Database.updateLikedImageCountByIncrease(imageId: Int): Int {
     return this.update(ImageDetailsTable) {
         set(ImageDetailsTable.likeCount, ImageDetailsTable.likeCount + 1)

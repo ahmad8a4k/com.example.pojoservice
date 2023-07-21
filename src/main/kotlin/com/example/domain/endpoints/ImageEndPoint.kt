@@ -11,6 +11,7 @@ sealed class ImageEndPoint(val path: String) {
     object ImageCompleteDetails : ImageEndPoint(path = "/images_complete_details")
     object TryEncodeImages : ImageEndPoint(path = "/tryEncodeImages")
     object LiteImagesByDetails: ImageEndPoint(path = "/images_by_date")
+    object SearchImageByText: ImageEndPoint(path = "/search_image")
 
     /**
      * Update Image

@@ -202,4 +202,7 @@ val mainModule = module {
     single {
         UpdateWatchImageCountUseCase(get())
     }
+    single {
+        GetSearchImageByTextUseCase(get())
+    }
 }

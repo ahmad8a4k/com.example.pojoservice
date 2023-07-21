@@ -21,6 +21,7 @@ fun Route.images() {
     val listOfLiteImagesDetailsByDateUseCase by inject<GetLiteImagesOrderByDateUseCase>()
     val updateImageUseCase by inject<UpdateUserLikedImage>()
     val updateWatchImageCount by inject<UpdateWatchImageCountUseCase>()
+    val getSearchImageByTextUseCase by inject<GetSearchImageByTextUseCase>()
 
     get(ImageEndPoint.ThreeWeeksAgoTopRatedImages.path) {
         val limit = call.request.queryParameters.getOrFail("limit")
@@ -99,6 +100,13 @@ fun Route.images() {
         val imageId = call.request.queryParameters.getOrFail("image_id").toInt()
         val updateWatch = updateWatchImageCount(imageId = imageId)
         call.respond(message = updateWatch, status = updateWatch.statuesCode)
+    }
+
+    put(ImageEndPoint.SearchImageByText.path) {
+        val imageText = call.request.queryParameters.getOrFail("image_text")
+        val userId = call.request.queryParameters.getOrFail("user_id").toInt()
+        val searchResult = getSearchImageByTextUseCase(imageTitle = imageText, userId = userId)
+        call.respond(message = searchResult, status = searchResult.statuesCode)
     }
 
 }
